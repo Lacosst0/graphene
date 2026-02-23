@@ -1,4 +1,5 @@
 /* Place for custom hooks */
+import { MapLibreHook } from "./demo/libremap_hook";
 
 type CustomEventHandler = (event: Event) => void;
 
@@ -13,7 +14,6 @@ type StorybookCustomEventsHook = {
   mounted: () => void;
   destroyed: () => void;
 };
-
 
 const parseEvents = (raw: string | undefined): string[] => {
   if (!raw) return [];
@@ -42,23 +42,17 @@ const buildPayload = (event: Event, targetEl: CustomEventTarget | null) => {
     detailChecked = detail.checked;
   }
 
-  const targetChecked =
-    targetEl && typeof targetEl.checked !== "undefined" ? targetEl.checked : null;
-  const targetToggled =
-    targetEl && typeof targetEl.toggled !== "undefined" ? targetEl.toggled : null;
+  const targetChecked = targetEl && typeof targetEl.checked !== "undefined" ? targetEl.checked : null;
+  const targetToggled = targetEl && typeof targetEl.toggled !== "undefined" ? targetEl.toggled : null;
 
   const checked =
-    typeof detailChecked !== "undefined"
-      ? detailChecked
-      : targetToggled !== null
-        ? targetToggled
-        : targetChecked;
+    typeof detailChecked !== "undefined" ? detailChecked : targetToggled !== null ? targetToggled : targetChecked;
 
   return {
     detail,
     value: targetEl && typeof targetEl.value !== "undefined" ? targetEl.value : null,
     checked,
-    toggled: targetToggled
+    toggled: targetToggled,
   };
 };
 
@@ -89,10 +83,10 @@ const StorybookCustomEvents: StorybookCustomEventsHook = {
       target.removeEventListener(name, handler as EventListener);
     });
     this._handlers = [];
-  }
+  },
 };
 
 export const buildHooks = () => {
   const GrapheneHooks = (window as any).Graphene?.Hooks ?? {};
-  return { ...GrapheneHooks, StorybookCustomEvents };
+  return { ...GrapheneHooks, MapLibreHook, StorybookCustomEvents };
 };

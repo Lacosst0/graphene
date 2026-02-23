@@ -45,6 +45,7 @@ defmodule DemoWeb.Router do
     live("/settings", SettingsLive)
     live("/support", SupportLive)
     live("/components", ComponentCatalogLive)
+    live("/devices", DevicesLive)
   end
 
   scope "/", DemoWeb do

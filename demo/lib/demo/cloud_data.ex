@@ -178,4 +178,9 @@ defmodule Demo.CloudData do
       %{id: "enterprise", label: "Enterprise"}
     ]
   end
+
+  def devices do
+    File.read!("./lib/demo/snapshot.json")
+    |> Jason.decode!(keys: :atoms)
+  end
 end

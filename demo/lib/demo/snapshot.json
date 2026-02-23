@@ -1,0 +1,337 @@
+{
+  "generated_at": "2026-02-22T12:00:00Z",
+  "time_zone": "Etc/UTC",
+  "snapshot_window_minutes": 15,
+  "devices": [
+    {
+      "device_id": 2001,
+      "serial_number": "DEV00101",
+      "comment": "Site 1 device 1",
+      "lon": 37.639091,
+      "lat": 55.762556,
+      "site_id": 1,
+      "site_address": "Moscow, Linden Yard",
+      "site_uin": "MN-ALPHA-001",
+      "last_bucket": "2026-02-22T11:59:00Z",
+      "leq_5min": 47.1
+    },
+    {
+      "device_id": 2002,
+      "serial_number": "DEV00102",
+      "comment": "Site 1 device 2",
+      "lon": 37.638181,
+      "lat": 55.762052,
+      "site_id": 1,
+      "site_address": "Moscow, Linden Yard",
+      "site_uin": "MN-ALPHA-001",
+      "last_bucket": "2026-02-22T11:46:00Z",
+      "leq_5min": 42.9
+    },
+    {
+      "device_id": 2003,
+      "serial_number": "DEV00103",
+      "comment": "Site 1 device 3",
+      "lon": 37.637785,
+      "lat": 55.761997,
+      "site_id": 1,
+      "site_address": "Moscow, Linden Yard",
+      "site_uin": "MN-ALPHA-001",
+      "last_bucket": "2026-02-22T11:48:00Z",
+      "leq_5min": 45.3
+    },
+    {
+      "device_id": 2004,
+      "serial_number": "DEV00201",
+      "comment": "Site 2 device 1",
+      "lon": 37.654209,
+      "lat": 55.736161,
+      "site_id": 2,
+      "site_address": "Moscow, Iron Gate",
+      "site_uin": "MN-BRAVO-014",
+      "last_bucket": "2026-02-22T11:48:00Z",
+      "leq_5min": 43.8
+    },
+    {
+      "device_id": 2005,
+      "serial_number": "DEV00202",
+      "comment": "Site 2 device 2",
+      "lon": 37.654008,
+      "lat": 55.736922,
+      "site_id": 2,
+      "site_address": "Moscow, Iron Gate",
+      "site_uin": "MN-BRAVO-014",
+      "last_bucket": "2026-02-22T11:48:00Z",
+      "leq_5min": 62.6
+    },
+    {
+      "device_id": 2006,
+      "serial_number": "DEV00203",
+      "comment": "Site 2 device 3",
+      "lon": 37.653177,
+      "lat": 55.736327,
+      "site_id": 2,
+      "site_address": "Moscow, Iron Gate",
+      "site_uin": "MN-BRAVO-014",
+      "last_bucket": "2026-02-22T11:52:00Z",
+      "leq_5min": 40.6
+    },
+    {
+      "device_id": 2007,
+      "serial_number": "DEV00301",
+      "comment": "Site 3 device 1",
+      "lon": 37.598338,
+      "lat": 55.774746,
+      "site_id": 3,
+      "site_address": "Moscow, Copper Lane",
+      "site_uin": "MN-CAR-207",
+      "last_bucket": "2026-02-22T11:52:00Z",
+      "leq_5min": 47.7
+    },
+    {
+      "device_id": 2008,
+      "serial_number": "DEV00302",
+      "comment": "Site 3 device 2",
+      "lon": 37.598188,
+      "lat": 55.7735,
+      "site_id": 3,
+      "site_address": "Moscow, Copper Lane",
+      "site_uin": "MN-CAR-207",
+      "last_bucket": "2026-02-22T11:56:00Z",
+      "leq_5min": 42.9
+    },
+    {
+      "device_id": 2009,
+      "serial_number": "DEV00303",
+      "comment": "Site 3 device 3",
+      "lon": 37.598853,
+      "lat": 55.773814,
+      "site_id": 3,
+      "site_address": "Moscow, Copper Lane",
+      "site_uin": "MN-CAR-207",
+      "last_bucket": null,
+      "leq_5min": null
+    },
+    {
+      "device_id": 2010,
+      "serial_number": "DEV00401",
+      "comment": "Site 4 device 1",
+      "lon": 37.604236,
+      "lat": 55.72307,
+      "site_id": 4,
+      "site_address": "Moscow, Riverbend",
+      "site_uin": "MN-DELTA-033",
+      "last_bucket": "2026-02-22T11:48:00Z",
+      "leq_5min": 41.5
+    },
+    {
+      "device_id": 2011,
+      "serial_number": "DEV00402",
+      "comment": "Site 4 device 2",
+      "lon": 37.605786,
+      "lat": 55.722976,
+      "site_id": 4,
+      "site_address": "Moscow, Riverbend",
+      "site_uin": "MN-DELTA-033",
+      "last_bucket": "2026-02-22T11:57:00Z",
+      "leq_5min": 68.7
+    },
+    {
+      "device_id": 2012,
+      "serial_number": "DEV00403",
+      "comment": "Site 4 device 3",
+      "lon": 37.606421,
+      "lat": 55.725176,
+      "site_id": 4,
+      "site_address": "Moscow, Riverbend",
+      "site_uin": "MN-DELTA-033",
+      "last_bucket": "2026-02-22T11:52:00Z",
+      "leq_5min": 40.4
+    },
+    {
+      "device_id": 2013,
+      "serial_number": "DEV00501",
+      "comment": "Site 5 device 1",
+      "lon": 37.658148,
+      "lat": 55.787248,
+      "site_id": 5,
+      "site_address": "Moscow, Old Market",
+      "site_uin": "MN-ECHO-118",
+      "last_bucket": "2026-02-22T11:51:00Z",
+      "leq_5min": 48.6
+    },
+    {
+      "device_id": 2014,
+      "serial_number": "DEV00502",
+      "comment": "Site 5 device 2",
+      "lon": 37.656366,
+      "lat": 55.788021,
+      "site_id": 5,
+      "site_address": "Moscow, Old Market",
+      "site_uin": "MN-ECHO-118",
+      "last_bucket": "2026-02-22T11:57:00Z",
+      "leq_5min": 44.6
+    },
+    {
+      "device_id": 2015,
+      "serial_number": "DEV00503",
+      "comment": "Site 5 device 3",
+      "lon": 37.65691,
+      "lat": 55.786683,
+      "site_id": 5,
+      "site_address": "Moscow, Old Market",
+      "site_uin": "MN-ECHO-118",
+      "last_bucket": "2026-02-22T11:47:00Z",
+      "leq_5min": 52.8
+    },
+    {
+      "device_id": 2016,
+      "serial_number": "DEV00601",
+      "comment": "Site 6 device 1",
+      "lon": 37.631421,
+      "lat": 55.711973,
+      "site_id": 6,
+      "site_address": "Moscow, Pine District",
+      "site_uin": "MN-FOXTROT-502",
+      "last_bucket": "2026-02-22T11:49:00Z",
+      "leq_5min": 52.3
+    },
+    {
+      "device_id": 2017,
+      "serial_number": "DEV00602",
+      "comment": "Site 6 device 2",
+      "lon": 37.633729,
+      "lat": 55.71084,
+      "site_id": 6,
+      "site_address": "Moscow, Pine District",
+      "site_uin": "MN-FOXTROT-502",
+      "last_bucket": "2026-02-22T11:59:00Z",
+      "leq_5min": 64.7
+    },
+    {
+      "device_id": 2018,
+      "serial_number": "DEV00603",
+      "comment": "Site 6 device 3",
+      "lon": 37.63172,
+      "lat": 55.711331,
+      "site_id": 6,
+      "site_address": "Moscow, Pine District",
+      "site_uin": "MN-FOXTROT-502",
+      "last_bucket": null,
+      "leq_5min": null
+    },
+    {
+      "device_id": 2019,
+      "serial_number": "DEV00701",
+      "comment": "Site 7 device 1",
+      "lon": 37.573785,
+      "lat": 55.769008,
+      "site_id": 7,
+      "site_address": "Moscow, Red Arch",
+      "site_uin": "MN-GOLF-071",
+      "last_bucket": "2026-02-22T11:53:00Z",
+      "leq_5min": 47.6
+    },
+    {
+      "device_id": 2020,
+      "serial_number": "DEV00702",
+      "comment": "Site 7 device 2",
+      "lon": 37.572205,
+      "lat": 55.770933,
+      "site_id": 7,
+      "site_address": "Moscow, Red Arch",
+      "site_uin": "MN-GOLF-071",
+      "last_bucket": "2026-02-22T11:50:00Z",
+      "leq_5min": 43.9
+    },
+    {
+      "device_id": 2021,
+      "serial_number": "DEV00703",
+      "comment": "Site 7 device 3",
+      "lon": 37.573159,
+      "lat": 55.7712,
+      "site_id": 7,
+      "site_address": "Moscow, Red Arch",
+      "site_uin": "MN-GOLF-071",
+      "last_bucket": "2026-02-22T11:46:00Z",
+      "leq_5min": 43.9
+    },
+    {
+      "device_id": 2022,
+      "serial_number": "DEV00801",
+      "comment": "Site 8 device 1",
+      "lon": 37.589115,
+      "lat": 55.730813,
+      "site_id": 8,
+      "site_address": "Moscow, Orchard Row",
+      "site_uin": "MN-HOTEL-440",
+      "last_bucket": "2026-02-22T11:50:00Z",
+      "leq_5min": 45.1
+    },
+    {
+      "device_id": 2023,
+      "serial_number": "DEV00802",
+      "comment": "Site 8 device 2",
+      "lon": 37.587794,
+      "lat": 55.732973,
+      "site_id": 8,
+      "site_address": "Moscow, Orchard Row",
+      "site_uin": "MN-HOTEL-440",
+      "last_bucket": "2026-02-22T11:50:00Z",
+      "leq_5min": 59.0
+    },
+    {
+      "device_id": 2024,
+      "serial_number": "DEV00803",
+      "comment": "Site 8 device 3",
+      "lon": 37.589092,
+      "lat": 55.733138,
+      "site_id": 8,
+      "site_address": "Moscow, Orchard Row",
+      "site_uin": "MN-HOTEL-440",
+      "last_bucket": "2026-02-22T11:46:00Z",
+      "leq_5min": 45.5
+    }
+  ],
+  "sites": [
+    {
+      "id": 1,
+      "uin": "MN-ALPHA-001",
+      "address": "Moscow, Linden Yard"
+    },
+    {
+      "id": 2,
+      "uin": "MN-BRAVO-014",
+      "address": "Moscow, Iron Gate"
+    },
+    {
+      "id": 3,
+      "uin": "MN-CAR-207",
+      "address": "Moscow, Copper Lane"
+    },
+    {
+      "id": 4,
+      "uin": "MN-DELTA-033",
+      "address": "Moscow, Riverbend"
+    },
+    {
+      "id": 5,
+      "uin": "MN-ECHO-118",
+      "address": "Moscow, Old Market"
+    },
+    {
+      "id": 6,
+      "uin": "MN-FOXTROT-502",
+      "address": "Moscow, Pine District"
+    },
+    {
+      "id": 7,
+      "uin": "MN-GOLF-071",
+      "address": "Moscow, Red Arch"
+    },
+    {
+      "id": 8,
+      "uin": "MN-HOTEL-440",
+      "address": "Moscow, Orchard Row"
+    }
+  ]
+}

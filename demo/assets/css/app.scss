@@ -1,4 +1,5 @@
 /* Demo-specific styling layered on top of Graphene's vendored assets. */
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
 .demo-web {
   background-color: var(--cds-background);
