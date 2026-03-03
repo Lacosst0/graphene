@@ -100,7 +100,7 @@ defmodule Storybook.Welcome do
         <pre class="psb highlight psb:p-2 psb:md:p-3 psb:border psb:border-slate-800 psb:text-xs psb:md:text-sm
         psb:rounded-md psb:bg-slate-800! psb:whitespace-pre-wrap psb:break-normal"><code class="language-elixir"><span class="kd">defp</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="0830078535-1">do</span><span class="w">
           </span><span class="p" data-group-id="0830078535-2">[</span><span class="w">
-            </span><span class="p" data-group-id="0830078535-3">{</span><span class="ss">:graphene</span><span class="p">,</span><span class="w"> </span><span class="s">"~&gt; 2.47.0"</span><span class="p" data-group-id="0830078535-3">}</span><span class="w">
+            </span><span class="p" data-group-id="0830078535-3">{</span><span class="ss">:graphene</span><span class="p">,</span><span class="w"> </span><span class="s">"~&gt; 0.0.1"</span><span class="p" data-group-id="0830078535-3">}</span><span class="w">
           </span><span class="p" data-group-id="0830078535-2">]</span><span class="w">
         </span><span class="k" data-group-id="0830078535-1">end</span></code></pre>
         <ol start="2">

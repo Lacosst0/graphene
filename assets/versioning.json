@@ -1,0 +1,4 @@
+{
+  "carbon_web_components_range": ">=2.48.0 <3.0.0",
+  "ibm_products_web_components_range": ">=0.33.0 <1.0.0"
+}

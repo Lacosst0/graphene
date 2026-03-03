@@ -12,7 +12,7 @@ components on demand.
 ```elixir
 defp deps do
   [
-    {:graphene, "~> 2.47.0"}
+    {:graphene, "~> 0.0.1"}
   ]
 end
 ```

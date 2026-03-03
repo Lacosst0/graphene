@@ -20,6 +20,7 @@ defmodule DemoWeb.ComponentCatalogLive do
         query: "",
         filter_form: to_form(%{"query" => ""}, as: :filter),
         graphene_version: graphene_version(),
+        carbon_version: carbon_version(),
         graphene_assets: graphene_assets()
       )
 
@@ -48,7 +49,8 @@ defmodule DemoWeb.ComponentCatalogLive do
     {:noreply,
      socket
      |> assign(:graphene_assets, graphene_assets())
-     |> assign(:graphene_version, graphene_version())}
+     |> assign(:graphene_version, graphene_version())
+     |> assign(:carbon_version, carbon_version())}
   end
 
   @impl true
@@ -89,6 +91,7 @@ defmodule DemoWeb.ComponentCatalogLive do
                   <.stack orientation="horizontal" gap="2">
                     <.heading>Assets</.heading>
                     <.tag type="cool-gray">v{@graphene_version}</.tag>
+                    <.tag type="cool-gray">Carbon {@carbon_version}</.tag>
                   </.stack>
                   <p>This panel refreshes every 2 seconds to surface regenerated assets.</p>
                   <.structured_list rows={@graphene_assets} condensed>
@@ -330,7 +333,11 @@ defmodule DemoWeb.ComponentCatalogLive do
   end
 
   defp graphene_version do
-    Application.spec(:graphene, :vsn) |> to_string()
+    Graphene.Version.graphene()
+  end
+
+  defp carbon_version do
+    Graphene.Version.carbon_web_components()
   end
 
   defp format_mtime(mtime) do
