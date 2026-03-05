@@ -4,7 +4,7 @@ if Mix.env() == :dev do
     require Logger
 
     defp template(:src) do
-      Path.join(["assets", "eex", "graphene_form_components.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_form_components.ex"])
     end
 
     defp template(:dst) do
@@ -12,7 +12,7 @@ if Mix.env() == :dev do
     end
 
     defp helpers_template(:src) do
-      Path.join(["assets", "eex", "graphene_form_components_custom.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_form_components_custom.ex"])
     end
 
     defp module_name do

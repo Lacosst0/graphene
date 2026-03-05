@@ -47,7 +47,7 @@ if Mix.env() == :dev do
     end
 
     defp templatesrc() do
-      Path.join(["assets", "eex", "graphene_icons_raw.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_icons_raw.ex"])
     end
 
     defp templatedst() do

@@ -1,30 +1,31 @@
 if Mix.env() == :dev do
-  defmodule Mix.Tasks.Graphene.ProductComponents.Generate do
+  defmodule Mix.Tasks.Graphene.CarbonComponents.Generate do
     use Mix.Task
     require Logger
+    alias Graphene.CarbonComponents.Custom.ComponentRecipes.{AttrSpec, SlotAttrSpec, SlotSpec}
 
     defp template(:src) do
-      Path.join(["assets", "eex", "graphene_product_components.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_carbon_components.ex"])
     end
 
     defp template(:dst) do
-      Path.join(["lib", "graphene", "aliases", "product_components.ex"])
+      Path.join(["lib", "graphene", "aliases", "carbon_components.ex"])
     end
 
     defp template(:group_src) do
-      Path.join(["assets", "eex", "graphene_product_components_group.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_carbon_components_group.ex"])
     end
 
     defp template(:group_dst, group) do
-      Path.join(["lib", "graphene", "product_components", "#{group}.ex"])
+      Path.join(["lib", "graphene", "carbon_components", "#{group}.ex"])
     end
 
     defp module_name do
-      "Graphene.ProductComponents"
+      "Graphene.CarbonComponents"
     end
 
     defp components_list do
-      Graphene.CodeGen.ProductMetadata.components()
+      Graphene.CodeGen.Metadata.components()
     end
 
     defp components_map(components) do
@@ -33,12 +34,30 @@ if Mix.env() == :dev do
       end)
     end
 
-    defp product_component_overrides do
-      Graphene.CodeGen.ProductComponentPatches.product_component_overrides()
+    defp carbon_component_overrides do
+      Graphene.CarbonComponents.Custom.ComponentRecipes.overrides()
     end
 
-    defp product_component_recipes do
-      Graphene.CodeGen.ProductComponentPatches.product_component_recipes()
+    defp carbon_component_recipes do
+      Graphene.CarbonComponents.Custom.ComponentRecipes.recipes()
+    end
+
+    defp form_delegate_names do
+      if Code.ensure_loaded?(Graphene.Internal.FormComponents) do
+        core_names =
+          components_list()
+          |> components_map()
+          |> Map.keys()
+          |> MapSet.new()
+
+        Graphene.Internal.FormComponents.__info__(:functions)
+        |> Enum.filter(fn {_name, arity} -> arity == 1 end)
+        |> Enum.map(&elem(&1, 0))
+        |> MapSet.new()
+        |> MapSet.intersection(core_names)
+      else
+        MapSet.new()
+      end
     end
 
     defp docs_map(components) do
@@ -76,6 +95,18 @@ if Mix.env() == :dev do
         "#{k}: #{value}"
       end)
       |> Enum.join(", ")
+    end
+
+    defp atom_name(atom) when is_atom(atom) do
+      atom |> Atom.to_string() |> atom_name()
+    end
+
+    defp atom_name(name) when is_binary(name) do
+      if Regex.match?(~r/^[a-z_][a-zA-Z0-9_]*$/, name) do
+        ":#{name}"
+      else
+        ":\"#{name}\""
+      end
     end
 
     defp build_attr(attr) do
@@ -141,6 +172,77 @@ if Mix.env() == :dev do
       end
     end
 
+    defp build_extra_attrs(extra_attrs) when is_list(extra_attrs) do
+      extra_attrs
+      |> Enum.map(&build_recipe_attr/1)
+      |> Enum.join("")
+    end
+
+    defp build_extra_attrs(_extra_attrs), do: ""
+
+    defp build_recipe_attr(%AttrSpec{name: name, type: type, opts: opts}) do
+      build_manual_attr(name, type, opts || [])
+    end
+
+    defp build_extra_slots(extra_slots) when is_list(extra_slots) do
+      extra_slots
+      |> Enum.map(&build_recipe_slot/1)
+      |> Enum.join("")
+    end
+
+    defp build_extra_slots(_extra_slots), do: ""
+
+    defp build_recipe_slot(%SlotSpec{name: name, opts: opts, attrs: attrs}) do
+      slot_opts =
+        []
+        |> maybe_add_opt(:required, Keyword.get(opts || [], :required, false))
+        |> maybe_add_opt(:doc, Keyword.get(opts || [], :doc))
+
+      slot_opt_str = opt_string(slot_opts)
+      name = atom_name(name)
+
+      header =
+        if slot_opt_str do
+          "  slot #{name}, #{slot_opt_str}"
+        else
+          "  slot #{name}"
+        end
+
+      if attrs == [] do
+        header <> "\n"
+      else
+        attrs =
+          attrs
+          |> Enum.map(&build_recipe_slot_attr/1)
+          |> Enum.join("")
+
+        header <> " do\n" <> attrs <> "  end\n"
+      end
+    end
+
+    defp build_recipe_slot_attr(%SlotAttrSpec{name: name, type: type, opts: opts}) do
+      opts =
+        []
+        |> maybe_add_opt(:values, Keyword.get(opts || [], :values))
+        |> maybe_add_opt(:required, Keyword.get(opts || [], :required, false))
+        |> maybe_add_opt(:doc, Keyword.get(opts || [], :doc))
+
+      opt_str = opt_string(opts)
+      attr_name = atom_name(name)
+
+      type =
+        case type do
+          atom when is_atom(atom) -> ":#{atom}"
+          other -> to_string(other)
+        end
+
+      if opt_str do
+        "    attr #{attr_name}, #{type}, #{opt_str}\n"
+      else
+        "    attr #{attr_name}, #{type}\n"
+      end
+    end
+
     defp maybe_add_opt(opts, _key, nil), do: opts
     defp maybe_add_opt(opts, _key, false), do: opts
     defp maybe_add_opt(opts, _key, []), do: opts
@@ -153,15 +255,22 @@ if Mix.env() == :dev do
       |> Enum.join("\n")
     end
 
-    defp render_component(name, component, doc, recipe) do
+    defp render_component(name, component, doc, recipe, form_delegates) do
       if recipe do
         render_recipe_component(name, component, doc, recipe)
       else
-        render_simple_component(name, component, doc)
+        delegate =
+          if MapSet.member?(form_delegates, name) do
+            :form
+          else
+            :core
+          end
+
+        render_simple_component(name, component, doc, delegate)
       end
     end
 
-    defp render_simple_component(name, component, doc) do
+    defp render_simple_component(name, component, doc, delegate) do
       doc_str =
         if is_binary(doc) do
           "  @doc \"\"\"\n" <> indent_doc(doc) <> "\n  \"\"\"\n"
@@ -174,6 +283,7 @@ if Mix.env() == :dev do
         |> Enum.map(&build_attr/1)
         |> Enum.join("")
         |> Kernel.<>(events_attr(component))
+        |> Kernel.<>(form_delegate_attrs(component, delegate))
         |> Kernel.<>(rest_attr())
 
       slots =
@@ -182,7 +292,11 @@ if Mix.env() == :dev do
         |> Enum.join("")
         |> Kernel.<>(inner_block_slot(component.slots))
 
-      delegate_call = "    ProductCoreComponents.#{name}(assigns)\n"
+      delegate_call =
+        case delegate do
+          :form -> "    FormComponents.#{name}(assigns)\n"
+          _ -> "    CoreComponents.#{name}(assigns)\n"
+        end
 
       doc_str <>
         attrs <>
@@ -200,24 +314,26 @@ if Mix.env() == :dev do
           "  @doc \"See base component.\"\n"
         end
 
-      delegate = Map.get(recipe, :delegate, :product)
-      delegate_to = Map.get(recipe, :delegate_to, name)
+      delegate = Map.get(recipe, :delegate) || :core
+      delegate_to = Map.get(recipe, :delegate_to) || name
+
+      extra_attrs = Map.get(recipe, :extra_attrs, [])
+      extra_slots = Map.get(recipe, :extra_slots, [])
 
       attrs =
         component.attrs
         |> Enum.map(&build_attr/1)
         |> Enum.join("")
-        |> Kernel.<>(Map.get(recipe, :extra_attrs, ""))
-        |> Kernel.<>(events_attr(component, Map.get(recipe, :extra_attrs, "")))
-        |> Kernel.<>(rest_attr(Map.get(recipe, :extra_attrs, "")))
-
-      extra_slots = Map.get(recipe, :extra_slots, "")
+        |> Kernel.<>(events_attr(component))
+        |> Kernel.<>(form_delegate_attrs(component, delegate))
+        |> Kernel.<>(build_extra_attrs(extra_attrs))
+        |> Kernel.<>(rest_attr(extra_attrs))
 
       slots =
         component.slots
         |> Enum.map(&build_slot/1)
         |> Enum.join("")
-        |> Kernel.<>(extra_slots)
+        |> Kernel.<>(build_extra_slots(extra_slots))
         |> Kernel.<>(inner_block_slot(component.slots, extra_slots))
 
       patterns = Map.get(recipe, :patterns, [])
@@ -227,6 +343,7 @@ if Mix.env() == :dev do
         assign_defaults_prelude(component.attrs)
         |> merge_prelude(Map.get(recipe, :prelude))
         |> merge_prelude(attrs_prelude)
+
       body = Map.get(recipe, :body, "")
 
       clauses =
@@ -317,12 +434,12 @@ if Mix.env() == :dev do
     defp merge_prelude(nil, prelude), do: prelude
     defp merge_prelude(prelude, extra), do: prelude <> "\n" <> extra
 
-    defp inner_block_slot(slots, extra_slots \\ "") do
+    defp inner_block_slot(slots, extra_slots \\ []) do
       has_inner_block =
         Enum.any?(slots, fn slot ->
           slot.atomname == ":inner_block" or slot.htmlname == "inner-block" or
             slot.name == "inner_block"
-        end) or String.contains?(extra_slots, "slot :inner_block")
+        end) or extra_slot_inner_block?(extra_slots)
 
       if has_inner_block do
         ""
@@ -331,7 +448,36 @@ if Mix.env() == :dev do
       end
     end
 
-    defp rest_attr(extra_attrs \\ "") do
+    defp extra_slot_inner_block?(extra_slots) when is_list(extra_slots) do
+      Enum.any?(extra_slots, fn
+        %SlotSpec{name: :inner_block} -> true
+        %SlotSpec{name: :"inner-block"} -> true
+        %SlotSpec{name: "inner_block"} -> true
+        _ -> false
+      end)
+    end
+
+    defp extra_slot_inner_block?(extra_slots) when is_binary(extra_slots) do
+      String.contains?(extra_slots, "slot :inner_block")
+    end
+
+    defp extra_slot_inner_block?(_extra_slots), do: false
+
+    defp rest_attr(extra_attrs \\ [])
+
+    defp rest_attr(extra_attrs) when is_list(extra_attrs) do
+      if Enum.any?(extra_attrs, fn
+           %AttrSpec{name: :rest} -> true
+           %AttrSpec{name: "rest"} -> true
+           _ -> false
+         end) do
+        ""
+      else
+        "  attr :rest, :global\n"
+      end
+    end
+
+    defp rest_attr(extra_attrs) when is_binary(extra_attrs) do
       if String.contains?(extra_attrs, "attr :rest") do
         ""
       else
@@ -339,15 +485,18 @@ if Mix.env() == :dev do
       end
     end
 
-    defp events_attr(component, extra_attrs \\ "") do
-      has_events_attr =
-        Enum.any?(component.attrs, fn attr -> attr.atomname == :events end) or
-          String.contains?(extra_attrs, "attr :events")
+    defp rest_attr(_extra_attrs), do: "  attr :rest, :global\n"
 
-      if has_events_attr do
+    defp events_attr(component) do
+      existing = MapSet.new(Enum.map(component.attrs, & &1.name))
+
+      if MapSet.member?(existing, :events) or MapSet.member?(existing, "events") do
         ""
       else
-        "  attr :events, :any, default: nil, doc: \"custom events passed to Graphene.JS.events/1\"\n"
+        build_manual_attr(:events, :any,
+          default: nil,
+          doc: "custom events passed to Graphene.JS.events/1"
+        )
       end
     end
 
@@ -374,8 +523,8 @@ if Mix.env() == :dev do
     defp render_recipe_fallback(name, delegate, delegate_to) do
       call =
         case delegate do
-          :carbon -> "    CarbonComponents.#{delegate_to}(assigns)\n"
-          _ -> "    ProductCoreComponents.#{delegate_to}(assigns)\n"
+          :form -> "    FormComponents.#{delegate_to}(assigns)\n"
+          _ -> "    CoreComponents.#{delegate_to}(assigns)\n"
         end
 
       "  def #{name}(assigns) do\n" <> call <> "  end\n\n"
@@ -388,10 +537,59 @@ if Mix.env() == :dev do
       end
     end
 
+    defp form_delegate_attrs(component, :form) do
+      existing = MapSet.new(Enum.map(component.attrs, & &1.name))
+
+      [
+        {:field, "Phoenix.HTML.FormField",
+         [doc: "a form field struct, for example: @form[:email]"]},
+        {:form, :string, [default: nil, doc: "the form attribute for the form-associated element"]},
+        {:form_event, :string,
+         [
+           default: nil,
+           doc: "override the custom event used to sync form values (passed as `form-event`)"
+         ]}
+      ]
+      |> Enum.reject(fn {name, _type, _opts} -> MapSet.member?(existing, name) end)
+      |> Enum.map(fn {name, type, opts} -> build_manual_attr(name, type, opts) end)
+      |> Enum.join("")
+    end
+
+    defp form_delegate_attrs(_component, _delegate), do: ""
+
+    defp build_manual_attr(name, type, opts) do
+      opt_str = opt_string(opts)
+      name = atom_name(name)
+
+      type =
+        case type do
+          atom when is_atom(atom) -> ":#{atom}"
+          other -> to_string(other)
+        end
+
+      if opt_str do
+        "  attr #{name}, #{type}, #{opt_str}\n"
+      else
+        "  attr #{name}, #{type}\n"
+      end
+    end
+
     defp ensure_trailing_newline(nil), do: ""
 
     defp ensure_trailing_newline(content) when is_binary(content) do
       if String.ends_with?(content, "\n"), do: content, else: content <> "\n"
+    end
+
+    defp custom_component_exports do
+      Graphene.CarbonComponents.Custom.Exports.import_list()
+    end
+
+    defp custom_component_delegates do
+      Graphene.CarbonComponents.Custom.Exports.exports()
+      |> Enum.map(fn %{name: name, module: mod} ->
+        "  defdelegate #{name}(assigns), to: #{inspect(mod)}\n"
+      end)
+      |> Enum.join("")
     end
 
     defp prefix_counts(names) do
@@ -430,17 +628,17 @@ if Mix.env() == :dev do
     end
 
     defp group_module_name(prefix) do
-      "Graphene.ProductComponents." <> Macro.camelize(prefix)
+      "Graphene.CarbonComponents." <> Macro.camelize(prefix)
     end
 
-    defp render_wrappers(names, components, docs, recipes) do
+    defp render_wrappers(names, components, docs, recipes, form_delegates) do
       names
       |> Enum.sort()
       |> Enum.map(fn name ->
         component = Map.fetch!(components, name)
         doc = Map.get(docs, name)
         recipe = Map.get(recipes, name)
-        render_component(name, component, doc, recipe)
+        render_component(name, component, doc, recipe, form_delegates)
       end)
       |> Enum.join("\n")
     end
@@ -470,12 +668,12 @@ if Mix.env() == :dev do
       aliases =
         []
         |> maybe_add_alias(
-          String.contains?(wrappers, "ProductCoreComponents."),
-          "  alias Graphene.Internal.ProductCoreComponents"
+          String.contains?(wrappers, "CoreComponents."),
+          "  alias Graphene.Internal.CoreComponents"
         )
         |> maybe_add_alias(
-          String.contains?(wrappers, "CarbonComponents."),
-          "  alias Graphene.CarbonComponents"
+          String.contains?(wrappers, "FormComponents."),
+          "  alias Graphene.Internal.FormComponents"
         )
 
       Enum.join(aliases, "\n")
@@ -485,9 +683,16 @@ if Mix.env() == :dev do
     defp maybe_add_alias(list, false, _alias_line), do: list
 
     defp cleanup_generated_groups!(group_paths) do
-      keep = MapSet.new(group_paths)
+      manual =
+        MapSet.new([
+          Path.join(["lib", "graphene", "carbon_components", "data_table_component.ex"]),
+          Path.join(["lib", "graphene", "carbon_components", "data_table.ex"]),
+          Path.join(["lib", "graphene", "carbon_components", "helpers.ex"])
+        ])
 
-      Path.join(["lib", "graphene", "product_components", "*.ex"])
+      keep = MapSet.union(MapSet.new(group_paths), manual)
+
+      Path.join(["lib", "graphene", "carbon_components", "*.ex"])
       |> Path.wildcard()
       |> Enum.each(fn path ->
         if not MapSet.member?(keep, path) do
@@ -503,8 +708,9 @@ if Mix.env() == :dev do
       components = components_list()
       components_map = components_map(components)
       docs = docs_map(components)
-      recipes = product_component_recipes() |> Map.new(&{&1.name, &1})
-      overrides = product_component_overrides()
+      recipes = carbon_component_recipes() |> Map.new(&{&1.name, &1})
+      overrides = carbon_component_overrides()
+      form_delegates = form_delegate_names()
 
       names =
         components
@@ -525,8 +731,13 @@ if Mix.env() == :dev do
       delegates = render_delegates(render_names, group_map)
       imports = render_imports(group_names)
 
+      custom_imports =
+        "      import Graphene.CarbonComponents, only: #{inspect(custom_component_exports())}"
+
+      custom_delegates = custom_component_delegates()
+
       tmp_dir =
-        Path.join(System.tmp_dir!(), "graphene-product-#{System.unique_integer([:positive])}")
+        Path.join(System.tmp_dir!(), "graphene-carbon-#{System.unique_integer([:positive])}")
 
       File.mkdir_p!(tmp_dir)
 
@@ -538,7 +749,12 @@ if Mix.env() == :dev do
 
       for {group, group_components} <- grouped do
         wrappers =
-          render_wrappers(group_components, components_map, docs, recipes)
+          render_wrappers(group_components, components_map, docs, recipes, form_delegates)
+
+        wrappers =
+          [wrappers]
+          |> Enum.reject(&(&1 == ""))
+          |> Enum.join("\n")
 
         aliases = render_aliases(wrappers)
 
@@ -564,11 +780,12 @@ if Mix.env() == :dev do
       assigns = [
         module: module_name(),
         delegates: delegates,
+        custom_imports: custom_imports,
         imports: imports,
-        custom_components: ""
+        custom_delegates: custom_delegates
       ]
 
-      tmp_out = Path.join(tmp_dir, "product_components.ex")
+      tmp_out = Path.join(tmp_dir, "carbon_components.ex")
       File.write!(tmp_out, render_template(template(:src), assigns))
 
       Mix.Task.reenable("format")
@@ -579,7 +796,7 @@ if Mix.env() == :dev do
       File.mkdir_p!(Path.dirname(template(:dst)))
       File.cp!(tmp_out, template(:dst))
 
-      Logger.debug("Added #{length(components)} product components")
+      Logger.debug("Added #{length(components)} components")
     end
   end
 end

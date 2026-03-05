@@ -15,11 +15,11 @@ if Mix.env() == :dev do
     """
 
     defp template_story(:src) do
-      Path.join(["assets", "eex", "graphene_component_story.exs"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_component_story.exs"])
     end
 
     defp template_index(:src) do
-      Path.join(["assets", "eex", "graphene_core_storybook_index.exs"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_core_storybook_index.exs"])
     end
 
     defp template_story(:dst, base, name) do

@@ -1,35 +1,35 @@
 if Mix.env() == :dev do
-  defmodule Mix.Tasks.Graphene.CoreComponents.Generate do
+  defmodule Mix.Tasks.Graphene.ProductCoreComponents.Generate do
     use Mix.Task
     require Logger
-    alias Graphene.CodeGen.Metadata
+    alias Graphene.CodeGen.ProductMetadata
 
     defp template_core_components(:src) do
-      Path.join(["assets", "eex", "graphene_core_components.ex"])
+      Path.join(["lib", "mix", "tasks", "templates", "graphene_core_components.ex"])
     end
 
     defp template_core_components(:dst) do
-      Path.join(["lib", "graphene", "internal", "core_components.ex"])
+      Path.join(["lib", "graphene", "internal", "product_core_components.ex"])
     end
 
     defp template_js_mapping(:src) do
-      Path.join(["assets", "eex", "dynamic_loader_mapping.ts"])
+      Path.join(["lib", "mix", "tasks", "templates", "dynamic_loader_mapping_products.ts"])
     end
 
     defp template_js_mapping(:dst) do
-      Path.join(["assets", "src", "lib", "_dynamic_loader_mapping.ts"])
+      Path.join(["assets", "src", "lib", "_dynamic_loader_mapping_products.ts"])
     end
 
     defp module() do
-      "Graphene.Internal.CoreComponents"
+      "Graphene.Internal.ProductCoreComponents"
     end
 
     def get_version() do
-      Metadata.version()
+      ProductMetadata.version()
     end
 
     def get_components() do
-      Metadata.components()
+      ProductMetadata.components()
     end
 
     defp template_assigns(components) do
@@ -37,7 +37,7 @@ if Mix.env() == :dev do
         version: get_version(),
         module: module(),
         components: components,
-        source: Metadata.source()
+        source: ProductMetadata.source()
       ]
     end
 
@@ -68,11 +68,11 @@ if Mix.env() == :dev do
       assigns = template_assigns(components)
 
       tmp_dir =
-        Path.join(System.tmp_dir!(), "graphene-codegen-#{System.unique_integer([:positive])}")
+        Path.join(System.tmp_dir!(), "graphene-product-codegen-#{System.unique_integer([:positive])}")
 
       File.mkdir_p!(tmp_dir)
-      tmp_core = Path.join(tmp_dir, "core_components.ex")
-      tmp_js = Path.join(tmp_dir, "_dynamic_loader_mapping.ts")
+      tmp_core = Path.join(tmp_dir, "product_core_components.ex")
+      tmp_js = Path.join(tmp_dir, "_dynamic_loader_mapping_products.ts")
 
       File.write!(tmp_core, render_template(template_core_components(:src), assigns))
       File.write!(tmp_js, render_template(template_js_mapping(:src), assigns))
@@ -88,7 +88,7 @@ if Mix.env() == :dev do
       File.mkdir_p!(Path.dirname(template_js_mapping(:dst)))
       File.cp!(tmp_js, template_js_mapping(:dst))
 
-      Logger.debug("Added #{length(components)} components")
+      Logger.debug("Added #{length(components)} product components")
     end
   end
 end

@@ -3,6 +3,5 @@ build
 coverage
 
 codegen
-eex
 dist
 node_modules
