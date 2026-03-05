@@ -144,13 +144,15 @@
       |> assign_new(:button, fn -> [] end)
       |> assign_new(:drop_container, fn -> [] end)
       |> assign_new(:item, fn -> [] end)
-      |> assign_new(:form_event, fn ->
-        if Map.get(assigns, :drop_container, []) != [] and Map.get(assigns, :button, []) == [] do
-          "cds-file-uploader-drop-container-changed"
-        else
-          "cds-file-uploader-button-changed"
-        end
-      end)
+      |> assign(
+        :form_event,
+        assigns[:form_event] ||
+          if Map.get(assigns, :drop_container, []) != [] and Map.get(assigns, :button, []) == [] do
+            "cds-file-uploader-drop-container-changed"
+          else
+            "cds-file-uploader-button-changed"
+          end
+      )
       |> form_input_assigns(name: :file_uploader, mode: :value, event: "cds-file-uploader-button-changed")
 
     ~H"""
