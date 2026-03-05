@@ -6,7 +6,7 @@ import {
   readEvents,
   resolveTargets,
   sanitizePayload,
-  type CustomEventConfig
+  type CustomEventConfig,
 } from "./event_helpers";
 
 type HandlerEntry = [EventTarget, string, EventListener];
@@ -34,7 +34,8 @@ export class EventManager {
 
   public connect(): void {
     const doConnect = () => {
-      const root = this.options.root ?? document.body ?? document.documentElement;
+      const root =
+        this.options.root ?? document.body ?? document.documentElement;
       if (!root) return;
       this.attachTree(root);
       this.observe(root);
@@ -73,7 +74,7 @@ export class EventManager {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["data-gf-events", "data-gf-target-selector"]
+      attributeFilter: ["data-gf-events", "data-gf-target-selector"],
     });
     this.observer = observer;
   }
@@ -98,9 +99,11 @@ export class EventManager {
       this.attachElement(root);
     }
     if ("querySelectorAll" in root) {
-      (root as ParentNode).querySelectorAll?.("[data-gf-events]").forEach((el) => {
-        this.attachElement(el as HTMLElement);
-      });
+      (root as ParentNode)
+        .querySelectorAll?.("[data-gf-events]")
+        .forEach((el) => {
+          this.attachElement(el as HTMLElement);
+        });
     }
   }
 
@@ -167,13 +170,15 @@ export class EventManager {
     sourceEl: HTMLElement,
     config: CustomEventConfig,
     event: Event,
-    fallbackTarget: any
+    fallbackTarget: any,
   ): void {
     if (!liveSocket || typeof liveSocket.isConnected !== "function") return;
     if (!liveSocket.isConnected()) return;
     if (typeof liveSocket.owner !== "function") return;
 
-    const payload = sanitizePayload(buildPayload(config.payload, event, fallbackTarget));
+    const payload = sanitizePayload(
+      buildPayload(config.payload, event, fallbackTarget),
+    );
     const pushTarget = config.push_target;
     const pushEventName = config.push;
 
@@ -182,7 +187,12 @@ export class EventManager {
       if (pushTarget && typeof view.withinTargets === "function") {
         view.withinTargets(pushTarget, (targetView: any, targetCtx: any) => {
           if (targetView && typeof targetView.pushHookEvent === "function") {
-            targetView.pushHookEvent(sourceEl, targetCtx, pushEventName, payload);
+            targetView.pushHookEvent(
+              sourceEl,
+              targetCtx,
+              pushEventName,
+              payload,
+            );
           }
         });
         return;

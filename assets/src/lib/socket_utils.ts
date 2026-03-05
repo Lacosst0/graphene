@@ -19,19 +19,31 @@
 //   }
 // )
 
-export function mergeWebComponentsAttrs(from: HTMLElement, to: HTMLElement): void {
-    if (from.tagName.startsWith("cds-")) {
-        const attributes = [...Array.from(to.attributes), ...Array.from(from.attributes)];
-        attributes.forEach((attr) => {
-            to.setAttribute(attr.name, attr.value);
-        });
-        const tagName = to.tagName.toLowerCase();
-        if (tagName === "cds-number-input" || tagName === "cds-fluid-number-input") {
-            const step = to.getAttribute("step");
-            const safeStep = step === null || step === "" || step === "null" || step === "undefined" ? "1" : step;
-            to.setAttribute("step", safeStep);
-            (to as any)._step = safeStep;
-            (to as any).step = safeStep;
-        }
+export function mergeWebComponentsAttrs(
+  from: HTMLElement,
+  to: HTMLElement,
+): void {
+  if (from.tagName.startsWith("cds-")) {
+    const attributes = [
+      ...Array.from(to.attributes),
+      ...Array.from(from.attributes),
+    ];
+    attributes.forEach((attr) => {
+      to.setAttribute(attr.name, attr.value);
+    });
+    const tagName = to.tagName.toLowerCase();
+    if (
+      tagName === "cds-number-input" ||
+      tagName === "cds-fluid-number-input"
+    ) {
+      const step = to.getAttribute("step");
+      const safeStep =
+        step === null || step === "" || step === "null" || step === "undefined"
+          ? "1"
+          : step;
+      to.setAttribute("step", safeStep);
+      (to as any)._step = safeStep;
+      (to as any).step = safeStep;
     }
+  }
 }

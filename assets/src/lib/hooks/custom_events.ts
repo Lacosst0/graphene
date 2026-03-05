@@ -5,7 +5,7 @@ import {
   execJS,
   readEvents,
   resolveTargets,
-  type CustomEventConfig
+  type CustomEventConfig,
 } from "../event_helpers";
 
 type HookHandler = (event: Event) => void;
@@ -22,7 +22,12 @@ type GrapheneRootHook = GrapheneHook & {
   attachAll?: () => void;
 };
 
-const execViewJS = (hook: any, sourceEl: HTMLElement, encodedJS: string, eventType: string) => {
+const execViewJS = (
+  hook: any,
+  sourceEl: HTMLElement,
+  encodedJS: string,
+  eventType: string,
+) => {
   const view = hook.__view?.();
   execJS(view?.liveSocket, sourceEl, encodedJS, eventType);
 };
@@ -64,7 +69,7 @@ export const GrapheneCustomEvents = {
       target.removeEventListener(name, handler as EventListener);
     });
     this._handlers = [];
-  }
+  },
 };
 
 export const GrapheneEventsRoot = {
@@ -91,7 +96,7 @@ export const GrapheneEventsRoot = {
     this._handlers = [];
 
     const elements = Array.from(
-      this.el.querySelectorAll("[data-gf-events]")
+      this.el.querySelectorAll("[data-gf-events]"),
     ) as HTMLElement[];
     if (this.el.dataset.gfEvents) {
       elements.unshift(this.el);
@@ -125,5 +130,5 @@ export const GrapheneEventsRoot = {
         });
       });
     });
-  }
+  },
 };

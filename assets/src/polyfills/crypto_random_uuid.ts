@@ -34,7 +34,7 @@
       try {
         Object.defineProperty(target, "randomUUID", {
           value: randomUUID,
-          configurable: true
+          configurable: true,
         });
       } catch (_error) {
         try {
@@ -72,7 +72,7 @@
         Object.defineProperty(globalThis, "crypto", {
           value: fallbackCrypto,
           configurable: true,
-          writable: true
+          writable: true,
         });
       } catch (_error) {
         try {

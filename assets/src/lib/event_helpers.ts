@@ -25,7 +25,7 @@ export const readEvents = (el: HTMLElement): CustomEventConfig[] => {
 
 export const resolveTargets = (
   el: HTMLElement,
-  config?: CustomEventConfig
+  config?: CustomEventConfig,
 ): EventTarget[] => {
   const selector = config?.target || el.dataset.gfTargetSelector;
   if (!selector) return [el];
@@ -54,8 +54,10 @@ const readTargetChecked = (detail: any, targetEl: any) => {
   if (detail && Object.prototype.hasOwnProperty.call(detail, "checked")) {
     return detail.checked;
   }
-  if (targetEl && typeof targetEl.toggled !== "undefined") return targetEl.toggled;
-  if (targetEl && typeof targetEl.checked !== "undefined") return targetEl.checked;
+  if (targetEl && typeof targetEl.toggled !== "undefined")
+    return targetEl.toggled;
+  if (targetEl && typeof targetEl.checked !== "undefined")
+    return targetEl.checked;
   return null;
 };
 
@@ -65,7 +67,10 @@ const targetPayload = (event: Event, fallbackTarget: any) => {
   return {
     value: readTargetValue(targetEl),
     checked: readTargetChecked(detail, targetEl),
-    toggled: targetEl && typeof targetEl.toggled !== "undefined" ? targetEl.toggled : null
+    toggled:
+      targetEl && typeof targetEl.toggled !== "undefined"
+        ? targetEl.toggled
+        : null,
   };
 };
 
@@ -88,14 +93,19 @@ export const buildPayload = (spec: any, event: Event, fallbackTarget: any) => {
   }
 
   if (Array.isArray(spec)) {
-    return spec.reduce((acc, item) => mergePayload(acc, buildPayload(item, event, fallbackTarget)), {});
+    return spec.reduce(
+      (acc, item) =>
+        mergePayload(acc, buildPayload(item, event, fallbackTarget)),
+      {},
+    );
   }
 
   if (typeof spec === "object") {
     if (Array.isArray(spec.merge)) {
       const merged = spec.merge.reduce(
-        (acc: any, item: any) => mergePayload(acc, buildPayload(item, event, fallbackTarget)),
-        {}
+        (acc: any, item: any) =>
+          mergePayload(acc, buildPayload(item, event, fallbackTarget)),
+        {},
       );
       return mergePayload(merged, spec.static || {});
     }
@@ -109,7 +119,7 @@ export const execJS = (
   liveSocket: any,
   sourceEl: HTMLElement,
   encodedJS: string,
-  eventType?: string
+  eventType?: string,
 ) => {
   if (!encodedJS) return;
   if (!liveSocket || typeof liveSocket.execJS !== "function") return;
@@ -134,12 +144,14 @@ const isDomDocument = (value: any): value is Document =>
 const summarizeElement = (el: Element) => {
   const anyEl = el as any;
   const summary: Record<string, any> = {
-    tagName: el.tagName?.toLowerCase?.() ?? null
+    tagName: el.tagName?.toLowerCase?.() ?? null,
   };
   if ("id" in anyEl && anyEl.id) summary.id = anyEl.id;
-  if ("className" in anyEl && anyEl.className) summary.className = anyEl.className;
+  if ("className" in anyEl && anyEl.className)
+    summary.className = anyEl.className;
   if ("name" in anyEl && anyEl.name) summary.name = anyEl.name;
-  if ("value" in anyEl && typeof anyEl.value !== "undefined") summary.value = anyEl.value;
+  if ("value" in anyEl && typeof anyEl.value !== "undefined")
+    summary.value = anyEl.value;
   if ("role" in anyEl && anyEl.getAttribute) {
     const role = anyEl.getAttribute("role");
     if (role) summary.role = role;
@@ -149,12 +161,12 @@ const summarizeElement = (el: Element) => {
 
 const summarizeNode = (node: Node) => ({
   nodeName: node.nodeName,
-  nodeType: node.nodeType
+  nodeType: node.nodeType,
 });
 
 const summarizeEvent = (event: Event) => ({
   type: event.type,
-  detail: (event as any).detail
+  detail: (event as any).detail,
 });
 
 export const sanitizePayload = (value: any) => {

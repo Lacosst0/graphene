@@ -14,7 +14,7 @@ export interface WebComponentManagerOptions {
 
 const componentImports = {
   ...carbonComponentImports,
-  ...productComponentImports
+  ...productComponentImports,
 };
 const baseComponentNames = Object.keys(componentImports);
 const formComponentNames = baseComponentNames.map((name) => `${name}-form`);
@@ -28,7 +28,11 @@ const patchedNumberInputs = new Set<string>();
 const definePatchFlag = "__graphenePatchedDefine";
 const originalDefine = customElements.define.bind(customElements);
 
-function normalizeTagName(tagName: string): { tag: string; base: string; isForm: boolean } {
+function normalizeTagName(tagName: string): {
+  tag: string;
+  base: string;
+  isForm: boolean;
+} {
   const lower = tagName.toLowerCase();
   if (lower.endsWith("-form")) {
     return { tag: lower, base: lower.slice(0, -5), isForm: true };
@@ -163,7 +167,7 @@ function applyNumberInputDescriptor(proto: any): void {
       } else {
         (this as any)._step = safeValue;
       }
-    }
+    },
   });
 
   if (!proto.__grapheneStepPatched) {
@@ -178,7 +182,9 @@ function applyNumberInputDescriptor(proto: any): void {
           // ignore if the component rejects programmatic assignment
         }
       }
-      return originalConnected ? originalConnected.apply(this, args) : undefined;
+      return originalConnected
+        ? originalConnected.apply(this, args)
+        : undefined;
     };
     proto.__grapheneStepPatched = true;
   }
@@ -243,15 +249,13 @@ function scanAndLoad(root: ParentNode | null): void {
     return;
   }
 
-  root
-    .querySelectorAll(componentSelector)
-    .forEach((el) => {
-      normalizeNotificationTimestamp(el);
-      normalizeNumberInputStep(el);
-      const { base } = normalizeTagName(el.tagName);
-      ensureNumberInputPatched(base);
-      loadComponentByTag(el.tagName);
-    });
+  root.querySelectorAll(componentSelector).forEach((el) => {
+    normalizeNotificationTimestamp(el);
+    normalizeNumberInputStep(el);
+    const { base } = normalizeTagName(el.tagName);
+    ensureNumberInputPatched(base);
+    loadComponentByTag(el.tagName);
+  });
 }
 
 function collectComponentTags(root: ParentNode | null): string[] {
@@ -300,7 +304,7 @@ export class WebComponentManager {
         if (timeoutMs > 0) {
           Promise.race([
             ready,
-            new Promise((resolve) => setTimeout(resolve, timeoutMs))
+            new Promise((resolve) => setTimeout(resolve, timeoutMs)),
           ]).finally(() => this.clearLoadingClass());
         } else {
           ready.finally(() => this.clearLoadingClass());
@@ -326,7 +330,9 @@ export class WebComponentManager {
     this.observer = null;
   }
 
-  public whenReady(root: ParentNode | null = this.options.root ?? document.body): Promise<void> {
+  public whenReady(
+    root: ParentNode | null = this.options.root ?? document.body,
+  ): Promise<void> {
     if (this.readyPromise) {
       return this.readyPromise;
     }
@@ -334,9 +340,9 @@ export class WebComponentManager {
     this.loadExistingComponents();
     const tags = collectComponentTags(root ?? document.documentElement);
 
-    this.readyPromise = Promise.all(tags.map((tag) => waitForComponent(tag))).then(
-      () => undefined
-    );
+    this.readyPromise = Promise.all(
+      tags.map((tag) => waitForComponent(tag)),
+    ).then(() => undefined);
 
     return this.readyPromise;
   }
@@ -370,7 +376,7 @@ export class WebComponentManager {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["timestamp"]
+      attributeFilter: ["timestamp"],
     };
     const root = document.body ?? document.documentElement;
     if (!root) {

@@ -1,18 +1,18 @@
-@use '@carbon/styles/scss/config' with (
+@use "@carbon/styles/scss/config" with (
   $css--font-face: false
 );
-@use '@carbon/styles/scss/reset';
-@use '@carbon/styles/scss/type';
-@use '@carbon/styles/scss/theme';
-@use '@carbon/styles/scss/themes';
-@use '@carbon/styles/scss/components';
-@use '@carbon/styles/scss/layout';
-@use '@carbon/ibm-products-styles/scss/index-without-carbon';
-@use './story-assets/interstitial-screen';
-@use '@carbon/grid' as grid;
-@use '@carbon/layout/scss/spacing' as carbon_spacing;
+@use "@carbon/styles/scss/reset";
+@use "@carbon/styles/scss/type";
+@use "@carbon/styles/scss/theme";
+@use "@carbon/styles/scss/themes";
+@use "@carbon/styles/scss/components";
+@use "@carbon/styles/scss/layout";
+@use "@carbon/ibm-products-styles/scss/index-without-carbon";
+@use "./story-assets/interstitial-screen";
+@use "@carbon/grid" as grid;
+@use "@carbon/layout/scss/spacing" as carbon_spacing;
 
-@import '@ibm/plex/css/ibm-plex.css';
+@import "@ibm/plex/css/ibm-plex.css";
 
 @include reset.reset;
 @include type.reset;
@@ -22,10 +22,12 @@
 :root {
   @include theme.theme(themes.$g10);
 
-  --cds-font-sans: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular",
-    sans-serif;
-  --cds-font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  --cds-font-sans:
+    "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont,
+    ".SFNSText-Regular", sans-serif;
+  --cds-font-mono:
+    "IBM Plex Mono", "SFMono-Regular", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
   --cds-font-serif: "IBM Plex Serif", "Georgia", "Times New Roman", serif;
 
   @each $name, $value in carbon_spacing.$spacing {
@@ -56,7 +58,7 @@ cds-side-nav ~ .cds--content {
 }
 
 cds-side-nav[expanded] ~ .cds--content,
-cds-side-nav[collapse-mode='fixed'] ~ .cds--content,
+cds-side-nav[collapse-mode="fixed"] ~ .cds--content,
 .cds--side-nav[expanded] ~ .cds--content {
   margin-inline-start: 16rem;
 }

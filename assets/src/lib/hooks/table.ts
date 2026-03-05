@@ -25,19 +25,20 @@ const TABLE_EVENTS: Record<string, string> = {
   "cds-table-sorted": "graphene:table-sorted",
   "cds-table-filtered": "graphene:table-filtered",
   "cds-search-input": "graphene:table-search-input",
-  "cds-table-batch-actions-cancel-clicked": "graphene:table-batch-cancel"
+  "cds-table-batch-actions-cancel-clicked": "graphene:table-batch-cancel",
 };
-
-const CARBON_PREFIX = "cds";
 
 const rowId = (row: any): string | null => {
   if (!row) return null;
   if (typeof row === "string" || typeof row === "number") return String(row);
 
   if (typeof row === "object") {
-    if (typeof row.rowId === "string" || typeof row.rowId === "number") return String(row.rowId);
-    if (typeof row.row_id === "string" || typeof row.row_id === "number") return String(row.row_id);
-    if (typeof row.id === "string" || typeof row.id === "number") return String(row.id);
+    if (typeof row.rowId === "string" || typeof row.rowId === "number")
+      return String(row.rowId);
+    if (typeof row.row_id === "string" || typeof row.row_id === "number")
+      return String(row.row_id);
+    if (typeof row.id === "string" || typeof row.id === "number")
+      return String(row.id);
   }
 
   if (row.dataset?.rowId) return row.dataset.rowId;
@@ -58,7 +59,8 @@ const buildPayload = (event: TableEvent, root: HTMLElement): TablePayload => {
   const isSimulated = (detail as any).__simulated === true;
   const selectedRowsFromDetail = Array.isArray(detail.selectedRows)
     ? detail.selectedRows
-    : detail.selectedRows && typeof detail.selectedRows[Symbol.iterator] === "function"
+    : detail.selectedRows &&
+        typeof detail.selectedRows[Symbol.iterator] === "function"
       ? Array.from(detail.selectedRows)
       : [];
   const selectedRowsFromTable =
@@ -66,9 +68,9 @@ const buildPayload = (event: TableEvent, root: HTMLElement): TablePayload => {
       ? ((root as any)._selectedRows as HTMLElement[])
       : null;
   const selectedIdFromDetail = rowId(detail.selectedRow || null);
-  const selectedRowsFromDom = Array.from(root.querySelectorAll<HTMLElement>("cds-table-row")).filter(
-    (row) => row.hasAttribute("selected") || (row as any).selected
-  );
+  const selectedRowsFromDom = Array.from(
+    root.querySelectorAll<HTMLElement>("cds-table-row"),
+  ).filter((row) => row.hasAttribute("selected") || (row as any).selected);
   const selectedIdsFromDom = rowIds(selectedRowsFromDom);
   const selectedIdsFromDetail = rowIds(selectedRowsFromDetail);
   let selectedIds = selectedIdsFromDom;
@@ -85,14 +87,15 @@ const buildPayload = (event: TableEvent, root: HTMLElement): TablePayload => {
 
   const unfilteredRowsFromDetail = Array.isArray(detail.unfilteredRows)
     ? detail.unfilteredRows
-    : detail.unfilteredRows && typeof detail.unfilteredRows[Symbol.iterator] === "function"
+    : detail.unfilteredRows &&
+        typeof detail.unfilteredRows[Symbol.iterator] === "function"
       ? Array.from(detail.unfilteredRows)
       : [];
   const unfilteredRows =
     unfilteredRowsFromDetail.length > 0
       ? unfilteredRowsFromDetail
       : Array.from(root.querySelectorAll<HTMLElement>("cds-table-row")).filter(
-          (row) => !row.hasAttribute("filtered") && !(row as any).filtered
+          (row) => !row.hasAttribute("filtered") && !(row as any).filtered,
         );
 
   const columnIndexValue =
@@ -112,14 +115,14 @@ const buildPayload = (event: TableEvent, root: HTMLElement): TablePayload => {
     selected_ids: selectedIds,
     column_index: Number.isNaN(columnIndex) ? null : columnIndex,
     unfiltered_ids: rowIds(unfilteredRows),
-    search: detail.value || detail.searchValue || null
+    search: detail.value || detail.searchValue || null,
   };
 };
 
 const selectionSignature = (root: HTMLElement): string => {
-  const selectedRows = Array.from(root.querySelectorAll<HTMLElement>("cds-table-row")).filter(
-    (row) => row.hasAttribute("selected") || (row as any).selected
-  );
+  const selectedRows = Array.from(
+    root.querySelectorAll<HTMLElement>("cds-table-row"),
+  ).filter((row) => row.hasAttribute("selected") || (row as any).selected);
   const selected = rowIds(selectedRows).sort();
   return selected.join("|");
 };
@@ -148,7 +151,8 @@ const applySelectedIdsFromDataset = (root: HTMLElement): boolean => {
     const id = rowId(row);
     if (!id) return;
     const shouldSelect = desiredIds.has(id);
-    const currentlySelected = row.hasAttribute("selected") || (row as any).selected;
+    const currentlySelected =
+      row.hasAttribute("selected") || (row as any).selected;
 
     if (shouldSelect !== currentlySelected) {
       changed = true;
@@ -170,15 +174,16 @@ const updateTableSelectionUI = (table: any, selectedCount: number) => {
       ? Array.from(table._tableRows as HTMLElement[])
       : Array.from((table as HTMLElement).querySelectorAll("cds-table-row"));
   const totalSelectableRows = tableRows.filter(
-    (row) => !row.hasAttribute("filtered") && !row.hasAttribute("disabled")
+    (row) => !row.hasAttribute("filtered") && !row.hasAttribute("disabled"),
   ).length;
   const headerCheckbox = table?._tableHeaderRow?.shadowRoot
-    ?.querySelector(`${CARBON_PREFIX}-checkbox`)
-    ?.shadowRoot?.querySelector(`.${CARBON_PREFIX}--checkbox`);
+    ?.querySelector("cds-checkbox")
+    ?.shadowRoot?.querySelector(".cds--checkbox");
 
   if (headerCheckbox) {
     headerCheckbox.checked = selectedCount > 0;
-    headerCheckbox.indeterminate = selectedCount > 0 && selectedCount < totalSelectableRows;
+    headerCheckbox.indeterminate =
+      selectedCount > 0 && selectedCount < totalSelectableRows;
   }
 
   if (table?._tableBatchActions) {
@@ -202,7 +207,10 @@ const ensureFilterRows = (table: any) => {
   if (!table || typeof table.filterRows !== "function") return;
   if ((table as any)._grapheneFilterRowsWrapped) return;
   const original = table.filterRows;
-  table.filterRows = (rowText: string | null | undefined, searchString: string | null | undefined) => {
+  table.filterRows = (
+    rowText: string | null | undefined,
+    searchString: string | null | undefined,
+  ) => {
     const safeRowText = typeof rowText === "string" ? rowText : "";
     const safeSearch = typeof searchString === "string" ? searchString : "";
     try {
@@ -233,7 +241,7 @@ const applySelection = (
   hook: any,
   selectedIds: Set<string>,
   sourceRowId: string | null,
-  eventName: string
+  eventName: string,
 ) => {
   const table = hook.el as HTMLElement;
   const isRadio =
@@ -261,10 +269,12 @@ const applySelection = (
   hook._basicComponentsTableSelectionSignature = selectionSignature(table);
 
   const selectedRow =
-    sourceRowId !== null ? rows.find((row) => rowId(row) === sourceRowId) || null : null;
+    sourceRowId !== null
+      ? rows.find((row) => rowId(row) === sourceRowId) || null
+      : null;
   const payload = buildPayload(
     { detail: { selectedRow, selectedRows } } as any,
-    table as HTMLElement
+    table as HTMLElement,
   );
   hook.pushEventTo(table, eventName, payload);
 };
@@ -282,7 +292,9 @@ const applySort = (hook: any, columnIndex: number, direction: string) => {
   const rowPairs = rows.map((row) => {
     const next = row.nextElementSibling;
     const expanded =
-      next && next.matches && next.matches("cds-table-expanded-row") ? (next as HTMLElement) : null;
+      next && next.matches && next.matches("cds-table-expanded-row")
+        ? (next as HTMLElement)
+        : null;
     return { row, expanded };
   });
   const sorted = [...rowPairs].sort((rowA, rowB) => {
@@ -290,7 +302,10 @@ const applySort = (hook: any, columnIndex: number, direction: string) => {
     const cellB = rowB.row.querySelectorAll("cds-table-cell")[columnIndex];
     const textA = cellA?.textContent?.trim() ?? "";
     const textB = cellB?.textContent?.trim() ?? "";
-    const comparison = textA.localeCompare(textB, undefined, { numeric: true, sensitivity: "base" });
+    const comparison = textA.localeCompare(textB, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
     return direction === "descending" ? -comparison : comparison;
   });
 
@@ -317,8 +332,10 @@ const applySort = (hook: any, columnIndex: number, direction: string) => {
   });
 
   const payload = buildPayload(
-    { detail: { sortedHeader: { dataset: { colIndex: String(columnIndex) } } } } as any,
-    table as HTMLElement
+    {
+      detail: { sortedHeader: { dataset: { colIndex: String(columnIndex) } } },
+    } as any,
+    table as HTMLElement,
   );
   hook.pushEventTo(table, "graphene:table-sorted", payload);
 };
@@ -333,7 +350,7 @@ const applySearch = (hook: any, value: string) => {
     try {
       table._handleFilterRows();
       unfilteredRows = tableRows(table).filter(
-        (row) => !row.hasAttribute("filtered") && !(row as any).filtered
+        (row) => !row.hasAttribute("filtered") && !(row as any).filtered,
       );
     } catch (_error) {
       const rows = tableRows(table);
@@ -366,17 +383,23 @@ const applySearch = (hook: any, value: string) => {
     });
 
     const headerCheckbox = table?._tableHeaderRow?.shadowRoot
-      ?.querySelector(`${CARBON_PREFIX}-checkbox`)
-      ?.shadowRoot?.querySelector(`.${CARBON_PREFIX}--checkbox`);
+      ?.querySelector("cds-checkbox")
+      ?.shadowRoot?.querySelector(".cds--checkbox");
     if (headerCheckbox) {
       headerCheckbox.disabled = unfilteredRows.length === 0;
     }
   }
 
-  const searchPayload = buildPayload({ detail: { value: searchValue } } as any, table);
+  const searchPayload = buildPayload(
+    { detail: { value: searchValue } } as any,
+    table,
+  );
   hook.pushEventTo(table, "graphene:table-search-input", searchPayload);
 
-  const filterPayload = buildPayload({ detail: { unfilteredRows } } as any, table);
+  const filterPayload = buildPayload(
+    { detail: { unfilteredRows } } as any,
+    table,
+  );
   hook.pushEventTo(table, "graphene:table-filtered", filterPayload);
 };
 
@@ -386,7 +409,7 @@ const handleSimulation = (hook: any, detail: any) => {
   const table = hook.el as HTMLElement;
   const rows = tableRows(table);
   const currentSelectedIds = rowIds(
-    rows.filter((row) => row.hasAttribute("selected") || (row as any).selected)
+    rows.filter((row) => row.hasAttribute("selected") || (row as any).selected),
   );
 
   switch (detail.action) {
@@ -395,18 +418,25 @@ const handleSimulation = (hook: any, detail: any) => {
       if (!rowIdValue) return;
       const selectedSet = new Set(currentSelectedIds);
       const shouldSelect =
-        typeof detail.selected === "boolean" ? detail.selected : !selectedSet.has(rowIdValue);
+        typeof detail.selected === "boolean"
+          ? detail.selected
+          : !selectedSet.has(rowIdValue);
       if (shouldSelect) {
         selectedSet.add(rowIdValue);
       } else {
         selectedSet.delete(rowIdValue);
       }
-      applySelection(hook, selectedSet, rowIdValue, "graphene:table-row-selected");
+      applySelection(
+        hook,
+        selectedSet,
+        rowIdValue,
+        "graphene:table-row-selected",
+      );
       break;
     }
     case "select_all": {
       const selectableRows = rows.filter(
-        (row) => !row.hasAttribute("filtered") && !row.hasAttribute("disabled")
+        (row) => !row.hasAttribute("filtered") && !row.hasAttribute("disabled"),
       );
       const selectableIds = rowIds(selectableRows);
       const selectedSet = new Set(currentSelectedIds);
@@ -419,13 +449,19 @@ const handleSimulation = (hook: any, detail: any) => {
       break;
     }
     case "select_none": {
-      applySelection(hook, new Set<string>(), null, "graphene:table-row-all-selected");
+      applySelection(
+        hook,
+        new Set<string>(),
+        null,
+        "graphene:table-row-all-selected",
+      );
       break;
     }
     case "sort": {
       const columnIndex = Number(detail.column_index);
       if (Number.isNaN(columnIndex)) return;
-      const direction = detail.direction === "descending" ? "descending" : "ascending";
+      const direction =
+        detail.direction === "descending" ? "descending" : "ascending";
       applySort(hook, columnIndex, direction);
       break;
     }
@@ -445,7 +481,7 @@ const syncSelection = async (hook: any) => {
   await Promise.all([
     customElements.whenDefined("cds-table"),
     customElements.whenDefined("cds-table-row"),
-    customElements.whenDefined("cds-table-header-row")
+    customElements.whenDefined("cds-table-header-row"),
   ]);
 
   const table: any = root;
@@ -458,7 +494,7 @@ const syncSelection = async (hook: any) => {
   await Promise.all(
     rows
       .map((row) => (row as any).updateComplete)
-      .filter((value) => value && typeof value.then === "function")
+      .filter((value) => value && typeof value.then === "function"),
   );
 
   const desiredRows = rows.filter((row) => row.hasAttribute("selected"));
@@ -470,7 +506,9 @@ const syncSelection = async (hook: any) => {
     }
   });
 
-  const currentRows: HTMLElement[] = Array.isArray(table._selectedRows) ? table._selectedRows : [];
+  const currentRows: HTMLElement[] = Array.isArray(table._selectedRows)
+    ? table._selectedRows
+    : [];
   const desiredSet = new Set(desiredRows);
   const currentSet = new Set(currentRows);
   let changed = false;
@@ -493,7 +531,11 @@ const syncSelectionWithSignature = (hook: any) => {
   const root = hook.el as HTMLElement;
   const appliedFromDataset = applySelectedIdsFromDataset(root);
   const signature = selectionSignature(root);
-  if (!appliedFromDataset && hook._basicComponentsTableSelectionSignature === signature) return;
+  if (
+    !appliedFromDataset &&
+    hook._basicComponentsTableSelectionSignature === signature
+  )
+    return;
   hook._basicComponentsTableSelectionSignature = signature;
   void syncSelection(hook);
 };
@@ -515,7 +557,10 @@ export const BasicComponentsTable: any = {
     const simulatorHandler = (event: CustomEvent) => {
       handleSimulation(this, event.detail || {});
     };
-    this.el.addEventListener("graphene:table-simulate", simulatorHandler as EventListener);
+    this.el.addEventListener(
+      "graphene:table-simulate",
+      simulatorHandler as EventListener,
+    );
     this._basicComponentsTableSimulatorHandler = simulatorHandler;
     ensureSearchValue(this.el);
     ensureFilterRows(this.el);
@@ -539,9 +584,9 @@ export const BasicComponentsTable: any = {
     if (this._basicComponentsTableSimulatorHandler) {
       this.el.removeEventListener(
         "graphene:table-simulate",
-        this._basicComponentsTableSimulatorHandler as EventListener
+        this._basicComponentsTableSimulatorHandler as EventListener,
       );
     }
     this._basicComponentsTableSimulatorHandler = null;
-  }
+  },
 };

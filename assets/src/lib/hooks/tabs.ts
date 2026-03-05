@@ -13,18 +13,20 @@ const applyInitialSelection = (root: HTMLElement) => {
   if (items.length === 0) return;
 
   let selectedItem = items.find(
-    (item) => item.selected || item.hasAttribute("selected")
+    (item) => item.selected || item.hasAttribute("selected"),
   );
 
   if (!selectedItem) {
     const desiredValue =
-      tabs.value || tabs.getAttribute("value") || items[0].getAttribute("value");
+      tabs.value ||
+      tabs.getAttribute("value") ||
+      items[0].getAttribute("value");
 
     selectedItem =
       items.find(
         (item) =>
           item.value === desiredValue ||
-          item.getAttribute("value") === desiredValue
+          item.getAttribute("value") === desiredValue,
       ) || items[0];
 
     items.forEach((item) => {
@@ -52,5 +54,5 @@ export const TabsInit = {
 
   updated(this: TabsInitContext) {
     applyInitialSelection(this.el);
-  }
+  },
 };
