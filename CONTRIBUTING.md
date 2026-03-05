@@ -16,6 +16,7 @@ First off, thanks for taking the time to contribute! ❤️
 3. If you commit or do PRs, please follow the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
 4. If you do PRs, please don't include newer versions of auto-generated files
 5. Auto-generated files should be commited with the `chore:` or `docs:` commit prefix
+6. Use formatters like `mix format` and `npx prettier . --write` with project configuration to keep code consistent
 
 ## Development
 
@@ -26,3 +27,4 @@ To start developing, follow these steps:
 2. `cd demo && mix setup` - Install `demo` dependencies
 3. `mix phx.server` - Start the `demo` project
 
+We recommend [Elixir official LSP (Expert)](https://github.com/elixir-lang/expert) for better type checking
