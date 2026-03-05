@@ -8,7 +8,7 @@ if Mix.env() == :dev do
     end
 
     defp template(:dst) do
-      Path.join(["lib", "graphene", "product_components.ex"])
+      Path.join(["lib", "graphene", "aliases", "product_components.ex"])
     end
 
     defp template(:group_src) do
