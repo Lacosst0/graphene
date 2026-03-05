@@ -5,8 +5,8 @@ defmodule Graphene.MixProject do
     [
       app: :graphene,
       # same as webcomponents
-      version: "0.0.1",
-      elixir: "~> 1.14",
+      version: "0.1.0",
+      elixir: "~> 1.19",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),

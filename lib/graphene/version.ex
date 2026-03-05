@@ -5,7 +5,7 @@ defmodule Graphene.Version do
   Run `mix graphene.version.generate` to refresh this file.
   """
 
-  @graphene "0.0.1"
+  @graphene "0.1.0"
   @carbon_web_components "2.48.0"
   @carbon_styles "^1.100.0"
   @ibm_products_web_components "^0.33.0"
