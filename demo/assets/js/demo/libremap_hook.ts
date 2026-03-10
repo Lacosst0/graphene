@@ -30,6 +30,7 @@ export const MapLibreHook: LiveViewHook = {
       minZoom: 0,
       maxZoom: 100,
       zoom: 10,
+      attributionControl: false,
     });
 
     this.map.addControl(new maplibregl.NavigationControl());
