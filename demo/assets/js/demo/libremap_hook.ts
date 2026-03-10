@@ -58,14 +58,27 @@ export const MapLibreHook: LiveViewHook = {
     const focusMarker = this.el?.dataset.focus;
 
     markerData.forEach((m) => {
-      const popupElement = document.createElement("div");
+      const popup = new maplibregl.Popup({ closeButton: false });
+
+      // Prevent popup from scrolling the page
+      popup.on("open", (e) => {
+        // Get element when it's rendered (exists)
+        popup.getElement().addEventListener("wheel", (e) => {
+          e.preventDefault();
+          e.stopPropagation(); // prevent scroll
+          this.map!.getCanvas().dispatchEvent(new WheelEvent("wheel", e)); // zoom
+        });
+      });
+
+      const popupContent = document.createElement("div");
+      popup.setDOMContent(popupContent);
 
       // Title
       const title = document.createElement("h4");
       const strong = document.createElement("strong");
       strong.textContent = m.label;
       title.appendChild(strong);
-      popupElement.appendChild(title);
+      popupContent.appendChild(title);
 
       // Description
       const description = document.createElement("p");
@@ -77,12 +90,9 @@ export const MapLibreHook: LiveViewHook = {
           description.appendChild(document.createElement("br"));
         }
       });
-      popupElement.appendChild(description);
+      popupContent.appendChild(description);
 
-      const marker = new maplibregl.Marker()
-        .setLngLat([m.lon, m.lat])
-        .setPopup(new maplibregl.Popup({ closeButton: false }).setDOMContent(popupElement))
-        .addTo(this.map!);
+      const marker = new maplibregl.Marker().setLngLat([m.lon, m.lat]).setPopup(popup).addTo(this.map!);
 
       // Focus marker if needed
       if (focusMarker && m.id.toString() === focusMarker) {
