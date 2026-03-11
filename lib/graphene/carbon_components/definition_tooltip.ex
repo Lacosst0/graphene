@@ -28,6 +28,7 @@ defmodule Graphene.CarbonComponents.DefinitionTooltip do
   attr :open_on_hover, :boolean,
     doc: "Specifies whether the `DefinitionTooltip` should open on hover or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :definition, doc: "Definition content."
   slot :inner_block

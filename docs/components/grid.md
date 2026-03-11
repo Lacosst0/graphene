@@ -14,22 +14,19 @@
 <cds-grid id="grid-single-default">
   
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Column 1
     
 </cds-column>
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Column 2
     
 </cds-column>
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Column 3
     
@@ -54,29 +51,25 @@
 <cds-grid condensed id="grid-single-condensed" style="--graphene-grid-row-gap: var(--cds-grid-gutter);">
   
   
-    
-<cds-column sm="1">
+    <cds-column sm="1">
   
       One
     
 </cds-column>
   
-    
-<cds-column sm="1">
+    <cds-column sm="1">
   
       Two
     
 </cds-column>
   
-    
-<cds-column sm="1">
+    <cds-column sm="1">
   
       Three
     
 </cds-column>
   
-    
-<cds-column sm="1">
+    <cds-column sm="1">
   
       Four
     
@@ -100,22 +93,19 @@
 <cds-grid full-width id="grid-single-full-width">
   
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Wide 1
     
 </cds-column>
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Wide 2
     
 </cds-column>
   
-    
-<cds-column sm="2">
+    <cds-column sm="2">
   
       Wide 3
     

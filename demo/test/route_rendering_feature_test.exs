@@ -25,6 +25,7 @@ defmodule Demo.RouteRenderingFeatureTest do
       session
       |> visit(path)
       |> assert_has(css("#main-content", count: 1))
+      |> wait_for_components_ready()
       |> assert_no_compile_errors()
     rescue
       error in Wallaby.JSError ->
@@ -41,6 +42,50 @@ defmodule Demo.RouteRenderingFeatureTest do
     refute has?(session, css("body", text: "Internal Server Error"))
     refute has?(session, css("body", text: "Something went wrong"))
     session
+  end
+
+  defp wait_for_components_ready(session, attempts \\ 20) do
+    token = System.unique_integer([:positive])
+    do_wait_for_components_ready(session, token, attempts)
+  end
+
+  defp do_wait_for_components_ready(session, _token, 0), do: session
+
+  defp do_wait_for_components_ready(session, token, attempts) do
+    Wallaby.Browser.execute_script(
+      session,
+      """
+      const token = #{token};
+      const manager = window.componentManager;
+      if (manager && typeof manager.whenReady === "function") {
+        if (window.__grapheneReadyToken !== token) {
+          window.__grapheneReadyToken = token;
+          window.__grapheneReadyDoneToken = null;
+          manager.whenReady()
+            .then(() => { window.__grapheneReadyDoneToken = token; })
+            .catch(() => { window.__grapheneReadyDoneToken = token; });
+        }
+      }
+
+      const tags = new Set();
+      document.querySelectorAll("*").forEach((el) => {
+        const tag = el.tagName?.toLowerCase?.();
+        if (tag && tag.includes("-")) tags.add(tag);
+      });
+      for (const tag of tags) {
+        if (!customElements.get(tag)) return false;
+      }
+      return true;
+      """,
+      fn ready ->
+        if ready do
+          session
+        else
+          Process.sleep(250)
+          do_wait_for_components_ready(session, token, attempts - 1)
+        end
+      end
+    )
   end
 
   defp demo_paths do

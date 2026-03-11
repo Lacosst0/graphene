@@ -34,20 +34,12 @@ defmodule Graphene.BasicComponents do
   def flash(assigns) do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
     assigns = assign(assigns, :carbon_kind, flash_kind(assigns.kind))
-    assigns =
-      assign(
-        assigns,
-        :graphene_open,
-        if(assigns.open, do: nil, else: "false")
-      )
-
     ~H"""
     <CarbonComponents.toast_notification
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       kind={@carbon_kind}
       open={@open}
-      data-graphene-open={@graphene_open}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       {@rest}
     >
@@ -615,7 +607,7 @@ defmodule Graphene.BasicComponents do
         <:col :let={user} label="username">{user.username}</:col>
       </.table>
   """
-  defdelegate table(assigns), to: Graphene.CarbonComponents.Table
+  defdelegate table(assigns), to: Graphene.CarbonComponents
 
   @doc """
   Renders a LiveView-aware data table.
@@ -687,7 +679,7 @@ defmodule Graphene.BasicComponents do
   end
 
   attr :class, :any, default: ""
-  attr :size, :integer, default: 24
+  attr :size, :any, default: 24
 
   def icon(assigns) do
     ~H"""

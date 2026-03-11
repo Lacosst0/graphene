@@ -8,6 +8,7 @@ if Mix.env() == :dev do
     @marker_start "  <!-- STORYBOOK_DOCS:START -->"
     @marker_end "  <!-- STORYBOOK_DOCS:END -->"
     @components_docs_dir Path.join(["docs", "components"])
+    @product_components_docs_dir Path.join(["docs", "product_components"])
 
     @impl true
     def run(_args \\ []) do
@@ -22,6 +23,7 @@ if Mix.env() == :dev do
 
         update_graphene_moduledoc!(markdown)
         write_component_docs!()
+        write_product_component_docs!()
       end)
     end
 
@@ -62,6 +64,21 @@ if Mix.env() == :dev do
       Graphene.Docs.StorybookCarbon.generate_component_markdown()
       |> Enum.each(fn {component, markdown} ->
         path = Path.join(@components_docs_dir, "#{component}.md")
+        File.write!(path, markdown)
+      end)
+    end
+
+    defp write_product_component_docs! do
+      File.mkdir_p!(@product_components_docs_dir)
+
+      @product_components_docs_dir
+      |> Path.join("*.md")
+      |> Path.wildcard()
+      |> Enum.each(&File.rm!/1)
+
+      Graphene.Docs.StorybookProducts.generate_component_markdown()
+      |> Enum.each(fn {component, markdown} ->
+        path = Path.join(@product_components_docs_dir, "#{component}.md")
         File.write!(path, markdown)
       end)
     end

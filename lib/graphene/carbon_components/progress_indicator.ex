@@ -29,6 +29,7 @@ defmodule Graphene.CarbonComponents.ProgressIndicator do
   attr :vertical, :boolean,
     doc: "Determines whether or not the progress indicator should be rendered\nvertically."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :step do
@@ -52,13 +53,17 @@ defmodule Graphene.CarbonComponents.ProgressIndicator do
       |> assign_new(:space_equally, fn -> false end)
       |> assign_new(:vertical, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :current_index,
+        :space_equally,
+        :vertical
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.progress_indicator
-      current_index={@current_index}
-      space_equally={@space_equally}
-      vertical={@vertical}
-      {@rest}
-    >
+    <CoreComponents.progress_indicator {@component_attrs} {@rest}>
       <%= for step <- @step do %>
         <CoreComponents.progress_step
           label={step[:label]}
@@ -91,6 +96,7 @@ defmodule Graphene.CarbonComponents.ProgressIndicator do
 
   """
   attr :vertical, :boolean, doc: "`true` to render the vertical variant."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

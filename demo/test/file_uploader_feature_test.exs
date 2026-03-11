@@ -31,14 +31,38 @@ defmodule Demo.FileUploaderFeatureTest do
     |> wait_for_hash(expected_hash)
   end
 
-  defp dispatch_carbon_upload(session, filename, content) do
+  @tag timeout: 120_000
+  feature "file uploader computes hash after drop-container event", %{session: session} do
+    content = "carbon-file-uploader-drop-container"
+    expected_hash = :crypto.hash(:sha256, content) |> Base.encode16(case: :lower)
+
+    session
+    |> visit("/carbon_components/file_uploader/upload")
+    |> assert_has(css("#file-uploader-bridge", count: 1))
+    |> wait_for_bridge_ready()
+    |> dispatch_carbon_upload(
+      "upload-drop.txt",
+      content,
+      "cds-file-uploader-drop-container-changed"
+    )
+    |> wait_for_submit_enabled()
+    |> click(css("[data-testid='carbon-file-upload-submit']", []))
+    |> wait_for_hash(expected_hash)
+  end
+
+  defp dispatch_carbon_upload(
+         session,
+         filename,
+         content,
+         event_name \\ "cds-file-uploader-button-changed"
+       ) do
     Wallaby.Browser.execute_script(
       session,
       """
       const bridge = document.querySelector("#file-uploader-bridge");
       if (!bridge) return false;
       const file = new File([#{Jason.encode!(content)}], #{Jason.encode!(filename)}, {type: "text/plain"});
-      const event = new CustomEvent("cds-file-uploader-button-changed", {
+      const event = new CustomEvent(#{Jason.encode!(event_name)}, {
         bubbles: true,
         composed: true,
         detail: { addedFiles: [file] }

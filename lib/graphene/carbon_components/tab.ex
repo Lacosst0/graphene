@@ -33,6 +33,7 @@ defmodule Graphene.CarbonComponents.Tab do
     doc:
       "The `value` attribute that is set to the parent `<cds-content-switcher>`\nwhen this content switcher item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -47,6 +48,7 @@ defmodule Graphene.CarbonComponents.Tab do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

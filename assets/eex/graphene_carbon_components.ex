@@ -14,8 +14,6 @@ defmodule <%= assigns[:module] %> do
 
   use Phoenix.Component
 
-  alias Graphene.Internal.FormComponents
-
   defmacro __using__(_opts) do
     quote do
 <%= assigns[:custom_imports] %>
@@ -25,5 +23,5 @@ defmodule <%= assigns[:module] %> do
 
   <%= assigns[:delegates] %>
 
-  <%= assigns[:custom_components] %>
+  <%= assigns[:custom_delegates] %>
 end

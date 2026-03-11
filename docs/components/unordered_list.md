@@ -16,24 +16,21 @@
 <cds-unordered-list id="unordered-single-default">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       First item
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Second item
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Third item
     
@@ -59,16 +56,14 @@
 <cds-unordered-list nested id="unordered-single-nested">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Outer item
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Another item
     
@@ -94,16 +89,14 @@
 <cds-unordered-list is-expressive id="unordered-single-expressive">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Expressive one
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Expressive two
     

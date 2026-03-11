@@ -12,7 +12,7 @@ components on demand.
 ```elixir
 defp deps do
   [
-    {:graphene, "~> 2.47.0"}
+    {:graphene, "~> 0.0.1"}
   ]
 end
 ```
@@ -67,6 +67,7 @@ end
 Notes:
 - Graphene ships Carbon styles + IBM Plex fonts inside `priv/static/assets`, so no Carbon-related npm packages are required.
 - When developing this repo locally (the `demo` app), run `mix assets.build` at the repo root to refresh vendored Graphene assets.
+- For local debugging you can disable Graphene asset chunking via `GRAPHENE_NO_CHUNKS=1` when running `node assets/build.cjs` directly. To keep commit-ready output safe, `mix assets.build` ignores that flag for `priv/static/assets` unless you also set `GRAPHENE_ALLOW_UNCHUNKED_ASSETS=1`.
 - Optional (reduce flicker): preload Graphene’s CSS + a couple of IBM Plex font files. Use the helper to avoid hardcoding hashed filenames:
 
 ```heex

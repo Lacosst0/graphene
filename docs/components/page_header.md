@@ -22,21 +22,17 @@
   
   
   
-    
-<cds-page-header-breadcrumb border>
+    <cds-page-header-breadcrumb border>
   
       
         
+  <cds-breadcrumb size="md">
   
-<cds-breadcrumb size="md">
   
-  
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -45,8 +41,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Page
@@ -64,13 +59,11 @@
 </cds-page-header-breadcrumb>
   
   
-    
-<cds-page-header-content title="Page title">
+    <cds-page-header-content title="Page title">
   
       
         
-          
-<cds-page-header-content-text subtitle="Optional subtitle">
+          <cds-page-header-content-text subtitle="Optional subtitle">
   
             
               
@@ -118,21 +111,17 @@
   
   
   
-    
-<cds-page-header-breadcrumb border>
+    <cds-page-header-breadcrumb border>
   
       
         
+  <cds-breadcrumb size="md">
   
-<cds-breadcrumb size="md">
   
-  
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -141,12 +130,10 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Workspace
         
@@ -155,8 +142,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Projects
@@ -174,13 +160,11 @@
 </cds-page-header-breadcrumb>
   
   
-    
-<cds-page-header-content title="Projects">
+    <cds-page-header-content title="Projects">
   
       
         
-          
-<cds-page-header-content-text subtitle="Team projects">
+          <cds-page-header-content-text subtitle="Team projects">
   
             
               
@@ -193,8 +177,7 @@
       
       
         
-  
-<cds-button kind="ghost" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="ghost" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   New project
   
 </cds-button>
@@ -233,21 +216,17 @@
   
   
   
-    
-<cds-page-header-breadcrumb>
+    <cds-page-header-breadcrumb>
   
       
         
+  <cds-breadcrumb size="md">
   
-<cds-breadcrumb size="md">
   
-  
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -256,8 +235,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Settings
@@ -275,13 +253,11 @@
 </cds-page-header-breadcrumb>
   
   
-    
-<cds-page-header-content title="Settings">
+    <cds-page-header-content title="Settings">
   
       
         
-          
-<cds-page-header-content-text subtitle="Account">
+          <cds-page-header-content-text subtitle="Account">
   
             
               

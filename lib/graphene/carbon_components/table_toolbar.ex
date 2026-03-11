@@ -15,6 +15,7 @@ defmodule Graphene.CarbonComponents.TableToolbar do
 
   """
   attr :size, :any, doc: "Toolbar size"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -31,6 +32,7 @@ defmodule Graphene.CarbonComponents.TableToolbar do
   """
   attr :has_batch_actions, :boolean, doc: "`true` if this batch actions bar is active."
   attr :size, :any, doc: "Table toolbar contents size"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -73,6 +75,7 @@ defmodule Graphene.CarbonComponents.TableToolbar do
 
   attr :type, :string, doc: "The `<input>` name."
   attr :value, :string, doc: "The value."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

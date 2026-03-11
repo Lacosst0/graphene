@@ -1,7 +1,5 @@
 # `content_switcher`
 
-## basic
-
 ### default
 
 ```heex
@@ -12,19 +10,17 @@
 ```
 
 ```html
-<cds-content-switcher selected-index="0" selection-mode="automatic" value="files" id="basic-single-default">
+<cds-content-switcher selected-index="0" selection-mode="automatic" value="files" id="content-switcher-single-default">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="files">
+    <cds-content-switcher-item align="top" close-on-activation value="files">
   
       Files
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="settings">
+    <cds-content-switcher-item align="top" close-on-activation value="settings">
   
       Settings
     
@@ -46,27 +42,24 @@
 ```
 
 ```html
-<cds-content-switcher low-contrast selected-index="0" selection-mode="automatic" value="tasks" id="basic-single-low-contrast">
+<cds-content-switcher low-contrast selected-index="0" selection-mode="automatic" value="tasks" id="content-switcher-single-low-contrast">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="tasks">
+    <cds-content-switcher-item align="top" close-on-activation value="tasks">
   
       Tasks
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="insights">
+    <cds-content-switcher-item align="top" close-on-activation value="insights">
   
       Insights
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="team">
+    <cds-content-switcher-item align="top" close-on-activation value="team">
   
       Team
     
@@ -99,19 +92,17 @@
 ```
 
 ```html
-<cds-content-switcher selected-index="0" selection-mode="automatic" size="sm" value="one" id="basic-sizes-sm">
+<cds-content-switcher selected-index="0" selection-mode="automatic" size="sm" value="one" id="content-switcher-sizes-sm">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="one">
+    <cds-content-switcher-item align="top" close-on-activation value="one">
   
       One
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="two">
+    <cds-content-switcher-item align="top" close-on-activation value="two">
   
       Two
     
@@ -120,20 +111,17 @@
   
 
 </cds-content-switcher>
-
-<cds-content-switcher selected-index="0" selection-mode="automatic" size="md" value="one" id="basic-sizes-md">
+<cds-content-switcher selected-index="0" selection-mode="automatic" size="md" value="one" id="content-switcher-sizes-md">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="one">
+    <cds-content-switcher-item align="top" close-on-activation value="one">
   
       One
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="two">
+    <cds-content-switcher-item align="top" close-on-activation value="two">
   
       Two
     
@@ -142,20 +130,17 @@
   
 
 </cds-content-switcher>
-
-<cds-content-switcher selected-index="0" selection-mode="automatic" size="lg" value="one" id="basic-sizes-lg">
+<cds-content-switcher selected-index="0" selection-mode="automatic" size="lg" value="one" id="content-switcher-sizes-lg">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="one">
+    <cds-content-switcher-item align="top" close-on-activation value="one">
   
       One
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="two">
+    <cds-content-switcher-item align="top" close-on-activation value="two">
   
       Two
     
@@ -164,20 +149,17 @@
   
 
 </cds-content-switcher>
-
-<cds-content-switcher selected-index="0" selection-mode="automatic" size="xl" value="one" id="basic-sizes-xl">
+<cds-content-switcher selected-index="0" selection-mode="automatic" size="xl" value="one" id="content-switcher-sizes-xl">
   
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="one">
+    <cds-content-switcher-item align="top" close-on-activation value="one">
   
       One
     
   
 </cds-content-switcher-item>
   
-    
-<cds-content-switcher-item align="top" close-on-activation value="two">
+    <cds-content-switcher-item align="top" close-on-activation value="two">
   
       Two
     

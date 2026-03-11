@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.PageHeader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :breadcrumb do
@@ -42,8 +43,13 @@ defmodule Graphene.CarbonComponents.PageHeader do
   slot :inner_block
 
   def page_header(%{breadcrumb_slot: [_ | _]} = assigns) do
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.page_header {@rest}>
+    <CoreComponents.page_header {@component_attrs} {@rest}>
       <% breadcrumbs = if @breadcrumb_slot != [], do: @breadcrumb_slot, else: @breadcrumb %>
       <%= for breadcrumb <- breadcrumbs do %>
         <CoreComponents.page_header_breadcrumb
@@ -82,8 +88,13 @@ defmodule Graphene.CarbonComponents.PageHeader do
   end
 
   def page_header(%{breadcrumb: [_ | _]} = assigns) do
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.page_header {@rest}>
+    <CoreComponents.page_header {@component_attrs} {@rest}>
       <% breadcrumbs = if @breadcrumb_slot != [], do: @breadcrumb_slot, else: @breadcrumb %>
       <%= for breadcrumb <- breadcrumbs do %>
         <CoreComponents.page_header_breadcrumb
@@ -144,6 +155,7 @@ defmodule Graphene.CarbonComponents.PageHeader do
     doc:
       "Set to `true` if the breadcrumb bar is sitting within a grid\n(ie. when used in tandem with page-header-hero-image)"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :content_actions, doc: "Content actions for the breadcrumb."
   slot :page_actions, doc: "Page actions for the breadcrumb."
@@ -160,6 +172,7 @@ defmodule Graphene.CarbonComponents.PageHeader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -174,6 +187,7 @@ defmodule Graphene.CarbonComponents.PageHeader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :tags, doc: "Tags for the page header."
   slot :inner_block

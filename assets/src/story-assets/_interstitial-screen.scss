@@ -1,0 +1,37 @@
+@use "@carbon/styles/scss/breakpoint" as *;
+@use "@carbon/styles/scss/spacing" as *;
+@use "@carbon/styles/scss/type";
+
+$prefix: "c4p";
+$interstitial-block-class: #{$prefix}--interstitial-screen;
+$block-class: #{$prefix}--interstitial-screen-view-module;
+
+.#{$block-class} {
+  margin-block: $spacing-07;
+}
+
+.#{$block-class}--heading {
+  @include type.type-style("heading-05");
+
+  margin-block-end: $spacing-07;
+}
+
+.#{$block-class}--body {
+  @include type.type-style("body-01");
+}
+
+.#{$block-class}--enableTag {
+  margin-block-start: $spacing-07;
+}
+
+c4p-interstitial-screen:not([fullscreen]) .#{$block-class} {
+  margin: $spacing-11 $spacing-07;
+}
+
+c4p-interstitial-screen[fullscreen] .#{$block-class} {
+  margin: $spacing-12 $spacing-08;
+
+  @include breakpoint-down(xlg) {
+    margin: $spacing-12 $spacing-07;
+  }
+}

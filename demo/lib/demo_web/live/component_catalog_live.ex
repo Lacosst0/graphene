@@ -20,6 +20,7 @@ defmodule DemoWeb.ComponentCatalogLive do
         query: "",
         filter_form: to_form(%{"query" => ""}, as: :filter),
         graphene_version: graphene_version(),
+        carbon_version: carbon_version(),
         graphene_assets: graphene_assets()
       )
 
@@ -48,7 +49,8 @@ defmodule DemoWeb.ComponentCatalogLive do
     {:noreply,
      socket
      |> assign(:graphene_assets, graphene_assets())
-     |> assign(:graphene_version, graphene_version())}
+     |> assign(:graphene_version, graphene_version())
+     |> assign(:carbon_version, carbon_version())}
   end
 
   @impl true
@@ -79,82 +81,97 @@ defmodule DemoWeb.ComponentCatalogLive do
       <:content_text subtitle="Rendered coverage for every Carbon wrapper in Graphene." />
     </.page_header>
 
-    <.grid>
+    <.grid full_width row_gap="07">
       <:column span="16">
-        <div class="demo-section demo-card">
-          <div class="demo-kicker">Graphene monitor</div>
-          <h3>Assets & version</h3>
-          <p class="demo-muted">
-            This panel refreshes every 2 seconds to surface regenerated assets.
-          </p>
-          <.structured_list rows={@graphene_assets} condensed>
-            <:col :let={asset} label="Asset">{asset.name}</:col>
-            <:col :let={asset} label="Size">{asset.size || "Missing"}</:col>
-            <:col :let={asset} label="Updated">{asset.updated_at || "Missing"}</:col>
-          </.structured_list>
-          <p class="demo-muted">Graphene v{@graphene_version}</p>
-        </div>
-      </:column>
-      <:column span="16">
-        <div class="demo-section demo-card">
-          <div class="demo-page-grid">
-            <div>
-              <p class="demo-muted">
-                Showing {@component_count} components. Use the filter to narrow the list.
-              </p>
-              <.form for={@filter_form} phx-change="filter">
-                <.search
-                  field={@filter_form[:query]}
-                  label_text="Filter components"
-                  placeholder="Search by name"
-                />
-              </.form>
-              <div class="demo-section demo-component-list">
-                <%= for component <- @filtered_components do %>
-                  <.button
-                    kind={
-                      if Atom.to_string(component.name) == @selected_name,
-                        do: "primary",
-                        else: "ghost"
-                    }
-                    size="sm"
-                    type="button"
-                    phx-click="select_component"
-                    phx-value-name={component.name}
-                  >
-                    {component.label}
-                  </.button>
-                <% end %>
-              </div>
-            </div>
-            <div :if={@selected_component}>
-              <div class="demo-component-header">
-                <h4>{@selected_component.label}</h4>
-                <.tag type="cool-gray">:{@selected_component.name}</.tag>
-              </div>
-              <div class="demo-component-preview">
-                {component_preview(@selected_component)}
-              </div>
-            </div>
-          </div>
-        </div>
+        <.grid>
+          <:column sm="4" md="4" lg="6">
+            <.stack gap="3">
+              <.tile>
+                <.stack gap="2">
+                  <.stack orientation="horizontal" gap="2">
+                    <.heading>Assets</.heading>
+                    <.tag type="cool-gray">v{@graphene_version}</.tag>
+                    <.tag type="cool-gray">Carbon {@carbon_version}</.tag>
+                  </.stack>
+                  <p>This panel refreshes every 2 seconds to surface regenerated assets.</p>
+                  <.structured_list rows={@graphene_assets} condensed>
+                    <:col :let={asset} label="Asset">{asset.name}</:col>
+                    <:col :let={asset} label="Size">{asset.size || "Missing"}</:col>
+                    <:col :let={asset} label="Updated">{asset.updated_at || "Missing"}</:col>
+                  </.structured_list>
+                </.stack>
+              </.tile>
+
+              <.tile>
+                <div style="max-height: 22rem; overflow-y: auto; padding-right: 0.25rem;">
+                  <.contained_list kind="on-page" size="sm">
+                    <:label>
+                      <.stack orientation="horizontal" gap="2">
+                        <span>Components</span>
+                        <.tag type="cool-gray">{@component_count}</.tag>
+                      </.stack>
+                    </:label>
+                    <:action>
+                      <.form for={@filter_form} phx-change="filter">
+                        <.search
+                          field={@filter_form[:query]}
+                          label_text="Filter components"
+                          placeholder="Search by name"
+                          size="sm"
+                        />
+                      </.form>
+                    </:action>
+                    <.contained_list_item
+                      :for={component <- @filtered_components}
+                      clickable
+                      phx-click="select_component"
+                      phx-value-name={component.name}
+                    >
+                      {component.label}
+                    </.contained_list_item>
+                  </.contained_list>
+                </div>
+              </.tile>
+            </.stack>
+          </:column>
+          <:column sm="4" md="4" lg="10">
+            <.tile :if={@selected_component}>
+              <.stack gap="3">
+                <.stack orientation="horizontal" gap="2">
+                  <.heading>{@selected_component.label}</.heading>
+                  <.tag type="cool-gray">:{@selected_component.name}</.tag>
+                </.stack>
+                <.layer level="1">
+                  <div style="padding: 1rem;">
+                    {component_preview(@selected_component)}
+                  </div>
+                </.layer>
+              </.stack>
+            </.tile>
+          </:column>
+        </.grid>
       </:column>
 
       <:column span="16">
-        <div class="demo-section demo-card demo-shell-note">
-          <Icons.icon name="document" size={16} />
-          <span>
-            This catalog uses generated defaults to render each component once for visual QA.
-          </span>
-        </div>
+        <.tile>
+          <.stack orientation="horizontal" gap="2">
+            <.icon name="document" size="16" />
+            <p>
+              This catalog uses generated defaults to render each component once for visual QA.
+            </p>
+          </.stack>
+        </.tile>
       </:column>
     </.grid>
     """
   end
 
   defp build_component_list do
-    Graphene.CarbonComponents.__components__()
-    |> Enum.map(fn {name, meta} ->
+    meta_map = carbon_component_meta_map()
+
+    carbon_component_functions()
+    |> Enum.map(fn name ->
+      meta = resolve_component_meta(name, meta_map)
       label = humanize(name)
 
       %{
@@ -209,8 +226,55 @@ defmodule DemoWeb.ComponentCatalogLive do
     |> Map.put(:col, cols)
   end
 
+  defp build_assigns(:table_live, meta) do
+    build_assigns(:data_table, meta)
+  end
+
   defp build_assigns(name, meta) do
     build_assigns_base(name, meta)
+  end
+
+  defp carbon_component_functions do
+    Graphene.CarbonComponents.__info__(:functions)
+    |> Enum.filter(fn {_name, arity} -> arity == 1 end)
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.reject(&(&1 in [:__info__, :__components__, :__struct__]))
+    |> Enum.uniq()
+  end
+
+  defp carbon_component_meta_map do
+    modules =
+      case :application.get_key(:graphene, :modules) do
+        {:ok, modules} -> modules
+        _ -> []
+      end
+
+    modules
+    |> Enum.filter(&carbon_component_module?/1)
+    |> Enum.reduce(%{}, fn module, acc ->
+      if Code.ensure_loaded?(module) and function_exported?(module, :__components__, 0) do
+        Map.merge(acc, module.__components__())
+      else
+        acc
+      end
+    end)
+  end
+
+  defp carbon_component_module?(module) do
+    module == Graphene.CarbonComponents or
+      match?(["Graphene", "CarbonComponents" | _], Module.split(module))
+  end
+
+  defp resolve_component_meta(:table_live, meta_map) do
+    Map.get(meta_map, :data_table, empty_component_meta())
+  end
+
+  defp resolve_component_meta(name, meta_map) do
+    Map.get(meta_map, name, empty_component_meta())
+  end
+
+  defp empty_component_meta do
+    %{attrs: [], slots: []}
   end
 
   defp build_assigns_base(name, meta) do
@@ -269,7 +333,11 @@ defmodule DemoWeb.ComponentCatalogLive do
   end
 
   defp graphene_version do
-    Application.spec(:graphene, :vsn) |> to_string()
+    Graphene.Version.graphene()
+  end
+
+  defp carbon_version do
+    Graphene.Version.carbon_web_components()
   end
 
   defp format_mtime(mtime) do

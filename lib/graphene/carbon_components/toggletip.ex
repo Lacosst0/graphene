@@ -41,6 +41,7 @@ defmodule Graphene.CarbonComponents.Toggletip do
   attr :button_label, :string, doc: "The label for the toggle button", default: "Show information"
   attr :default_open, :boolean, doc: "Set whether toggletip is open by default."
   attr :open, :boolean, doc: "Set whether toggletip is open"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :body_text, doc: "Body text content for the toggletip."
   slot :actions, doc: "Action buttons for the toggletip."
@@ -58,16 +59,20 @@ defmodule Graphene.CarbonComponents.Toggletip do
       |> assign_new(:default_open, fn -> false end)
       |> assign_new(:open, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alignment,
+        :alignment_axis_offset,
+        :autoalign,
+        :button_label,
+        :default_open,
+        :open
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.toggletip
-      alignment={@alignment}
-      alignment_axis_offset={@alignment_axis_offset}
-      autoalign={@autoalign}
-      button_label={@button_label}
-      default_open={@default_open}
-      open={@open}
-      {@rest}
-    >
+    <CoreComponents.toggletip {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- @body_text}
@@ -94,16 +99,20 @@ defmodule Graphene.CarbonComponents.Toggletip do
       |> assign_new(:default_open, fn -> false end)
       |> assign_new(:open, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alignment,
+        :alignment_axis_offset,
+        :autoalign,
+        :button_label,
+        :default_open,
+        :open
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.toggletip
-      alignment={@alignment}
-      alignment_axis_offset={@alignment_axis_offset}
-      autoalign={@autoalign}
-      button_label={@button_label}
-      default_open={@default_open}
-      open={@open}
-      {@rest}
-    >
+    <CoreComponents.toggletip {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- @body_text}

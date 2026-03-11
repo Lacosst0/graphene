@@ -87,10 +87,9 @@ defmodule Graphene.Icons do
     attr :name, :string, required: true, values: @available_icons
   end
 
-  attr :size, :integer,
+  attr :size, :any,
     default: 24,
-    values: [16, 20, 24, 32],
-    doc: "Icon default size (24), but can be one of [16, 20, 24, 32]."
+    doc: "Icon default size (24), but can be one of [16, 20, 24, 32]. Accepts integers or strings."
 
   attr :fit, :string,
     default: nil,
@@ -101,9 +100,15 @@ defmodule Graphene.Icons do
   attr :width, :string, required: false, doc: "Overrides the width set by `size`"
   attr :rest, :global, doc: "Arbitrary HTML attributes for the svg container."
 
+  @allowed_sizes [16, 20, 24, 32]
+
   def icon(assigns) do
+    size = normalize_size(assigns.size)
+
     assigns =
-      assign(assigns, Graphene.Internal.IconsRaw.icon_raw(assigns.name, assigns.size))
+      assigns
+      |> assign(:size, size)
+      |> assign(Graphene.Internal.IconsRaw.icon_raw(assigns.name, size))
       |> autosize
 
     ~H"""
@@ -112,4 +117,15 @@ defmodule Graphene.Icons do
     </SVG.svg>
     """
   end
+
+  defp normalize_size(size) when is_integer(size) and size in @allowed_sizes, do: size
+
+  defp normalize_size(size) when is_binary(size) do
+    case Integer.parse(size) do
+      {int, ""} -> normalize_size(int)
+      _ -> 24
+    end
+  end
+
+  defp normalize_size(_size), do: 24
 end

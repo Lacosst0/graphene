@@ -17,6 +17,7 @@ defmodule Graphene.CarbonComponents.FeatureFlags do
   attr :enable_v12_toggle_reduced_label_spacing, :boolean,
     doc: "Enable reduced label spacing for v12 toggle."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

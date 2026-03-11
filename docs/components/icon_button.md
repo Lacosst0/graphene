@@ -9,7 +9,7 @@
 ```
 
 ```html
-<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="ghost" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Settings" type="button" id="icon-button-single-ghost">
+<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="ghost" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Settings" type="button" id="icon-button-single-ghost">
   
   
     
@@ -43,14 +43,13 @@
 ```
 
 ```html
-<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="primary" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Notifications" type="button" id="icon-button-single-primary">
+<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="primary" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Notifications" type="button" id="icon-button-single-primary">
   
   
     
     
     
-      
-<cds-icon class="" size="16">
+      <cds-icon class="" size="16">
   
         
   <svg width="16" height="16" viewBox="0 0 16 16">
@@ -81,14 +80,13 @@
 ```
 
 ```html
-<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="danger" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Delete" type="button" id="icon-button-single-danger">
+<cds-icon-button align="top" close-on-activation enter-delay-ms="100" kind="danger" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" tooltip-text="Delete" type="button" id="icon-button-single-danger">
   
   
     
     
     
-      
-<cds-icon class="" size="16">
+      <cds-icon class="" size="16">
   
         
   <svg width="16" height="16" viewBox="0 0 16 16">

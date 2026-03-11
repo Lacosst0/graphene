@@ -18,7 +18,12 @@ defmodule Graphene.CarbonComponents.ContainedList do
     doc: "Specify whether the dividing lines in between list items should be inset."
 
   attr :kind, :any, doc: "The kind of ContainedList you want to display"
-  attr :size, :any, doc: "Specify the size of the contained list."
+
+  attr :size, :string,
+    doc: "Specify the size of the contained list.",
+    values: [nil, nil, "lg", "md", "sm", "xl"]
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :action, doc: "The action slot for interactive elements in header"
   slot :label, doc: "The label text"
@@ -37,13 +42,13 @@ defmodule Graphene.CarbonComponents.ContainedList do
       |> assign_new(:kind, fn -> nil end)
       |> assign_new(:size, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [:is_inset, :kind, :size])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.contained_list
-      is_inset={@is_inset}
-      kind={@kind}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.contained_list {@component_attrs} {@rest}>
       <.dynamic_tag :for={label <- @label} tag_name={Map.get(label, :tag, "div")} slot="label">
         {render_slot(label)}
       </.dynamic_tag>
@@ -73,6 +78,7 @@ defmodule Graphene.CarbonComponents.ContainedList do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -92,6 +98,7 @@ defmodule Graphene.CarbonComponents.ContainedList do
   """
   attr :clickable, :boolean, doc: "Whether this item is clickable"
   attr :disabled, :boolean, doc: "Whether this item is disabled."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :action, doc: "The action slot for interactive elements"
   slot :icon, doc: "The icon slot for rendering an icon"

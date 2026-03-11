@@ -1,7 +1,5 @@
 # `tag`
 
-## basic
-
 ### blue
 
 ```heex
@@ -11,7 +9,7 @@
 ```
 
 ```html
-<cds-tag open size="md" title="Clear filter" type="blue" id="basic-single-blue">
+<cds-tag open size="md" title="Clear filter" type="blue" id="tag-single-blue">
   
   Blue
 
@@ -27,7 +25,7 @@
 ```
 
 ```html
-<cds-tag open size="md" title="Clear filter" type="green" id="basic-single-green">
+<cds-tag open size="md" title="Clear filter" type="green" id="tag-single-green">
   
   Green
 
@@ -43,7 +41,7 @@
 ```
 
 ```html
-<cds-tag filter open size="md" title="Clear filter" type="teal" id="basic-single-filter">
+<cds-tag filter open size="md" title="Clear filter" type="teal" id="tag-single-filter">
   
   Filter
 
@@ -65,19 +63,17 @@
 ```
 
 ```html
-<cds-tag open size="sm" title="Clear filter" type="cool-gray" id="basic-sizes-sm">
+<cds-tag open size="sm" title="Clear filter" type="cool-gray" id="tag-sizes-sm">
   
   SM
 
 </cds-tag>
-
-<cds-tag open size="md" title="Clear filter" type="cool-gray" id="basic-sizes-md">
+<cds-tag open size="md" title="Clear filter" type="cool-gray" id="tag-sizes-md">
   
   MD
 
 </cds-tag>
-
-<cds-tag open size="lg" title="Clear filter" type="cool-gray" id="basic-sizes-lg">
+<cds-tag open size="lg" title="Clear filter" type="cool-gray" id="tag-sizes-lg">
   
   LG
 

@@ -24,6 +24,7 @@ defmodule Graphene.CarbonComponents.Layer do
     default: "0"
 
   attr :with_background, :any
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :children, doc: "The elements contained within the component."
   slot :inner_block

@@ -1,10 +1,10 @@
 <.flash_group flash={@flash} />
 <.ui_shell
   class="cds--ui-shell"
-  content_class="cds--content cds--content--with-side-nav demo-shell-content"
+  content_class="cds--content cds--content--with-side-nav"
 >
   <:skip_to_content>
-    <a class="demo-skip" href="#main-content">Skip to content</a>
+    <a class="cds--skip-to-content" href="#main-content">Skip to content</a>
   </:skip_to_content>
   <:header>
     <.header aria-label="IBM Nimbus Cloud">
@@ -50,18 +50,21 @@
         <.header_global_action
           button_label_inactive="Search"
           button_label_active="Search"
+          tooltip_text="Search"
         >
           <:icon name="search" size={20} />
         </.header_global_action>
         <.header_global_action
           button_label_inactive="Notifications"
           button_label_active="Notifications"
+          tooltip_text="Notifications"
         >
           <:icon name="notification" size={20} />
         </.header_global_action>
         <.header_global_action
           button_label_inactive="Profile"
           button_label_active="Profile"
+          tooltip_text="Profile"
         >
           <:icon name="user--avatar" size={20} />
         </.header_global_action>
@@ -204,15 +207,16 @@
         </.side_nav_menu_item>
         </.side_nav_menu>
         <.side_nav_link href={~p"/demo/components"} active={@active_page == :components}>
-          <span class="demo-nav-link">
-            <.icon name="catalog" size={16} /> Component Catalog
-          </span>
+          <:title_icon_container>
+            <.icon name="catalog" size={16} />
+          </:title_icon_container>
+          Component Catalog
         </.side_nav_link>
       </.side_nav_items>
     </.side_nav>
   </:side_nav>
   <:content>
-    <div id="main-content" class="demo-shell-main">
+    <div id="main-content">
       {@inner_content}
     </div>
   </:content>

@@ -135,12 +135,16 @@ defmodule Graphene.CodeGen.ComponentTest do
              attr :data_table, :boolean, default: false, doc: "`true` if this tooltip is in a data table row"
              attr :flipped, :boolean, default: false, doc: "`true` if this overflow menu body should be flipped."
              attr :toolbar_action, :boolean, default: false, doc: "`true` if this menu is a toolbar action"
+
+             attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
              attr :rest, :global
 
              slot :icon, doc: "The icon for the trigger button.", do: attr(:tag, :string)
              slot :inner_block
              def breadcrumb_overflow_menu(assigns) do
-            
+                 assigns = apply_events(assigns)
+
                  ~H"""
                  <cds-breadcrumb-overflow-menu
                   data-table={assigns[:data_table]}

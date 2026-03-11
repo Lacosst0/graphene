@@ -47,6 +47,7 @@ defmodule Graphene.CarbonComponents.DatePickerInput do
   attr :warn_text, :string,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -63,6 +64,7 @@ defmodule Graphene.CarbonComponents.DatePickerInput do
   attr :hide_label, :boolean, doc: "Specify whether the label should be hidden."
   attr :kind, :string, doc: "Date picker kind.", values: [nil, "simple", "single", "from", "to"]
   attr :range, :boolean, doc: "`true` if the input is a range."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

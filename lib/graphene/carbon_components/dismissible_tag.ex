@@ -59,6 +59,7 @@ defmodule Graphene.CarbonComponents.DismissibleTag do
     ],
     default: "gray"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

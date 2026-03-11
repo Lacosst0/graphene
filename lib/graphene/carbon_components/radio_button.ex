@@ -50,6 +50,7 @@ defmodule Graphene.CarbonComponents.RadioButton do
   attr :warn_text, :string,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :ai_label, doc: "AI label content."
   slot :inner_block
@@ -96,12 +97,13 @@ defmodule Graphene.CarbonComponents.RadioButton do
   attr :warn_text, :string,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
 
@@ -124,34 +126,37 @@ defmodule Graphene.CarbonComponents.RadioButton do
       |> assign_new(:invalid_text, fn -> nil end)
       |> assign_new(:legend_text, fn -> nil end)
       |> assign_new(:name, fn -> nil end)
-      |> assign_new(:field, fn -> nil end)
       |> assign_new(:read_only, fn -> false end)
       |> assign_new(:required, fn -> false end)
       |> assign_new(:value, fn -> nil end)
       |> assign_new(:warn, fn -> false end)
       |> assign_new(:warn_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :default_selected,
+        :disabled,
+        :helper_text,
+        :invalid,
+        :invalid_text,
+        :label_position,
+        :legend_text,
+        :name,
+        :orientation,
+        :read_only,
+        :required,
+        :value,
+        :warn,
+        :warn_text,
+        :field,
+        :form,
+        :form_event
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <FormComponents.radio_button_group
-      default_selected={@default_selected}
-      disabled={@disabled}
-      helper_text={@helper_text}
-      invalid={@invalid}
-      invalid_text={@invalid_text}
-      label_position={@label_position}
-      legend_text={@legend_text}
-      name={@name}
-      orientation={@orientation}
-      read_only={@read_only}
-      required={@required}
-      value={@value}
-      warn={@warn}
-      warn_text={@warn_text}
-      field={@field}
-      form={@form}
-      form_event={@form_event}
-      {@rest}
-    >
+    <FormComponents.radio_button_group {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.radio_button
           label_text={item[:label]}
@@ -174,6 +179,7 @@ defmodule Graphene.CarbonComponents.RadioButton do
   Radio button skeleton.
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

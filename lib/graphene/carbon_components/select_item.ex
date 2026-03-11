@@ -22,6 +22,7 @@ defmodule Graphene.CarbonComponents.SelectItem do
   attr :selected, :boolean, doc: "`true` to select this option."
   attr :value, :string, doc: "The value."
   attr :text, :string, doc: "Text for the select item."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -38,6 +39,7 @@ defmodule Graphene.CarbonComponents.SelectItem do
   """
   attr :disabled, :boolean, doc: "`true` to disable this option."
   attr :label, :string, doc: "The label."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

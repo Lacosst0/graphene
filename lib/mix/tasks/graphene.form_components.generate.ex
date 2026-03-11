@@ -20,7 +20,10 @@ if Mix.env() == :dev do
     end
 
     defp components do
-      Graphene.Internal.CoreComponents.__components__()
+      Graphene.CodeGen.Metadata.components()
+      |> Map.new(fn component ->
+        {String.to_atom(component.componentname), component}
+      end)
     end
 
     defp docs_map do
@@ -139,10 +142,10 @@ if Mix.env() == :dev do
 
     defp render_slot_uses(component) do
       component.slots
-      |> Enum.reject(&(&1.name in [:item, :inner_block]))
+      |> Enum.reject(&(slot_atom(&1) in [:item, :inner_block]))
       |> Enum.map(fn slot ->
-        slot_name = Atom.to_string(slot.name)
-        htmlname = Graphene.CodeGen.Util.snake2kebab(slot_name)
+        slot_name = slot_assigns_key(slot)
+        htmlname = slot_htmlname(slot)
 
         [
           "      <.dynamic_tag",
@@ -161,22 +164,83 @@ if Mix.env() == :dev do
       end
     end
 
+    defp slot_assigns_key(slot) do
+      slot_atom(slot)
+      |> Atom.to_string()
+    end
+
+    defp slot_atom(%{atomname: atomname}) when is_binary(atomname) do
+      Code.string_to_quoted!(atomname)
+    end
+
+    defp slot_atom(%{name: name}) when is_atom(name), do: name
+
+    defp slot_atom(%{name: name}) when is_binary(name) do
+      name
+      |> Graphene.CodeGen.Util.kebab2snake()
+      |> String.to_atom()
+    end
+
+    defp slot_htmlname(%{htmlname: htmlname}) when is_binary(htmlname), do: htmlname
+
+    defp slot_htmlname(%{name: name}) when is_binary(name), do: name
+
+    defp slot_htmlname(%{name: name}) when is_atom(name) do
+      name
+      |> Atom.to_string()
+      |> Graphene.CodeGen.Util.snake2kebab()
+    end
+
+    defp form_tag(component) do
+      component.htmltag <> "-form"
+    end
+
+    defp attr_atom(attr) do
+      Code.string_to_quoted!(attr.atomname)
+    end
+
+    defp component_attr_bindings(component) do
+      Enum.map(component.attrs, fn attr -> {attr.htmlname, attr_atom(attr)} end)
+    end
+
+    defp form_component_attr_bindings(component) do
+      bindings = component_attr_bindings(component)
+      names = MapSet.new(Enum.map(bindings, fn {name, _} -> name end))
+
+      bindings =
+        if MapSet.member?(names, "form"), do: bindings, else: bindings ++ [{"form", :form}]
+
+      bindings =
+        if MapSet.member?(names, "id"), do: bindings, else: bindings ++ [{"id", :id}]
+
+      bindings =
+        if MapSet.member?(names, "name") do
+          bindings
+        else
+          bindings ++ [{"name", :name}]
+        end
+
+      if MapSet.member?(names, "form-event") do
+        bindings
+      else
+        bindings ++ [{"form-event", :form_event}]
+      end
+    end
+
     defp render_item_body(name, opts, config, component) do
       item_attrs = item_component_attr_lines(config)
       item_component = config.item_component
       slot_uses = render_slot_uses(component)
-      slot_keys = component.slots |> Enum.map(& &1.name)
-      drop_keys = [:input_id, :input_value, :component_assigns, :id, :item] ++ slot_keys
-      drop_keys = drop_keys |> Enum.uniq()
-      drop_keys_literal = inspect(drop_keys)
+      tag = form_tag(component)
+      bindings = form_component_attr_bindings(component)
 
       "  def #{name}(assigns) do\n" <>
         "    assigns = form_input_assigns(assigns, #{opts})\n" <>
-        "    component_assigns = Map.drop(assigns, #{drop_keys_literal})\n" <>
-        "    assigns = assign(assigns, :component_assigns, component_assigns)\n" <>
+        "    component_attrs =\n" <>
+        "      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, #{inspect(bindings)})\n" <>
+        "    assigns = assign(assigns, :component_attrs, component_attrs)\n" <>
         "    ~H\"\"\"\n" <>
-        "    <input type=\"hidden\" id={@input_id} name={@name} value={@input_value} form={@form} />\n" <>
-        "    <CoreComponents.#{name} {@component_assigns}>\n" <>
+        "    <#{tag} {@component_attrs} {@rest}>\n" <>
         "      {render_slot(@inner_block)}\n" <>
         slot_uses <>
         "      <%= for item <- @item do %>\n" <>
@@ -186,10 +250,19 @@ if Mix.env() == :dev do
         "          {item[:label] || render_slot(item)}\n" <>
         "        </CoreComponents.#{item_component}>\n" <>
         "      <% end %>\n" <>
-        "    </CoreComponents.#{name}>\n" <>
-        "    <.form_bridge_hook />\n" <>
+        "    </#{tag}>\n" <>
         "    \"\"\"\n" <>
         "  end\n\n"
+    end
+
+    defp ensure_inner_block(slots, component) do
+      has_inner_block = Enum.any?(component.slots, fn slot -> slot_atom(slot) == :inner_block end)
+
+      if has_inner_block do
+        slots
+      else
+        slots <> "  slot :inner_block\n"
+      end
     end
 
     defp render_template(path, assigns) do
@@ -234,6 +307,11 @@ if Mix.env() == :dev do
     end
 
     defp build_attr(attr) do
+      cond do
+        match?(%Graphene.CodeGen.Component.Attr{}, attr) ->
+          Graphene.CodeGen.Component.Attr.display_def(attr) <> "\n"
+
+        true ->
       opts =
         []
         |> maybe_add_opt(:default, Keyword.get(attr.opts, :default))
@@ -249,9 +327,13 @@ if Mix.env() == :dev do
       else
         "  attr #{name}, :#{attr.type}\n"
       end
+      end
     end
 
     defp build_slot(slot) do
+      if match?(%Graphene.CodeGen.Component.Slot{}, slot) do
+        Graphene.CodeGen.Component.Slot.display_def(slot) <> "\n"
+      else
       slot_opts =
         []
         |> maybe_add_opt(:required, slot.required)
@@ -292,10 +374,11 @@ if Mix.env() == :dev do
 
         header <> " do\n" <> attrs <> "  end\n"
       end
+      end
     end
 
     defp build_extra_attrs(component) do
-      names = MapSet.new(Enum.map(component.attrs, & &1.name))
+      names = MapSet.new(Enum.map(component.attrs, &attr_key/1))
       extras = []
 
       extras =
@@ -317,20 +400,44 @@ if Mix.env() == :dev do
             [
               "  attr :form, :string,\n" <>
                 "    default: nil,\n" <>
-                "    doc: \"the form attribute for the hidden input\"\n"
+                "    doc: \"the form attribute for the form-associated element\"\n"
             ]
         end
 
-      if MapSet.member?(names, :form_event) do
+      extras =
+        if MapSet.member?(names, :form_event) do
+          extras
+        else
+          extras ++
+            [
+              "  attr :form_event, :string,\n" <>
+                "    default: nil,\n" <>
+                "    doc: \"override the custom event used to sync form values (passed as `form-event`)\"\n"
+            ]
+        end
+
+      if MapSet.member?(names, :events) do
         extras
       else
         extras ++
           [
-            "  attr :form_event, :string,\n" <>
+            "  attr :events, :any,\n" <>
               "    default: nil,\n" <>
-              "    doc: \"override the custom event used to sync form values\"\n"
+              "    doc: \"custom events passed to Graphene.JS.events/1\"\n"
           ]
       end
+    end
+
+    defp attr_key(%{atomname: atomname}) when is_binary(atomname) do
+      Code.string_to_quoted!(atomname)
+    end
+
+    defp attr_key(%{name: name}) when is_atom(name), do: name
+
+    defp attr_key(%{name: name}) when is_binary(name) do
+      name
+      |> Graphene.CodeGen.Util.camel2snake()
+      |> String.to_atom()
     end
 
     defp maybe_add_opt(opts, _key, nil), do: opts
@@ -377,15 +484,22 @@ if Mix.env() == :dev do
       {slots, body} =
         case item_component_config(name) do
           nil ->
+            slots = ensure_inner_block(slots, component)
+            tag = form_tag(component)
+            bindings = form_component_attr_bindings(component)
+            slot_uses = render_slot_uses(component)
+
             body =
               "  def #{name}(assigns) do\n" <>
                 "    assigns = form_input_assigns(assigns, #{opts})\n" <>
-                "    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])\n" <>
-                "    assigns = assign(assigns, :component_assigns, component_assigns)\n" <>
+                "    component_attrs =\n" <>
+                "      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, #{inspect(bindings)})\n" <>
+                "    assigns = assign(assigns, :component_attrs, component_attrs)\n" <>
                 "    ~H\"\"\"\n" <>
-                "    <input type=\"hidden\" id={@input_id} name={@name} value={@input_value} form={@form} />\n" <>
-                "    <%= CoreComponents.#{name}(@component_assigns) %>\n" <>
-                "    <.form_bridge_hook />\n" <>
+                "    <#{tag} {@component_attrs} {@rest}>\n" <>
+                "      {render_slot(@inner_block)}\n" <>
+                slot_uses <>
+                "    </#{tag}>\n" <>
                 "    \"\"\"\n" <>
                 "  end\n\n"
 
@@ -393,6 +507,7 @@ if Mix.env() == :dev do
 
           config ->
             slots = slots <> item_slot_defs(config)
+            slots = ensure_inner_block(slots, component)
             {slots, render_item_body(name, opts, config, component)}
         end
 

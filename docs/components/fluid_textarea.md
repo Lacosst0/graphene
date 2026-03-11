@@ -1,7 +1,5 @@
 # `fluid_textarea`
 
-## basic
-
 ### default
 
 ```heex
@@ -11,9 +9,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-default-input" name="fluid-textarea-default" value="">
-
-<cds-fluid-textarea hidePasswordLabel="Hide password" id="basic-single-default" name="fluid-textarea-default" required-validity-message="Please fill out this field." rows="3" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="basic-single-default" data-form-detail="checked" data-form-event="input" data-form-input="basic-single-default-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-textarea-single-default-input" name="fluid-textarea-default" value="">
+<cds-fluid-textarea hidePasswordLabel="Hide password" id="fluid-textarea-single-default" name="fluid-textarea-default" required-validity-message="Please fill out this field." rows="3" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="fluid-textarea-single-default" data-form-detail="checked" data-form-event="input" data-form-input="fluid-textarea-single-default-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   
@@ -34,9 +31,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-helper-text-input" name="fluid-textarea-helper" value="">
-
-<cds-fluid-textarea hidePasswordLabel="Hide password" id="basic-single-helper-text" name="fluid-textarea-helper" required-validity-message="Please fill out this field." rows="4" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="basic-single-helper-text" data-form-detail="checked" data-form-event="input" data-form-input="basic-single-helper-text-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-textarea-single-helper-text-input" name="fluid-textarea-helper" value="">
+<cds-fluid-textarea hidePasswordLabel="Hide password" id="fluid-textarea-single-helper-text" name="fluid-textarea-helper" required-validity-message="Please fill out this field." rows="4" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="fluid-textarea-single-helper-text" data-form-detail="checked" data-form-event="input" data-form-input="fluid-textarea-single-helper-text-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="helper-text">
@@ -59,9 +55,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-invalid-input" name="fluid-textarea-invalid" value="">
-
-<cds-fluid-textarea hidePasswordLabel="Hide password" id="basic-single-invalid" name="fluid-textarea-invalid" required-validity-message="Please fill out this field." rows="3" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="basic-single-invalid" data-form-detail="checked" data-form-event="input" data-form-input="basic-single-invalid-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-textarea-single-invalid-input" name="fluid-textarea-invalid" value="">
+<cds-fluid-textarea hidePasswordLabel="Hide password" id="fluid-textarea-single-invalid" name="fluid-textarea-invalid" required-validity-message="Please fill out this field." rows="3" showPasswordLabel="Show password" size="md" tooltipAlignment="center" tooltipDirection="bottom" type="text" id="fluid-textarea-single-invalid" data-form-detail="checked" data-form-event="input" data-form-input="fluid-textarea-single-invalid-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   

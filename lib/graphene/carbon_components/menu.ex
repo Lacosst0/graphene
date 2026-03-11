@@ -21,6 +21,7 @@ defmodule Graphene.CarbonComponents.Menu do
   attr :menu_alignment, :string, doc: "Alignment of the menu."
   attr :x, :string, doc: "Horizontal position of the menu."
   attr :y, :string, doc: "Vertical position of the menu."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -75,6 +76,7 @@ defmodule Graphene.CarbonComponents.Menu do
     default: "lg"
 
   attr :tab_index, :string, doc: "Specify the tabIndex of the button.", default: "0"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -103,18 +105,22 @@ defmodule Graphene.CarbonComponents.Menu do
       |> assign_new(:label, fn -> nil end)
       |> assign_new(:menu_border, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :disabled,
+        :kind,
+        :label,
+        :menu_alignment,
+        :menu_background_token,
+        :menu_border,
+        :size,
+        :tab_index
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.menu_button
-      disabled={assigns[:disabled]}
-      kind={assigns[:kind]}
-      label={assigns[:label]}
-      menu_alignment={assigns[:menu_alignment]}
-      menu_background_token={assigns[:menu_background_token]}
-      menu_border={assigns[:menu_border]}
-      size={assigns[:size]}
-      tab_index={assigns[:tab_index]}
-      {@rest}
-    >
+    <CoreComponents.menu_button {@component_attrs} {@rest}>
       <CoreComponents.menu>
         {Graphene.CarbonComponents.Helpers.render_menu_items(assigns)}
       </CoreComponents.menu>

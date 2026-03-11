@@ -11,7 +11,10 @@ if Mix.env() == :dev do
             "graphene.codegen.extract",
             "graphene.core_components.generate",
             "graphene.form_components.generate",
-            "graphene.carbon_components.generate"
+            "graphene.carbon_components.generate",
+            "graphene.product_codegen.extract",
+            "graphene.product_core_components.generate",
+            "graphene.product_components.generate"
           ] do
         Mix.Task.reenable(task)
         Mix.Task.run(task)

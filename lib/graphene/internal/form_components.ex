@@ -7,14 +7,9 @@ defmodule Graphene.Internal.FormComponents do
 
   alias Graphene.Internal.CoreComponents
 
-  defp form_bridge_hook(assigns) do
-    ~H""
-  end
-
   defp form_input_assigns(assigns, opts) do
     mode = Keyword.fetch!(opts, :mode)
     checked_attr = Keyword.get(opts, :checked_attr, :checked)
-    detail_key = Keyword.get(opts, :detail_key, Atom.to_string(checked_attr))
     value_attr = Keyword.get(opts, :value_attr, :value)
     default_event = Keyword.get(opts, :event, "change")
 
@@ -38,6 +33,7 @@ defmodule Graphene.Internal.FormComponents do
       |> assign_new(:value, fn -> nil end)
       |> assign_new(:form, fn -> nil end)
       |> assign_new(:form_event, fn -> default_event end)
+      |> assign_new(:rest, fn -> %{} end)
 
     id = assigns[:id] || assigns[:name]
 
@@ -61,27 +57,10 @@ defmodule Graphene.Internal.FormComponents do
           |> assign(value_attr, assigns[:value])
       end
 
-    input_id = "#{id}-input"
-    input_value = form_hidden_value(assigns, mode)
     assigns = if value_attr == :value, do: assigns, else: assign(assigns, :value, nil)
 
-    hook_name = "GrapheneFormBridge"
-
-    rest =
-      (assigns[:rest] || %{})
-      |> Map.put_new(:id, id)
-      |> Map.merge(%{
-        :"phx-hook" => hook_name,
-        :"data-form-input" => input_id,
-        :"data-form-event" => assigns[:form_event] || default_event,
-        :"data-form-mode" => to_string(mode),
-        :"data-form-detail" => detail_key
-      })
-
     assigns
-    |> assign(:rest, rest)
-    |> assign(:input_id, input_id)
-    |> assign(:input_value, input_value)
+    |> assign(:rest, assigns[:rest] || %{})
   end
 
   defp normalize_checked(assigns, checked_attr) do
@@ -100,22 +79,6 @@ defmodule Graphene.Internal.FormComponents do
     Phoenix.HTML.Form.normalize_value("checkbox", value)
   end
 
-  defp form_hidden_value(assigns, :boolean) do
-    if assigns[:checked], do: "true", else: "false"
-  end
-
-  defp form_hidden_value(assigns, _mode) do
-    value = assigns[:value]
-
-    cond do
-      is_binary(value) -> value
-      is_number(value) -> to_string(value)
-      is_boolean(value) -> if(value, do: "true", else: "false")
-      is_nil(value) -> ""
-      true -> inspect(value)
-    end
-  end
-
   @doc """
   Form-aware file uploader wrapper.
 
@@ -127,7 +90,7 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :id, :string,
     default: nil,
@@ -135,15 +98,15 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :name, :string,
     default: nil,
-    doc: "the name used for the hidden form input"
+    doc: "the name used for the form value"
 
   attr :value, :any,
     default: nil,
-    doc: "optional value to sync to the hidden input"
+    doc: "optional value to sync to the form value"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :file_input_name, :string,
     default: nil,
@@ -192,13 +155,15 @@ defmodule Graphene.Internal.FormComponents do
       |> assign_new(:button, fn -> [] end)
       |> assign_new(:drop_container, fn -> [] end)
       |> assign_new(:item, fn -> [] end)
-      |> assign_new(:form_event, fn ->
-        if Map.get(assigns, :drop_container, []) != [] and Map.get(assigns, :button, []) == [] do
-          "cds-file-uploader-drop-container-changed"
-        else
-          "cds-file-uploader-button-changed"
-        end
-      end)
+      |> assign(
+        :form_event,
+        assigns[:form_event] ||
+          if Map.get(assigns, :drop_container, []) != [] and Map.get(assigns, :button, []) == [] do
+            "cds-file-uploader-drop-container-changed"
+          else
+            "cds-file-uploader-button-changed"
+          end
+      )
       |> form_input_assigns(
         name: :file_uploader,
         mode: :value,
@@ -206,11 +171,13 @@ defmodule Graphene.Internal.FormComponents do
       )
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.file_uploader
+    <cds-file-uploader-form
       disabled={@disabled}
-      label_description={@label_description}
-      label_title={@label_title}
+      label-description={@label_description}
+      label-title={@label_title}
+      name={@name}
+      form={@form}
+      form-event={@form_event}
       {@rest}
     >
       <%= for drop <- @drop_container do %>
@@ -248,8 +215,7 @@ defmodule Graphene.Internal.FormComponents do
         </CoreComponents.file_uploader_item>
       <% end %>
       {render_slot(@inner_block)}
-    </CoreComponents.file_uploader>
-    <.form_bridge_hook />
+    </cds-file-uploader-form>
     """
   end
 
@@ -289,6 +255,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the Checkbox is in a warn state. Defaults to `false`.
   * `warn_text` (`:boolean`) - Provide the text that is displayed when the Checkbox is in a warn state. Defaults to `false`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -301,45 +268,70 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :checked, :boolean, doc: "Specify whether the underlying input should be checked"
-  attr :data_table, :boolean, doc: "Specify if checkbox is being used in a data table"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :checked, :boolean,
+    default: false,
+    doc: "Specify whether the underlying input should be checked"
+
+  attr :data_table, :boolean,
+    default: false,
+    doc: "Specify if checkbox is being used in a data table"
 
   attr :default_checked, :any,
+    default: nil,
     doc: "Specify whether the underlying input should be checked by default"
 
-  attr :disabled, :boolean, doc: "Specify whether the Checkbox should be disabled"
-  attr :helper_text, :any, doc: "Provide text for the form group for additional help"
+  attr :disabled, :boolean, default: false, doc: "Specify whether the Checkbox should be disabled"
+
+  attr :helper_text, :any,
+    default: nil,
+    doc: "Provide text for the form group for additional help"
 
   attr :hide_checkbox, :boolean,
+    default: false,
     doc:
       "Specify whether the checkbox should be present in the DOM,\nbut invisible and uninteractable. Used for data-table purposes."
 
-  attr :hide_label, :boolean, doc: "Specify whether the label should be hidden, or not"
-  attr :id, :string, doc: "Specify a custom id for the checkbox", default: "checkbox"
-  attr :indeterminate, :boolean, doc: "Specify whether the Checkbox is in an indeterminate state"
-  attr :invalid, :boolean, doc: "Specify whether the Checkbox is currently invalid"
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the label should be hidden, or not"
+
+  attr :id, :string, default: "checkbox", doc: "Specify a custom id for the checkbox"
+
+  attr :indeterminate, :boolean,
+    default: false,
+    doc: "Specify whether the Checkbox is in an indeterminate state"
+
+  attr :invalid, :boolean,
+    default: false,
+    doc: "Specify whether the Checkbox is currently invalid"
 
   attr :invalid_text, :any,
+    default: nil,
     doc: "Provide the text that is displayed when the Checkbox is in an invalid state"
 
   attr :label_text, :string,
+    default: nil,
     doc:
       "Provide a label to provide a description of the Checkbox input that you are\nexposing to the user"
 
-  attr :name, :string, doc: "The form name."
-  attr :readonly, :boolean, doc: "Specify whether the Checkbox is read-only"
-  attr :rest, :global
-  attr :title, :string, doc: "Specify a title for the node for the Checkbox"
-  attr :value, :string, doc: "The value."
-  attr :warn, :boolean, doc: "Specify whether the Checkbox is in a warn state"
+  attr :name, :string, default: nil, doc: "The form name."
+  attr :readonly, :boolean, default: false, doc: "Specify whether the Checkbox is read-only"
+  attr :title, :string, default: nil, doc: "Specify a title for the node for the Checkbox"
+  attr :value, :string, default: nil, doc: "The value."
+  attr :warn, :boolean, default: false, doc: "Specify whether the Checkbox is in a warn state"
 
   attr :warn_text, :boolean,
+    default: false,
     doc: "Provide the text that is displayed when the Checkbox is in a warn state"
 
   slot :inner_block
@@ -353,13 +345,36 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-checkbox-changed"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"checked", :checked},
+        {"data-table", :data_table},
+        {"default-checked", :default_checked},
+        {"disabled", :disabled},
+        {"helper-text", :helper_text},
+        {"hide-checkbox", :hide_checkbox},
+        {"hide-label", :hide_label},
+        {"id", :id},
+        {"indeterminate", :indeterminate},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label-text", :label_text},
+        {"name", :name},
+        {"readonly", :readonly},
+        {"title", :title},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.checkbox(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-checkbox-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+    </cds-checkbox-form>
     """
   end
 
@@ -404,6 +419,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the Checkbox is in a warn state. Defaults to `false`.
   * `warn_text` (`:boolean`) - Provide the text that is displayed when the Checkbox is in a warn state. Defaults to `false`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -425,64 +441,74 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :checked, :boolean,
+    default: false,
     doc:
       "\n**Deprecated:** Use `toggled` instead.\nThe `checked` attribute will be removed in the next major version."
 
-  attr :data_table, :boolean, doc: "Specify if checkbox is being used in a data table"
+  attr :data_table, :boolean,
+    default: false,
+    doc: "Specify if checkbox is being used in a data table"
 
   attr :default_checked, :any,
+    default: nil,
     doc: "Specify whether the underlying input should be checked by default"
 
-  attr :disabled, :boolean, doc: "Specify whether the Checkbox should be disabled"
-  attr :helper_text, :any, doc: "Provide text for the form group for additional help"
+  attr :disabled, :boolean, default: false, doc: "Specify whether the Checkbox should be disabled"
+
+  attr :helper_text, :any,
+    default: nil,
+    doc: "Provide text for the form group for additional help"
 
   attr :hide_checkbox, :boolean,
+    default: false,
     doc:
       "Specify whether the checkbox should be present in the DOM,\nbut invisible and uninteractable. Used for data-table purposes."
 
-  attr :hide_label, :boolean, doc: "Hide label text."
-  attr :id, :string, doc: "Specify a custom id for the checkbox", default: "checkbox"
-  attr :indeterminate, :boolean, doc: "Specify whether the Checkbox is in an indeterminate state"
-  attr :invalid, :boolean, doc: "Specify whether the Checkbox is currently invalid"
+  attr :hide_label, :boolean, default: false, doc: "Hide label text."
+  attr :id, :string, default: "checkbox", doc: "Specify a custom id for the checkbox"
+
+  attr :indeterminate, :boolean,
+    default: false,
+    doc: "Specify whether the Checkbox is in an indeterminate state"
+
+  attr :invalid, :boolean,
+    default: false,
+    doc: "Specify whether the Checkbox is currently invalid"
 
   attr :invalid_text, :any,
+    default: nil,
     doc: "Provide the text that is displayed when the Checkbox is in an invalid state"
 
-  attr :label_a, :string, doc: "Specify the label for the \"on\" position", default: "On"
-  attr :label_b, :string, doc: "Specify the label for the \"off\" position", default: "Off"
-  attr :name, :string, doc: "The form name."
-  attr :read_only, :boolean, doc: "Read only boolean."
-  attr :readonly, :boolean, doc: "Specify whether the Checkbox is read-only"
-  attr :rest, :global
-  attr :size, :string, doc: "Toggle size.", values: ["", "sm"], default: ""
-  attr :title, :string, doc: "Specify a title for the node for the Checkbox"
-  attr :toggled, :boolean, doc: "Specify whether the control is toggled"
-  attr :value, :string, doc: "The value."
-  attr :warn, :boolean, doc: "Specify whether the Checkbox is in a warn state"
+  attr :label_a, :string, default: "On", doc: "Specify the label for the \"on\" position"
+  attr :label_b, :string, default: "Off", doc: "Specify the label for the \"off\" position"
+  attr :name, :string, default: nil, doc: "The form name."
+  attr :read_only, :boolean, default: false, doc: "Read only boolean."
+  attr :readonly, :boolean, default: false, doc: "Specify whether the Checkbox is read-only"
+  attr :size, :string, default: "", values: ["", "sm"], doc: "Toggle size."
+  attr :title, :string, default: nil, doc: "Specify a title for the node for the Checkbox"
+  attr :toggled, :boolean, default: nil, doc: "Specify whether the control is toggled"
+  attr :value, :string, default: nil, doc: "The value."
+  attr :warn, :boolean, default: false, doc: "Specify whether the Checkbox is in a warn state"
 
   attr :warn_text, :boolean,
+    default: false,
     doc: "Provide the text that is displayed when the Checkbox is in a warn state"
 
-  slot :checked_text, doc: "The text for the checked state." do
-    attr :tag, :string
-  end
-
+  slot :checked_text, doc: "The text for the checked state.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
+  slot :unchecked_text, doc: "The text for the unchecked state.", do: attr(:tag, :string)
   slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
-
-  slot :unchecked_text, doc: "The text for the unchecked state." do
-    attr :tag, :string
-  end
 
   def toggle(assigns) do
     assigns =
@@ -494,13 +520,61 @@ defmodule Graphene.Internal.FormComponents do
         detail_key: "toggled"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"checked", :checked},
+        {"data-table", :data_table},
+        {"default-checked", :default_checked},
+        {"disabled", :disabled},
+        {"helper-text", :helper_text},
+        {"hide-checkbox", :hide_checkbox},
+        {"hideLabel", :hide_label},
+        {"id", :id},
+        {"indeterminate", :indeterminate},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label-a", :label_a},
+        {"label-b", :label_b},
+        {"name", :name},
+        {"read-only", :read_only},
+        {"readonly", :readonly},
+        {"size", :size},
+        {"title", :title},
+        {"toggled", :toggled},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.toggle(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-toggle-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:checked_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="checked-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:unchecked_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="unchecked-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-toggle-form>
     """
   end
 
@@ -531,6 +605,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The `value` attribute for the `<input>` for selection. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -543,38 +618,62 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :default_selected, :string, doc: "The `value` attribute for the `<input>` for selection."
-  attr :disabled, :boolean, doc: "`true` if the radio button group should be disabled."
-  attr :helper_text, :any, doc: "The helper text."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :default_selected, :string,
+    default: nil,
+    doc: "The `value` attribute for the `<input>` for selection."
+
+  attr :disabled, :boolean,
+    default: false,
+    doc: "`true` if the radio button group should be disabled."
+
+  attr :helper_text, :any, default: nil, doc: "The helper text."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
 
   attr :label_position, :string,
-    doc: "The label position.",
+    default: "right",
     values: ["left", "right"],
-    default: "right"
+    doc: "The label position."
 
-  attr :legend_text, :string, doc: "The label position."
-  attr :name, :string, doc: "The `name` attribute for the `<input>` for selection."
+  attr :legend_text, :string, default: nil, doc: "The label position."
+  attr :name, :string, default: nil, doc: "The `name` attribute for the `<input>` for selection."
 
   attr :orientation, :string,
-    doc: "The orientation to lay out radio buttons.",
+    default: "horizontal",
     values: ["horizontal", "vertical"],
-    default: "horizontal"
+    doc: "The orientation to lay out radio buttons."
 
-  attr :read_only, :boolean, doc: "Controls the readonly state of the radio button group."
-  attr :required, :boolean, doc: "`true` to specify if input selection in group is required."
-  attr :rest, :global
-  attr :value, :string, doc: "The `value` attribute for the `<input>` for selection."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :read_only, :boolean,
+    default: false,
+    doc: "Controls the readonly state of the radio button group."
+
+  attr :required, :boolean,
+    default: false,
+    doc: "`true` to specify if input selection in group is required."
+
+  attr :value, :string,
+    default: nil,
+    doc: "The `value` attribute for the `<input>` for selection."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
   slot :inner_block
@@ -587,13 +686,33 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-radio-button-group-changed"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"defaultSelected", :default_selected},
+        {"disabled", :disabled},
+        {"helper-text", :helper_text},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label-position", :label_position},
+        {"legend-text", :legend_text},
+        {"name", :name},
+        {"orientation", :orientation},
+        {"readOnly", :read_only},
+        {"required", :required},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.radio_button_group(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-radio-button-group-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+    </cds-radio-button-group-form>
     """
   end
 
@@ -653,6 +772,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -674,121 +794,149 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :allow_empty, :boolean, doc: "`true` to allow empty string."
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :allow_empty, :boolean, default: false, doc: "`true` to allow empty string."
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
   attr :decrement_button_assistive_text, :string,
-    doc: "Aria text for the button that decrements the value",
-    default: "decrease number input"
+    default: "decrease number input",
+    doc: "Aria text for the button that decrements the value"
 
-  attr :default_value, :string, doc: "Optional starting value for uncontrolled state"
+  attr :default_value, :string,
+    default: nil,
+    doc: "Optional starting value for uncontrolled state"
 
   attr :disable_wheel, :boolean,
+    default: false,
     doc: "Specify if the wheel functionality for the input should be disabled, or not"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
-  attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+  attr :hide_steppers, :boolean,
+    default: false,
+    doc: "Specify whether you want the steppers to be hidden"
 
-  attr :hide_steppers, :boolean, doc: "Specify whether you want the steppers to be hidden"
+  attr :hide_password_label, :string,
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
   attr :icon_description, :string,
+    default: nil,
     doc: "Provide a description for up/down icons that can be read by screen readers"
 
   attr :increment_button_assistive_text, :string,
-    doc: "Aria text for the button that increments the value",
-    default: "increase number input"
+    default: "increase number input",
+    doc: "Aria text for the button that increments the value"
 
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Set to true to use the fluid variant."
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Set to true to use the fluid variant."
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
-  attr :max, :string, doc: "The maximum value allowed in the input", default: "Infty"
+  attr :max, :string, default: "Infty", doc: "The maximum value allowed in the input"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :min, :string, doc: "The minimum value allowed in the input", default: "-Infty"
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the input against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :min, :string, default: "-Infty", doc: "The minimum value allowed in the input"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the input against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
-  attr :step, :string, doc: "The amount the value should increase or decrease by", default: "1"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
+  attr :step, :string, default: "1", doc: "The amount the value should increase or decrease by"
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def number_input(assigns) do
     assigns =
@@ -799,13 +947,77 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-number-input"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"allow-empty", :allow_empty},
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"decrement-button-assistive-text", :decrement_button_assistive_text},
+        {"default-value", :default_value},
+        {"disable-wheel", :disable_wheel},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hide-steppers", :hide_steppers},
+        {"hidePasswordLabel", :hide_password_label},
+        {"icon-description", :icon_description},
+        {"increment-button-assistive-text", :increment_button_assistive_text},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max", :max},
+        {"max-count", :max_count},
+        {"min", :min},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"step", :step},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.number_input(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-number-input-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-number-input-form>
     """
   end
 
@@ -865,6 +1077,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -886,121 +1099,149 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :allow_empty, :boolean, doc: "`true` to allow empty string."
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :allow_empty, :boolean, default: false, doc: "`true` to allow empty string."
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
   attr :decrement_button_assistive_text, :string,
-    doc: "Aria text for the button that decrements the value",
-    default: "decrease number input"
+    default: "decrease number input",
+    doc: "Aria text for the button that decrements the value"
 
-  attr :default_value, :string, doc: "Optional starting value for uncontrolled state"
+  attr :default_value, :string,
+    default: nil,
+    doc: "Optional starting value for uncontrolled state"
 
   attr :disable_wheel, :boolean,
+    default: false,
     doc: "Specify if the wheel functionality for the input should be disabled, or not"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
-  attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+  attr :hide_steppers, :boolean,
+    default: false,
+    doc: "Specify whether you want the steppers to be hidden"
 
-  attr :hide_steppers, :boolean, doc: "Specify whether you want the steppers to be hidden"
+  attr :hide_password_label, :string,
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
   attr :icon_description, :string,
+    default: nil,
     doc: "Provide a description for up/down icons that can be read by screen readers"
 
   attr :increment_button_assistive_text, :string,
-    doc: "Aria text for the button that increments the value",
-    default: "increase number input"
+    default: "increase number input",
+    doc: "Aria text for the button that increments the value"
 
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Set to true to use the fluid variant."
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Set to true to use the fluid variant."
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
-  attr :max, :string, doc: "The maximum value allowed in the input", default: "Infty"
+  attr :max, :string, default: "Infty", doc: "The maximum value allowed in the input"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :min, :string, doc: "The minimum value allowed in the input", default: "-Infty"
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the input against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :min, :string, default: "-Infty", doc: "The minimum value allowed in the input"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the input against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
-  attr :step, :string, doc: "The amount the value should increase or decrease by", default: "1"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
+  attr :step, :string, default: "1", doc: "The amount the value should increase or decrease by"
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def fluid_number_input(assigns) do
     assigns =
@@ -1011,13 +1252,77 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-number-input"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"allow-empty", :allow_empty},
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"decrement-button-assistive-text", :decrement_button_assistive_text},
+        {"default-value", :default_value},
+        {"disable-wheel", :disable_wheel},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hide-steppers", :hide_steppers},
+        {"hidePasswordLabel", :hide_password_label},
+        {"icon-description", :icon_description},
+        {"increment-button-assistive-text", :increment_button_assistive_text},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max", :max},
+        {"max-count", :max_count},
+        {"min", :min},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"step", :step},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.fluid_number_input(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-fluid-number-input-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-fluid-number-input-form>
     """
   end
 
@@ -1066,6 +1371,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1087,108 +1393,184 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
   attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the input against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the input against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def text_input(assigns) do
     assigns = form_input_assigns(assigns, name: :text_input, mode: :value, event: "input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hidePasswordLabel", :hide_password_label},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max-count", :max_count},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.text_input(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-text-input-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-text-input-form>
     """
   end
 
@@ -1237,6 +1619,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1258,108 +1641,184 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
   attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the input against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the input against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def fluid_text_input(assigns) do
     assigns = form_input_assigns(assigns, name: :fluid_text_input, mode: :value, event: "input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hidePasswordLabel", :hide_password_label},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max-count", :max_count},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.fluid_text_input(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-fluid-text-input-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-fluid-text-input-form>
     """
   end
 
@@ -1408,6 +1867,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1429,108 +1889,184 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
   attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the input against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the input against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_position, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The native `<input>` type. Defaults to “password”.",
+    default: "password",
     values: ["email", "password", "tel", "text", "url"],
-    default: "password"
+    doc: "The native `<input>` type. Defaults to “password”."
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def password_input(assigns) do
     assigns = form_input_assigns(assigns, name: :password_input, mode: :value, event: "input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hide-password-label", :hide_password_label},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max-count", :max_count},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"show-password-label", :show_password_label},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"size", :size},
+        {"tooltip-alignment", :tooltip_alignment},
+        {"tooltip-position", :tooltip_position},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.password_input(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-password-input-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-password-input-form>
     """
   end
 
@@ -1550,7 +2086,7 @@ defmodule Graphene.Internal.FormComponents do
   * `autocomplete` (`:string`) - May be any of the standard HTML autocomplete options. Defaults to `nil`.
   * `autofocus` (`:boolean`) - Sets the input to be focussed automatically on page load. Defaults to false. Defaults to `false`.
   * `cols` (`:any`) - The number of columns for the textarea to show by default. Defaults to `nil`.
-  * `counter_mode` (`:any`) - Specify the method used for calculating the counter number. Defaults to `nil`.
+  * `counter_mode` (`:string`) - Specify the method used for calculating the counter number. Defaults to `"character"`. Must be one of `"character"`, or `"word"`.
   * `disabled` (`:boolean`) - Controls the disabled state of the input. Defaults to `false`.
   * `enable_counter` (`:boolean`) - Specify whether to display the character counter. Defaults to `false`.
   * `hide_label` (`:boolean`) - Specify whether you want the underlying label to be visually hidden. Defaults to `false`.
@@ -1584,6 +2120,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1605,115 +2142,197 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
-  attr :cols, :any, doc: "The number of columns for the textarea to show by default"
-  attr :counter_mode, :any, doc: "Specify the method used for calculating the counter number"
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :cols, :any, default: nil, doc: "The number of columns for the textarea to show by default"
+
+  attr :counter_mode, :string,
+    default: "character",
+    values: ["character", "word"],
+    doc: "Specify the method used for calculating the counter number"
+
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
   attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
-  attr :id, :string, doc: "ID to link the `label` and `textarea`"
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Specify whether the textarea is fluid or not"
+  attr :id, :string, default: nil, doc: "ID to link the `label` and `textarea`"
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Specify whether the textarea is fluid or not"
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :name, :string, doc: "Name for the input in the `FormData`"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
 
   attr :pattern, :string,
+    default: nil,
     doc: "Pattern to validate the textarea against for HTML validity checking"
 
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :rows, :string, doc: "The number of rows for the textarea to show by default", default: "4"
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+  attr :rows, :string, default: "4", doc: "The number of rows for the textarea to show by default"
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def textarea(assigns) do
     assigns = form_input_assigns(assigns, name: :textarea, mode: :value, event: "input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"cols", :cols},
+        {"counter-mode", :counter_mode},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hidePasswordLabel", :hide_password_label},
+        {"id", :id},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max-count", :max_count},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"rows", :rows},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.textarea(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-textarea-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-textarea-form>
     """
   end
 
@@ -1733,7 +2352,7 @@ defmodule Graphene.Internal.FormComponents do
   * `autocomplete` (`:string`) - May be any of the standard HTML autocomplete options. Defaults to `nil`.
   * `autofocus` (`:boolean`) - Sets the input to be focussed automatically on page load. Defaults to false. Defaults to `false`.
   * `cols` (`:any`) - The number of columns for the textarea to show by default. Defaults to `nil`.
-  * `counter_mode` (`:any`) - Specify the method used for calculating the counter number. Defaults to `nil`.
+  * `counter_mode` (`:string`) - Specify the method used for calculating the counter number. Defaults to `"character"`. Must be one of `"character"`, or `"word"`.
   * `disabled` (`:boolean`) - Controls the disabled state of the input. Defaults to `false`.
   * `enable_counter` (`:boolean`) - Specify whether to display the character counter. Defaults to `false`.
   * `hide_label` (`:boolean`) - Specify whether you want the underlying label to be visually hidden. Defaults to `false`.
@@ -1767,6 +2386,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the input. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1788,115 +2408,197 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autocomplete, :string, doc: "May be any of the standard HTML autocomplete options"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autocomplete, :string,
+    default: nil,
+    doc: "May be any of the standard HTML autocomplete options"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the input to be focussed automatically on page load. Defaults to false"
 
-  attr :cols, :any, doc: "The number of columns for the textarea to show by default"
-  attr :counter_mode, :any, doc: "Specify the method used for calculating the counter number"
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enable_counter, :boolean, doc: "Specify whether to display the character counter"
+  attr :cols, :any, default: nil, doc: "The number of columns for the textarea to show by default"
+
+  attr :counter_mode, :string,
+    default: "character",
+    values: ["character", "word"],
+    doc: "Specify the method used for calculating the counter number"
+
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enable_counter, :boolean,
+    default: false,
+    doc: "Specify whether to display the character counter"
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
   attr :hide_password_label, :string,
-    doc: "\"Hide password\" tooltip text on password visibility toggle",
-    default: "Hide password"
+    default: "Hide password",
+    doc: "\"Hide password\" tooltip text on password visibility toggle"
 
-  attr :id, :string, doc: "ID to link the `label` and `textarea`"
-  attr :inline, :boolean, doc: "true to use the inline version."
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Specify whether the textarea is fluid or not"
+  attr :id, :string, default: nil, doc: "ID to link the `label` and `textarea`"
+  attr :inline, :boolean, default: false, doc: "true to use the inline version."
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Specify whether the textarea is fluid or not"
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :max_count, :any,
+    default: nil,
     doc:
       "Max character count allowed for input. This is needed in order for enableCounter to display"
 
-  attr :name, :string, doc: "Name for the input in the `FormData`"
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
 
   attr :pattern, :string,
+    default: nil,
     doc: "Pattern to validate the textarea against for HTML validity checking"
 
-  attr :placeholder, :string, doc: "Value to display when the input has an empty `value`"
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the input has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :rows, :string, doc: "The number of rows for the textarea to show by default", default: "4"
-
-  attr :show_password_label, :string,
-    doc: "\"Show password\" tooltip text on password visibility toggle",
-    default: "Show password"
+  attr :rows, :string, default: "4", doc: "The number of rows for the textarea to show by default"
 
   attr :show_password_visibility_toggle, :boolean,
+    default: false,
     doc: "Boolean property to render password visibility toggle"
 
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
+  attr :show_password_label, :string,
+    default: "Show password",
+    doc: "\"Show password\" tooltip text on password visibility toggle"
+
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
 
   attr :tooltip_alignment, :string,
-    doc:
-      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end.",
+    default: "center",
     values: ["start", "center", "end"],
-    default: "center"
+    doc:
+      "Specify the alignment of the tooltip to the icon-only button.\nCan be one of: start, center, or end."
 
   attr :tooltip_direction, :string,
-    doc:
-      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left.",
+    default: "bottom",
     values: ["top", "right", "bottom", "left"],
-    default: "bottom"
+    doc:
+      "Specify the direction of the tooltip for icon-only buttons.\nCan be either top, right, bottom, or left."
 
   attr :type, :string,
-    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum",
+    default: "text",
     values: ["email", "password", "tel", "text", "url"],
-    default: "text"
+    doc: "The type of the input. Can be one of the types listed in the INPUT_TYPE enum"
 
-  attr :value, :string, doc: "The value of the input."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :value, :string, default: nil, doc: "The value of the input."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def fluid_textarea(assigns) do
     assigns = form_input_assigns(assigns, name: :fluid_textarea, mode: :value, event: "input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"autofocus", :autofocus},
+        {"cols", :cols},
+        {"counter-mode", :counter_mode},
+        {"disabled", :disabled},
+        {"enable-counter", :enable_counter},
+        {"hide-label", :hide_label},
+        {"hidePasswordLabel", :hide_password_label},
+        {"id", :id},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"label", :label},
+        {"max-count", :max_count},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"rows", :rows},
+        {"show-password-visibility-toggle", :show_password_visibility_toggle},
+        {"showPasswordLabel", :show_password_label},
+        {"size", :size},
+        {"tooltipAlignment", :tooltip_alignment},
+        {"tooltipDirection", :tooltip_direction},
+        {"type", :type},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.fluid_textarea(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-fluid-textarea-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:helper_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="helper-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-fluid-textarea-form>
     """
   end
 
@@ -1929,6 +2631,7 @@ defmodule Graphene.Internal.FormComponents do
   * `type` (`:string`) - The `<input>` name. Defaults to `nil`.
   * `value` (`:string`) - The value. Defaults to `nil`.
   * `color_scheme` (`:string`) - Color scheme for the search. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -1941,49 +2644,81 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :autocomplete, :string,
+    default: "off",
     doc:
-      "Specify an optional value for the autocomplete property on the underlying <input>,\ndefaults to \"off\"",
-    default: "off"
+      "Specify an optional value for the autocomplete property on the underlying <input>,\ndefaults to \"off\""
 
   attr :close_button_label_text, :string,
+    default: nil,
     doc: "Specify a label to be read by screen readers on the \"close\" button"
 
-  attr :color_scheme, :string, doc: "Color scheme for the search."
-  attr :disabled, :boolean, doc: "`true` if the search box should be disabled."
-  attr :expandable, :boolean, doc: "`true` if the search bar can be expandable"
-  attr :expanded, :boolean, doc: "`true` if the expandable search has been expanded"
-  attr :has_custom_icon, :boolean
-  attr :label_text, :string, doc: "The label text."
-  attr :name, :string, doc: "The form name in `FormData`."
-  attr :placeholder, :string, doc: "The placeholder text.", default: "Search"
-  attr :rest, :global
-  attr :role, :string, doc: "Specify the role for the underlying <input>, defaults to searchbox"
+  attr :disabled, :boolean, default: false, doc: "`true` if the search box should be disabled."
+  attr :expandable, :boolean, default: false, doc: "`true` if the search bar can be expandable"
+
+  attr :expanded, :boolean,
+    default: false,
+    doc: "`true` if the expandable search has been expanded"
+
+  attr :has_custom_icon, :boolean, default: false
+  attr :label_text, :string, default: nil, doc: "The label text."
+  attr :name, :string, default: nil, doc: "The form name in `FormData`."
+  attr :placeholder, :string, default: "Search", doc: "The placeholder text."
+
+  attr :role, :string,
+    default: nil,
+    doc: "Specify the role for the underlying <input>, defaults to searchbox"
 
   attr :size, :string,
-    doc: "The search box size.",
+    default: "md",
     values: ["sm", "md", "lg", "xl"],
-    default: "md"
+    doc: "The search box size."
 
-  attr :type, :string, doc: "The `<input>` name."
-  attr :value, :string, doc: "The value."
+  attr :type, :string, default: nil, doc: "The `<input>` name."
+  attr :value, :string, default: nil, doc: "The value."
+  attr :color_scheme, :string, default: nil, doc: "Color scheme for the search."
   slot :inner_block
 
   def search(assigns) do
     assigns = form_input_assigns(assigns, name: :search, mode: :value, event: "cds-search-input")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"close-button-label-text", :close_button_label_text},
+        {"disabled", :disabled},
+        {"expandable", :expandable},
+        {"expanded", :expanded},
+        {"hasCustomIcon", :has_custom_icon},
+        {"label-text", :label_text},
+        {"name", :name},
+        {"placeholder", :placeholder},
+        {"role", :role},
+        {"size", :size},
+        {"type", :type},
+        {"value", :value},
+        {"color-scheme", :color_scheme},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.search(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-search-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+    </cds-search-form>
     """
   end
 
@@ -2015,6 +2750,7 @@ defmodule Graphene.Internal.FormComponents do
   * `size` (`:string`) - The search box size. Defaults to `"md"`. Must be one of `"sm"`, `"md"`, `"lg"`, or `"xl"`.
   * `type` (`:string`) - The `<input>` name. Defaults to `nil`.
   * `value` (`:string`) - The value. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2027,50 +2763,80 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :autocomplete, :string,
+    default: "off",
     doc:
-      "Specify an optional value for the autocomplete property on the underlying <input>,\ndefaults to \"off\"",
-    default: "off"
+      "Specify an optional value for the autocomplete property on the underlying <input>,\ndefaults to \"off\""
 
   attr :close_button_label_text, :string,
+    default: nil,
     doc: "Specify a label to be read by screen readers on the \"close\" button"
 
-  attr :disabled, :boolean, doc: "`true` if the search box should be disabled."
-  attr :expandable, :boolean, doc: "`true` if the search bar can be expandable"
-  attr :expanded, :boolean, doc: "`true` if the expandable search has been expanded"
-  attr :has_custom_icon, :boolean
-  attr :label_text, :string, doc: "The label text."
-  attr :name, :string, doc: "The form name in `FormData`."
-  attr :placeholder, :string, doc: "The placeholder text.", default: "Search"
-  attr :rest, :global
-  attr :role, :string, doc: "Specify the role for the underlying <input>, defaults to searchbox"
+  attr :disabled, :boolean, default: false, doc: "`true` if the search box should be disabled."
+  attr :expandable, :boolean, default: false, doc: "`true` if the search bar can be expandable"
+
+  attr :expanded, :boolean,
+    default: false,
+    doc: "`true` if the expandable search has been expanded"
+
+  attr :has_custom_icon, :boolean, default: false
+  attr :label_text, :string, default: nil, doc: "The label text."
+  attr :name, :string, default: nil, doc: "The form name in `FormData`."
+  attr :placeholder, :string, default: "Search", doc: "The placeholder text."
+
+  attr :role, :string,
+    default: nil,
+    doc: "Specify the role for the underlying <input>, defaults to searchbox"
 
   attr :size, :string,
-    doc: "The search box size.",
+    default: "md",
     values: ["sm", "md", "lg", "xl"],
-    default: "md"
+    doc: "The search box size."
 
-  attr :type, :string, doc: "The `<input>` name."
-  attr :value, :string, doc: "The value."
+  attr :type, :string, default: nil, doc: "The `<input>` name."
+  attr :value, :string, default: nil, doc: "The value."
   slot :inner_block
 
   def fluid_search(assigns) do
     assigns =
       form_input_assigns(assigns, name: :fluid_search, mode: :value, event: "cds-search-input")
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autocomplete", :autocomplete},
+        {"close-button-label-text", :close_button_label_text},
+        {"disabled", :disabled},
+        {"expandable", :expandable},
+        {"expanded", :expanded},
+        {"hasCustomIcon", :has_custom_icon},
+        {"label-text", :label_text},
+        {"name", :name},
+        {"placeholder", :placeholder},
+        {"role", :role},
+        {"size", :size},
+        {"type", :type},
+        {"value", :value},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.fluid_search(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-fluid-search-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+    </cds-fluid-search-form>
     """
   end
 
@@ -2106,6 +2872,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the text area. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify if the currently value is warn. Defaults to `false`.
   * `warn_text` (`:string`) - Message which is displayed if the value is warn. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2127,55 +2894,69 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the select to be focussed automatically on page load. Defaults to false"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the select"
-  attr :hide_label, :boolean, doc: "Specify whether the label should be hidden, or not"
-  attr :id, :string, doc: "ID to link the `label` and `select`"
-  attr :inline, :boolean, doc: "Specify whether you want the inline version of this control"
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Specify whether the textarea is fluid or not"
-  attr :multiple, :boolean, doc: "`true` to enable multiple selection."
-  attr :name, :string, doc: "Name for the select in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the select against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the select has an empty `value`"
-  attr :readonly, :boolean, doc: "Controls the readonly state of the select"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the select"
+
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the label should be hidden, or not"
+
+  attr :id, :string, default: nil, doc: "ID to link the `label` and `select`"
+
+  attr :inline, :boolean,
+    default: false,
+    doc: "Specify whether you want the inline version of this control"
+
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Specify whether the textarea is fluid or not"
+  attr :multiple, :boolean, default: nil, doc: "`true` to enable multiple selection."
+  attr :name, :string, default: nil, doc: "Name for the select in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the select against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the select has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Controls the readonly state of the select"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :selected_index, :string, doc: "The selected index."
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
-  attr :value, :string, doc: "The value of the text area."
-  attr :warn, :boolean, doc: "Specify if the currently value is warn."
-  attr :warn_text, :string, doc: "Message which is displayed if the value is warn."
-
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  attr :selected_index, :string, default: nil, doc: "The selected index."
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
+  attr :value, :string, default: nil, doc: "The value of the text area."
+  attr :warn, :boolean, default: false, doc: "Specify if the currently value is warn."
+  attr :warn_text, :string, default: nil, doc: "Message which is displayed if the value is warn."
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
 
   slot :item do
     attr :label, :string
@@ -2184,28 +2965,42 @@ defmodule Graphene.Internal.FormComponents do
     attr :disabled, :boolean
   end
 
+  slot :inner_block
+
   def select(assigns) do
     assigns =
       form_input_assigns(assigns, name: :select, mode: :value, event: "cds-select-selected")
 
-    component_assigns =
-      Map.drop(assigns, [
-        :input_id,
-        :input_value,
-        :component_assigns,
-        :id,
-        :item,
-        :helper_text,
-        :inner_block,
-        :label_text,
-        :validity_message
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autofocus", :autofocus},
+        {"disabled", :disabled},
+        {"hide-label", :hide_label},
+        {"id", :id},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"multiple", :multiple},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"selectedIndex", :selected_index},
+        {"size", :size},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
       ])
 
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.select {@component_assigns}>
+    <cds-select-form {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- assigns[:helper_text]}
@@ -2238,8 +3033,7 @@ defmodule Graphene.Internal.FormComponents do
           {item[:label] || render_slot(item)}
         </CoreComponents.select_item>
       <% end %>
-    </CoreComponents.select>
-    <.form_bridge_hook />
+    </cds-select-form>
     """
   end
 
@@ -2275,6 +3069,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the text area. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify if the currently value is warn. Defaults to `false`.
   * `warn_text` (`:string`) - Message which is displayed if the value is warn. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2296,55 +3091,69 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :autofocus, :boolean,
+    default: false,
     doc: "Sets the select to be focussed automatically on page load. Defaults to false"
 
-  attr :disabled, :boolean, doc: "Controls the disabled state of the select"
-  attr :hide_label, :boolean, doc: "Specify whether the label should be hidden, or not"
-  attr :id, :string, doc: "ID to link the `label` and `select`"
-  attr :inline, :boolean, doc: "Specify whether you want the inline version of this control"
-  attr :invalid, :boolean, doc: "Specify if the currently value is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_fluid, :boolean, doc: "Specify whether the textarea is fluid or not"
-  attr :multiple, :boolean, doc: "`true` to enable multiple selection."
-  attr :name, :string, doc: "Name for the select in the `FormData`"
-  attr :pattern, :string, doc: "Pattern to validate the select against for HTML validity checking"
-  attr :placeholder, :string, doc: "Value to display when the select has an empty `value`"
-  attr :readonly, :boolean, doc: "Controls the readonly state of the select"
-  attr :required, :boolean, doc: "Boolean property to set the required status"
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the select"
+
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the label should be hidden, or not"
+
+  attr :id, :string, default: nil, doc: "ID to link the `label` and `select`"
+
+  attr :inline, :boolean,
+    default: false,
+    doc: "Specify whether you want the inline version of this control"
+
+  attr :invalid, :boolean, default: false, doc: "Specify if the currently value is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_fluid, :boolean, default: false, doc: "Specify whether the textarea is fluid or not"
+  attr :multiple, :boolean, default: nil, doc: "`true` to enable multiple selection."
+  attr :name, :string, default: nil, doc: "Name for the select in the `FormData`"
+
+  attr :pattern, :string,
+    default: nil,
+    doc: "Pattern to validate the select against for HTML validity checking"
+
+  attr :placeholder, :string,
+    default: nil,
+    doc: "Value to display when the select has an empty `value`"
+
+  attr :readonly, :boolean, default: false, doc: "Controls the readonly state of the select"
+  attr :required, :boolean, default: false, doc: "Boolean property to set the required status"
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :selected_index, :string, doc: "The selected index."
-  attr :size, :string, doc: "The input box size.", values: ["sm", "md", "lg", "xl"], default: "md"
-  attr :value, :string, doc: "The value of the text area."
-  attr :warn, :boolean, doc: "Specify if the currently value is warn."
-  attr :warn_text, :string, doc: "Message which is displayed if the value is warn."
-
-  slot :helper_text, doc: "The helper text." do
-    attr :tag, :string
-  end
-
-  slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
+  attr :selected_index, :string, default: nil, doc: "The selected index."
+  attr :size, :string, default: "md", values: ["sm", "md", "lg", "xl"], doc: "The input box size."
+  attr :value, :string, default: nil, doc: "The value of the text area."
+  attr :warn, :boolean, default: false, doc: "Specify if the currently value is warn."
+  attr :warn_text, :string, default: nil, doc: "Message which is displayed if the value is warn."
+  slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
 
   slot :item do
     attr :label, :string
@@ -2353,28 +3162,42 @@ defmodule Graphene.Internal.FormComponents do
     attr :disabled, :boolean
   end
 
+  slot :inner_block
+
   def fluid_select(assigns) do
     assigns =
       form_input_assigns(assigns, name: :fluid_select, mode: :value, event: "cds-select-selected")
 
-    component_assigns =
-      Map.drop(assigns, [
-        :input_id,
-        :input_value,
-        :component_assigns,
-        :id,
-        :item,
-        :helper_text,
-        :inner_block,
-        :label_text,
-        :validity_message
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autofocus", :autofocus},
+        {"disabled", :disabled},
+        {"hide-label", :hide_label},
+        {"id", :id},
+        {"inline", :inline},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isFluid", :is_fluid},
+        {"multiple", :multiple},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"selectedIndex", :selected_index},
+        {"size", :size},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"form-event", :form_event}
       ])
 
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.fluid_select {@component_assigns}>
+    <cds-fluid-select-form {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- assigns[:helper_text]}
@@ -2407,8 +3230,7 @@ defmodule Graphene.Internal.FormComponents do
           {item[:label] || render_slot(item)}
         </CoreComponents.select_item>
       <% end %>
-    </CoreComponents.fluid_select>
-    <.form_bridge_hook />
+    </cds-fluid-select-form>
     """
   end
 
@@ -2452,6 +3274,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the selected item. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2467,63 +3290,78 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autoalign, :boolean, doc: "Specify whether auto align functionality should be applied"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autoalign, :boolean,
+    default: false,
+    doc: "Specify whether auto align functionality should be applied"
 
   attr :direction, :string,
-    doc: "Specify the direction of the dropdown. Can be either top or bottom.",
+    default: "bottom",
     values: ["top", "bottom"],
-    default: "bottom"
+    doc: "Specify the direction of the dropdown. Can be either top or bottom."
 
-  attr :disabled, :boolean, doc: "`true` if this dropdown should be disabled."
-  attr :helper_text, :string, doc: "The helper text."
-  attr :hide_label, :boolean, doc: "Specify whether the title text should be hidden or not"
-  attr :invalid, :boolean, doc: "`true` to show the UI of the invalid state."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
+  attr :disabled, :boolean, default: false, doc: "`true` if this dropdown should be disabled."
+  attr :helper_text, :string, default: nil, doc: "The helper text."
+
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the title text should be hidden or not"
+
+  attr :invalid, :boolean, default: false, doc: "`true` to show the UI of the invalid state."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
-  attr :name, :string, doc: "Name for the dropdown in the `FormData`"
-  attr :open, :boolean, doc: "`true` if this dropdown should be open."
-  attr :read_only, :boolean, doc: "Whether or not the Dropdown is readonly"
-  attr :required, :boolean, doc: "`true` if the value is required."
+  attr :name, :string, default: nil, doc: "Name for the dropdown in the `FormData`"
+  attr :open, :boolean, default: false, doc: "`true` if this dropdown should be open."
+  attr :read_only, :boolean, default: false, doc: "Whether or not the Dropdown is readonly"
+  attr :required, :boolean, default: false, doc: "`true` if the value is required."
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :size, :string, doc: "Dropdown size.", values: ["sm", "md", "lg"], default: "md"
+  attr :size, :string, default: "md", values: ["sm", "md", "lg"], doc: "Dropdown size."
 
   attr :toggle_label_closed, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the closed state."
 
   attr :toggle_label_open, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the open state."
 
   attr :type, :string,
-    doc: "`true` if this dropdown should use the inline UI variant.",
+    default: "",
     values: ["", "inline"],
-    default: ""
+    doc: "`true` if this dropdown should use the inline UI variant."
 
-  attr :validity_message, :string, doc: "The validity message."
-  attr :value, :string, doc: "The value of the selected item."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :validity_message, :string, default: nil, doc: "The validity message."
+  attr :value, :string, default: nil, doc: "The value of the selected item."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :inner_block
-
-  slot :title_text, doc: "Title text content." do
-    attr :tag, :string
-  end
+  slot :title_text, doc: "Title text content.", do: attr(:tag, :string)
 
   slot :item do
     attr :label, :string
@@ -2531,26 +3369,44 @@ defmodule Graphene.Internal.FormComponents do
     attr :disabled, :boolean
   end
 
+  slot :inner_block
+
   def dropdown(assigns) do
     assigns =
       form_input_assigns(assigns, name: :dropdown, mode: :value, event: "cds-dropdown-selected")
 
-    component_assigns =
-      Map.drop(assigns, [
-        :input_id,
-        :input_value,
-        :component_assigns,
-        :id,
-        :item,
-        :inner_block,
-        :title_text
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autoalign", :autoalign},
+        {"direction", :direction},
+        {"disabled", :disabled},
+        {"helper-text", :helper_text},
+        {"hide-label", :hide_label},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label", :label},
+        {"name", :name},
+        {"open", :open},
+        {"read-only", :read_only},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"size", :size},
+        {"toggle-label-closed", :toggle_label_closed},
+        {"toggle-label-open", :toggle_label_open},
+        {"type", :type},
+        {"validity-message", :validity_message},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
       ])
 
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.dropdown {@component_assigns}>
+    <cds-dropdown-form {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- assigns[:title_text]}
@@ -2567,8 +3423,7 @@ defmodule Graphene.Internal.FormComponents do
           {item[:label] || render_slot(item)}
         </CoreComponents.dropdown_item>
       <% end %>
-    </CoreComponents.dropdown>
-    <.form_bridge_hook />
+    </cds-dropdown-form>
     """
   end
 
@@ -2628,6 +3483,7 @@ defmodule Graphene.Internal.FormComponents do
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
   * `controlled` (`:boolean`) - Whether the combobox is controlled. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2640,80 +3496,103 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :allow_custom_value, :boolean,
+    default: false,
     doc: "`true` to allow custom values that do not match any item in the list."
 
-  attr :autoalign, :boolean, doc: "Specify whether auto align functionality should be applied"
+  attr :autoalign, :boolean,
+    default: false,
+    doc: "Specify whether auto align functionality should be applied"
 
   attr :clear_selection_label, :string,
-    doc: "The `aria-label` attribute for the icon to clear selection.",
-    default: "Clear selection"
-
-  attr :controlled, :boolean, doc: "Whether the combobox is controlled."
+    default: "Clear selection",
+    doc: "The `aria-label` attribute for the icon to clear selection."
 
   attr :direction, :string,
-    doc: "Specify the direction of the dropdown. Can be either top or bottom.",
+    default: "bottom",
     values: ["top", "bottom"],
-    default: "bottom"
+    doc: "Specify the direction of the dropdown. Can be either top or bottom."
 
-  attr :disabled, :boolean, doc: "`true` if this dropdown should be disabled."
-  attr :helper_text, :string, doc: "The helper text."
-  attr :hide_label, :boolean, doc: "Specify whether the title text should be hidden or not"
-  attr :input_label, :string, doc: "The `aria-label` attribute for the `<input>` for filtering."
-  attr :invalid, :boolean, doc: "`true` to show the UI of the invalid state."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
+  attr :disabled, :boolean, default: false, doc: "`true` if this dropdown should be disabled."
+  attr :helper_text, :string, default: nil, doc: "The helper text."
+
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the title text should be hidden or not"
+
+  attr :input_label, :string,
+    default: nil,
+    doc: "The `aria-label` attribute for the `<input>` for filtering."
+
+  attr :invalid, :boolean, default: false, doc: "`true` to show the UI of the invalid state."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
-  attr :name, :string, doc: "Name for the dropdown in the `FormData`"
-  attr :open, :boolean, doc: "`true` if this dropdown should be open."
-  attr :read_only, :boolean, doc: "Whether or not the Dropdown is readonly"
-  attr :required, :boolean, doc: "`true` if the value is required."
+  attr :name, :string, default: nil, doc: "Name for the dropdown in the `FormData`"
+  attr :open, :boolean, default: false, doc: "`true` if this dropdown should be open."
+  attr :read_only, :boolean, default: false, doc: "Whether or not the Dropdown is readonly"
+  attr :required, :boolean, default: false, doc: "`true` if the value is required."
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
-
-  attr :rest, :global
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
   attr :should_filter_item, :any,
+    default: nil,
     doc:
       "Provide custom filtering behavior. This attribute will be ignored if\n`typeahead` is enabled and will default to `true`"
 
-  attr :size, :string, doc: "Dropdown size.", values: ["sm", "md", "lg"], default: "md"
+  attr :size, :string, default: "md", values: ["sm", "md", "lg"], doc: "Dropdown size."
 
   attr :title_text, :string,
+    default: nil,
     doc: "Provide the title text that will be read by a screen reader when visiting this control"
 
   attr :toggle_label_closed, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the closed state."
 
   attr :toggle_label_open, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the open state."
 
   attr :type, :string,
-    doc: "`true` if this dropdown should use the inline UI variant.",
+    default: "",
     values: ["", "inline"],
-    default: ""
+    doc: "`true` if this dropdown should use the inline UI variant."
 
   attr :typeahead, :boolean,
+    default: false,
     doc: "**Experimental**: will enable autocomplete and typeahead for the input field."
 
-  attr :validity_message, :string, doc: "The validity message."
-  attr :value, :string, doc: "The value of the selected item."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :validity_message, :string, default: nil, doc: "The validity message."
+  attr :value, :string, default: nil, doc: "The value of the selected item."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :inner_block
+  attr :controlled, :boolean, default: nil, doc: "Whether the combobox is controlled."
 
   slot :item do
     attr :label, :string
@@ -2721,18 +3600,51 @@ defmodule Graphene.Internal.FormComponents do
     attr :disabled, :boolean
   end
 
+  slot :inner_block
+
   def combo_box(assigns) do
     assigns =
       form_input_assigns(assigns, name: :combo_box, mode: :value, event: "cds-combo-box-selected")
 
-    component_assigns =
-      Map.drop(assigns, [:input_id, :input_value, :component_assigns, :id, :item, :inner_block])
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"allow-custom-value", :allow_custom_value},
+        {"autoalign", :autoalign},
+        {"clear-selection-label", :clear_selection_label},
+        {"direction", :direction},
+        {"disabled", :disabled},
+        {"helper-text", :helper_text},
+        {"hide-label", :hide_label},
+        {"input-label", :input_label},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label", :label},
+        {"name", :name},
+        {"open", :open},
+        {"read-only", :read_only},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"should-filter-item", :should_filter_item},
+        {"size", :size},
+        {"title-text", :title_text},
+        {"toggle-label-closed", :toggle_label_closed},
+        {"toggle-label-open", :toggle_label_open},
+        {"type", :type},
+        {"typeahead", :typeahead},
+        {"validity-message", :validity_message},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"controlled", :controlled},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
 
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.combo_box {@component_assigns}>
+    <cds-combo-box-form {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <%= for item <- @item do %>
         <CoreComponents.combo_box_item
@@ -2742,8 +3654,7 @@ defmodule Graphene.Internal.FormComponents do
           {item[:label] || render_slot(item)}
         </CoreComponents.combo_box_item>
       <% end %>
-    </CoreComponents.combo_box>
-    <.form_bridge_hook />
+    </cds-combo-box-form>
     """
   end
 
@@ -2805,6 +3716,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - The value of the selected item. Defaults to `nil`.
   * `warn` (`:boolean`) - Specify whether the control is currently in warning state. Defaults to `false`.
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2820,95 +3732,115 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :autoalign, :boolean, doc: "Specify whether auto align functionality should be applied"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :autoalign, :boolean,
+    default: false,
+    doc: "Specify whether auto align functionality should be applied"
 
   attr :clear_selection_description, :string,
+    default: "Total items selected: ",
     doc:
-      "Specify the text that should be read for screen readers that describes total items selected",
-    default: "Total items selected: "
+      "Specify the text that should be read for screen readers that describes total items selected"
 
   attr :clear_selection_label, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the icon to clear selection."
 
   attr :clear_selection_text, :string,
-    doc: "Specify the text that should be read for screen readers to clear selection.",
-    default: "To clear selection, press Delete or Backspace."
+    default: "To clear selection, press Delete or Backspace.",
+    doc: "Specify the text that should be read for screen readers to clear selection."
 
   attr :direction, :string,
-    doc: "Specify the direction of the dropdown. Can be either top or bottom.",
+    default: "bottom",
     values: ["top", "bottom"],
-    default: "bottom"
+    doc: "Specify the direction of the dropdown. Can be either top or bottom."
 
-  attr :disabled, :boolean, doc: "`true` if this dropdown should be disabled."
-  attr :filterable, :any
-  attr :helper_text, :string, doc: "The helper text."
-  attr :hide_label, :boolean, doc: "Specify whether the title text should be hidden or not"
-  attr :invalid, :boolean, doc: "`true` to show the UI of the invalid state."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
+  attr :disabled, :boolean, default: false, doc: "`true` if this dropdown should be disabled."
+  attr :filterable, :any, default: nil
+  attr :helper_text, :string, default: nil, doc: "The helper text."
+
+  attr :hide_label, :boolean,
+    default: false,
+    doc: "Specify whether the title text should be hidden or not"
+
+  attr :invalid, :boolean, default: false, doc: "`true` to show the UI of the invalid state."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
 
   attr :label, :string,
+    default: nil,
     doc: "Generic label that will be used as the textual representation of what this field is for"
 
   attr :locale, :string,
+    default: "en",
     doc:
-      "Specify the locale of the control. Used for the default compareItems used for sorting the list of items in the control.",
-    default: "en"
+      "Specify the locale of the control. Used for the default compareItems used for sorting the list of items in the control."
 
-  attr :name, :string, doc: "Name for the dropdown in the `FormData`"
-  attr :open, :boolean, doc: "`true` if this dropdown should be open."
-  attr :read_only, :boolean, doc: "Whether or not the Dropdown is readonly"
-  attr :required, :boolean, doc: "`true` if the value is required."
+  attr :name, :string, default: nil, doc: "Name for the dropdown in the `FormData`"
+  attr :open, :boolean, default: false, doc: "`true` if this dropdown should be open."
+  attr :read_only, :boolean, default: false, doc: "Whether or not the Dropdown is readonly"
+  attr :required, :boolean, default: false, doc: "`true` if the value is required."
 
   attr :required_validity_message, :string,
-    doc: "The special validity message for `required`.",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "The special validity message for `required`."
 
-  attr :rest, :global
-  attr :select_all, :boolean, doc: "Enables rendering of a “Select all” multi-select-item"
+  attr :select_all, :boolean,
+    default: false,
+    doc: "Enables rendering of a “Select all” multi-select-item"
 
   attr :selection_feedback, :string,
-    doc:
-      "Specify feedback (mode) of the selection.\n`top`: selected item jumps to top\n`fixed`: selected item stays at it's position\n`top-after-reopen`: selected item jump to top after reopen dropdown",
+    default: "top-after-reopen",
     values: ["fixed", "top", "top-after-reopen"],
-    default: "top-after-reopen"
+    doc:
+      "Specify feedback (mode) of the selection.\n`top`: selected item jumps to top\n`fixed`: selected item stays at it's position\n`top-after-reopen`: selected item jump to top after reopen dropdown"
 
-  attr :size, :string, doc: "Dropdown size.", values: ["sm", "md", "lg"], default: "md"
+  attr :size, :string, default: "md", values: ["sm", "md", "lg"], doc: "Dropdown size."
 
   attr :toggle_label_closed, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the closed state."
 
   attr :toggle_label_open, :string,
+    default: nil,
     doc: "The `aria-label` attribute for the UI indicating the open state."
 
   attr :type, :string,
-    doc: "`true` if this dropdown should use the inline UI variant.",
+    default: "",
     values: ["", "inline"],
-    default: ""
+    doc: "`true` if this dropdown should use the inline UI variant."
 
-  attr :validity_message, :string, doc: "The validity message."
-  attr :value, :string, doc: "The value of the selected item."
-  attr :warn, :boolean, doc: "Specify whether the control is currently in warning state"
+  attr :validity_message, :string, default: nil, doc: "The validity message."
+  attr :value, :string, default: nil, doc: "The value of the selected item."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "Specify whether the control is currently in warning state"
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
-  slot :inner_block
-
-  slot :title_text, doc: "Title text content." do
-    attr :tag, :string
-  end
+  slot :title_text, doc: "Title text content.", do: attr(:tag, :string)
 
   slot :item do
     attr :label, :string
     attr :value, :string
     attr :disabled, :boolean
   end
+
+  slot :inner_block
 
   def multi_select(assigns) do
     assigns =
@@ -2918,22 +3850,45 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-multi-select-selected"
       )
 
-    component_assigns =
-      Map.drop(assigns, [
-        :input_id,
-        :input_value,
-        :component_assigns,
-        :id,
-        :item,
-        :inner_block,
-        :title_text
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"autoalign", :autoalign},
+        {"clear-selection-description", :clear_selection_description},
+        {"clear-selection-label", :clear_selection_label},
+        {"clear-selection-text", :clear_selection_text},
+        {"direction", :direction},
+        {"disabled", :disabled},
+        {"filterable", :filterable},
+        {"helper-text", :helper_text},
+        {"hide-label", :hide_label},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"label", :label},
+        {"locale", :locale},
+        {"name", :name},
+        {"open", :open},
+        {"read-only", :read_only},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"select-all", :select_all},
+        {"selection-feedback", :selection_feedback},
+        {"size", :size},
+        {"toggle-label-closed", :toggle_label_closed},
+        {"toggle-label-open", :toggle_label_open},
+        {"type", :type},
+        {"validity-message", :validity_message},
+        {"value", :value},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
       ])
 
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    <CoreComponents.multi_select {@component_assigns}>
+    <cds-multi-select-form {@component_attrs} {@rest}>
       {render_slot(@inner_block)}
       <.dynamic_tag
         :for={s <- assigns[:title_text]}
@@ -2950,8 +3905,7 @@ defmodule Graphene.Internal.FormComponents do
           {item[:label] || render_slot(item)}
         </CoreComponents.multi_select_item>
       <% end %>
-    </CoreComponents.multi_select>
-    <.form_bridge_hook />
+    </cds-multi-select-form>
     """
   end
 
@@ -2979,6 +3933,7 @@ defmodule Graphene.Internal.FormComponents do
   * `open` (`:boolean`) - `true` if the date picker should be open. Defaults to `false`.
   * `readonly` (`:boolean`) - Specify if the component should be read-only. Defaults to `false`.
   * `value` (`:string`) - The date(s) in ISO8601 format (date portion only), for range mode, '/' is used for separate start/end dates. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -2991,33 +3946,47 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
+
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
 
   attr :allow_input, :boolean,
+    default: true,
     doc:
-      "flatpickr prop passthrough. Allows the user to enter a date directly into the input field",
-    default: true
+      "flatpickr prop passthrough. Allows the user to enter a date directly into the input field"
 
   attr :close_on_select, :boolean,
+    default: true,
     doc:
-      "flatpickr prop passthrough. Controls whether the calendar dropdown closes upon selection.",
-    default: true
+      "flatpickr prop passthrough. Controls whether the calendar dropdown closes upon selection."
 
-  attr :date_format, :string, doc: "The date format to let Flatpickr use."
-  attr :disabled, :boolean, doc: "Controls the disabled state of the input"
-  attr :enabled_range, :string, doc: "The date range that a user can pick in calendar dropdown."
-  attr :max_date, :string, doc: "The maximum date that a user can start picking from."
-  attr :min_date, :string, doc: "The minimum date that a user can start picking from."
-  attr :name, :string, doc: "Name for the input in the `FormData`"
-  attr :open, :boolean, doc: "`true` if the date picker should be open."
-  attr :readonly, :boolean, doc: "Specify if the component should be read-only"
-  attr :rest, :global
+  attr :date_format, :string, default: nil, doc: "The date format to let Flatpickr use."
+  attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
+
+  attr :enabled_range, :string,
+    default: nil,
+    doc: "The date range that a user can pick in calendar dropdown."
+
+  attr :max_date, :string,
+    default: nil,
+    doc: "The maximum date that a user can start picking from."
+
+  attr :min_date, :string,
+    default: nil,
+    doc: "The minimum date that a user can start picking from."
+
+  attr :name, :string, default: nil, doc: "Name for the input in the `FormData`"
+  attr :open, :boolean, default: false, doc: "`true` if the date picker should be open."
+  attr :readonly, :boolean, default: false, doc: "Specify if the component should be read-only"
 
   attr :value, :string,
+    default: nil,
     doc:
       "The date(s) in ISO8601 format (date portion only), for range mode, '/' is used for separate start/end dates."
 
@@ -3031,13 +4000,30 @@ defmodule Graphene.Internal.FormComponents do
         event: "cds-date-picker-changed"
       )
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"allow-input", :allow_input},
+        {"close-on-select", :close_on_select},
+        {"date-format", :date_format},
+        {"disabled", :disabled},
+        {"enabled-range", :enabled_range},
+        {"max-date", :max_date},
+        {"min-date", :min_date},
+        {"name", :name},
+        {"open", :open},
+        {"readonly", :readonly},
+        {"value", :value},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.date_picker(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-date-picker-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+    </cds-date-picker-form>
     """
   end
 
@@ -3070,6 +4056,7 @@ defmodule Graphene.Internal.FormComponents do
   * `value` (`:string`) - Value of the input. Defaults to `nil`.
   * `warning` (`:boolean`) - Specify whether the control is in warning state. Defaults to `false`.
   * `warning_text` (`:string`) - Provide the text that is displayed when the control is in a warning state. Defaults to `"Warning message."`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -3091,70 +4078,118 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :disabled, :boolean, doc: "Specify whether the control is disabled"
-  attr :hide_label, :boolean, doc: "Specify whether the label should be hidden"
-  attr :invalid, :boolean, doc: "Specify whether the control is currently invalid"
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :disabled, :boolean, default: false, doc: "Specify whether the control is disabled"
+  attr :hide_label, :boolean, default: false, doc: "Specify whether the label should be hidden"
+  attr :invalid, :boolean, default: false, doc: "Specify whether the control is currently invalid"
 
   attr :invalid_text, :string,
-    doc: "Provide the text that is displayed when the control is in an invalid state",
-    default: "Invalid time format."
+    default: "Invalid time format.",
+    doc: "Provide the text that is displayed when the control is in an invalid state"
 
-  attr :max_length, :string, doc: "Specify the maximum length of the input value", default: "5"
-  attr :name, :string, doc: "Name for the input in FormData"
+  attr :max_length, :string, default: "5", doc: "Specify the maximum length of the input value"
+  attr :name, :string, default: nil, doc: "Name for the input in FormData"
 
   attr :pattern, :string,
-    doc: "Pattern for input validation",
-    default: "(1[012]|[1-9]):[0-5][0-9](\\\\s)?"
+    default: "(1[012]|[1-9]):[0-5][0-9](\\\\s)?",
+    doc: "Pattern for input validation"
 
-  attr :placeholder, :string, doc: "Placeholder text for the input", default: "hh:mm"
-  attr :read_only, :boolean, doc: "Specify whether the control should be read-only"
-  attr :required, :boolean, doc: "Whether the input is required"
+  attr :placeholder, :string, default: "hh:mm", doc: "Placeholder text for the input"
+
+  attr :read_only, :boolean,
+    default: false,
+    doc: "Specify whether the control should be read-only"
+
+  attr :required, :boolean, default: false, doc: "Whether the input is required"
 
   attr :required_validity_message, :string,
-    doc: "Custom message for required validation",
-    default: "Please fill out this field."
+    default: "Please fill out this field.",
+    doc: "Custom message for required validation"
 
-  attr :rest, :global
-  attr :size, :string, doc: "Size of the time picker", values: ["sm", "md", "lg"], default: "md"
-  attr :type, :string, doc: "Input type", default: "text"
-  attr :value, :string, doc: "Value of the input"
-  attr :warning, :boolean, doc: "Specify whether the control is in warning state"
+  attr :size, :string, default: "md", values: ["sm", "md", "lg"], doc: "Size of the time picker"
+  attr :type, :string, default: "text", doc: "Input type"
+  attr :value, :string, default: nil, doc: "Value of the input"
+  attr :warning, :boolean, default: false, doc: "Specify whether the control is in warning state"
 
   attr :warning_text, :string,
-    doc: "Provide the text that is displayed when the control is in a warning state",
-    default: "Warning message."
+    default: "Warning message.",
+    doc: "Provide the text that is displayed when the control is in a warning state"
 
-  slot :inner_block
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
 
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
-
-  slot :time_picker_select, doc: "Slot for time picker select components." do
-    attr :tag, :string
-  end
+  slot :time_picker_select,
+    doc: "Slot for time picker select components.",
+    do: attr(:tag, :string)
 
   slot :validity_message,
     doc:
-      "The validity message. If present and non-empty, this input shows the UI of its invalid state." do
-    attr :tag, :string
-  end
+      "The validity message. If present and non-empty, this input shows the UI of its invalid state.",
+    do: attr(:tag, :string)
+
+  slot :inner_block
 
   def time_picker(assigns) do
     assigns = form_input_assigns(assigns, name: :time_picker, mode: :value, event: "change")
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"disabled", :disabled},
+        {"hide-label", :hide_label},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"max-length", :max_length},
+        {"name", :name},
+        {"pattern", :pattern},
+        {"placeholder", :placeholder},
+        {"readOnly", :read_only},
+        {"required", :required},
+        {"required-validity-message", :required_validity_message},
+        {"size", :size},
+        {"type", :type},
+        {"value", :value},
+        {"warning", :warning},
+        {"warning-text", :warning_text},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.time_picker(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-time-picker-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:time_picker_select]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="time-picker-select"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:validity_message]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="validity-message"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-time-picker-form>
     """
   end
 
@@ -3195,6 +4230,7 @@ defmodule Graphene.Internal.FormComponents do
   * `warn_text` (`:string`) - Provide the text that is displayed when the control is in warning state. Defaults to `nil`.
   * `controlled` (`:boolean`) - Whether the slider is controlled. Defaults to `nil`.
   * `format_label` (`:any`) - Formatter for the slider label. Defaults to `nil`.
+  * `events` (`:any`) - custom events passed to Graphene.JS.events/1. Defaults to `nil`.
   * Global attributes are accepted.
   ## Slots
 
@@ -3219,74 +4255,132 @@ defmodule Graphene.Internal.FormComponents do
 
   attr :form, :string,
     default: nil,
-    doc: "the form attribute for the hidden input"
+    doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
-  attr :controlled, :boolean, doc: "Whether the slider is controlled."
-  attr :disabled, :boolean, doc: "`true` if the check box should be disabled."
-  attr :format_label, :any, doc: "Formatter for the slider label."
+  attr :events, :any,
+    default: nil,
+    doc: "custom events passed to Graphene.JS.events/1"
+
+  attr :disabled, :boolean, default: false, doc: "`true` if the check box should be disabled."
 
   attr :hide_label, :boolean,
+    default: false,
     doc: "Specify whether you want the underlying label to be visually hidden"
 
-  attr :hide_text_input, :boolean, doc: "Checks whether the input field is hidden or not"
-  attr :invalid, :boolean, doc: "true to specify if the control is invalid."
-  attr :invalid_text, :string, doc: "Message which is displayed if the value is invalid."
-  attr :is_valid, :any, doc: "is slide input valid"
-  attr :max, :string, doc: "The maximum value."
-  attr :max_label, :string, doc: "The label associated with the maximum value."
-  attr :min, :string, doc: "The minimum value."
-  attr :min_label, :string, doc: "The label associated with the minimum value."
-  attr :name, :string, doc: "The form name."
-  attr :readonly, :boolean, doc: "Whether the slider should be read-only"
-  attr :required, :boolean, doc: "true to specify if the control is required."
-  attr :rest, :global
-  attr :step, :string, doc: "The snapping step of the value."
+  attr :hide_text_input, :boolean,
+    default: false,
+    doc: "Checks whether the input field is hidden or not"
+
+  attr :invalid, :boolean, default: false, doc: "true to specify if the control is invalid."
+
+  attr :invalid_text, :string,
+    default: nil,
+    doc: "Message which is displayed if the value is invalid."
+
+  attr :is_valid, :any, default: nil, doc: "is slide input valid"
+  attr :max, :string, default: nil, doc: "The maximum value."
+  attr :max_label, :string, default: nil, doc: "The label associated with the maximum value."
+  attr :min, :string, default: nil, doc: "The minimum value."
+  attr :min_label, :string, default: nil, doc: "The label associated with the minimum value."
+  attr :name, :string, default: nil, doc: "The form name."
+  attr :readonly, :boolean, default: false, doc: "Whether the slider should be read-only"
+  attr :required, :boolean, default: false, doc: "true to specify if the control is required."
+  attr :step, :string, default: nil, doc: "The snapping step of the value."
 
   attr :step_multiplier, :string,
+    default: "4",
     doc:
-      "A value determining how much the value should increase/decrease by Shift+arrow keys,\nwhich will be `(max - min) / stepMultiplier`.",
-    default: "4"
+      "A value determining how much the value should increase/decrease by Shift+arrow keys,\nwhich will be `(max - min) / stepMultiplier`."
 
-  attr :value, :any, doc: "The value."
-  attr :value_upper, :any, doc: "The upper bound when there are two handles.."
-  attr :warn, :boolean, doc: "true to specify if the control should display warn icon and text."
+  attr :value, :any, default: nil, doc: "The value."
+  attr :value_upper, :any, default: nil, doc: "The upper bound when there are two handles.."
+
+  attr :warn, :boolean,
+    default: false,
+    doc: "true to specify if the control should display warn icon and text."
 
   attr :warn_text, :string,
+    default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :controlled, :boolean, default: nil, doc: "Whether the slider is controlled."
+  attr :format_label, :any, default: nil, doc: "Formatter for the slider label."
+  slot :label_text, doc: "The label text.", do: attr(:tag, :string)
+  slot :max_text, doc: "The text for maximum value.", do: attr(:tag, :string)
+  slot :min_text, doc: "The text for minimum value.", do: attr(:tag, :string)
+  slot :lower_input, doc: "Lower input content.", do: attr(:tag, :string)
   slot :inner_block
-
-  slot :label_text, doc: "The label text." do
-    attr :tag, :string
-  end
-
-  slot :lower_input, doc: "Lower input content." do
-    attr :tag, :string
-  end
-
-  slot :max_text, doc: "The text for maximum value." do
-    attr :tag, :string
-  end
-
-  slot :min_text, doc: "The text for minimum value." do
-    attr :tag, :string
-  end
 
   def slider(assigns) do
     assigns =
       form_input_assigns(assigns, name: :slider, mode: :value, event: "cds-slider-changed")
 
-    component_assigns = Map.drop(assigns, [:input_id, :input_value, :component_assigns])
-    assigns = assign(assigns, :component_assigns, component_assigns)
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"disabled", :disabled},
+        {"hide-label", :hide_label},
+        {"hide-text-input", :hide_text_input},
+        {"invalid", :invalid},
+        {"invalid-text", :invalid_text},
+        {"isValid", :is_valid},
+        {"max", :max},
+        {"max-label", :max_label},
+        {"min", :min},
+        {"min-label", :min_label},
+        {"name", :name},
+        {"readonly", :readonly},
+        {"required", :required},
+        {"step", :step},
+        {"step-multiplier", :step_multiplier},
+        {"value", :value},
+        {"value-upper", :value_upper},
+        {"warn", :warn},
+        {"warn-text", :warn_text},
+        {"controlled", :controlled},
+        {"format-label", :format_label},
+        {"form", :form},
+        {"id", :id},
+        {"form-event", :form_event}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
 
     ~H"""
-    <input type="hidden" id={@input_id} name={@name} value={@input_value} form={@form} />
-    {CoreComponents.slider(@component_assigns)}
-    <.form_bridge_hook />
+    <cds-slider-form {@component_attrs} {@rest}>
+      {render_slot(@inner_block)}
+      <.dynamic_tag
+        :for={s <- assigns[:label_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="label-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:max_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="max-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:min_text]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="min-text"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+      <.dynamic_tag
+        :for={s <- assigns[:lower_input]}
+        tag_name={Map.get(s, :tag, "div")}
+        slot="lower-input"
+      >
+        {render_slot(s)}
+      </.dynamic_tag>
+    </cds-slider-form>
     """
   end
 end

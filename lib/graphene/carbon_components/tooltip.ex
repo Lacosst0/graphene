@@ -70,6 +70,7 @@ defmodule Graphene.CarbonComponents.Tooltip do
   attr :toolbar_action, :boolean,
     doc: "Specify whether the tooltip should be open when it first renders"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :trigger
 
@@ -97,30 +98,34 @@ defmodule Graphene.CarbonComponents.Tooltip do
       |> assign_new(:tab_tip, fn -> false end)
       |> assign_new(:toolbar_action, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :align,
+        :alignment_axis_offset,
+        :autoalign,
+        :autoalign_boundary,
+        :background_token,
+        :border,
+        :caret,
+        :close_on_activation,
+        :data_table,
+        :default_open,
+        :drop_shadow,
+        :enter_delay_ms,
+        :high_contrast,
+        :keyboard_only,
+        :leave_delay_ms,
+        :open,
+        :size,
+        :tab_tip,
+        :timeout_id,
+        :toolbar_action
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.tooltip
-      align={@align}
-      alignment_axis_offset={@alignment_axis_offset}
-      autoalign={@autoalign}
-      autoalign_boundary={@autoalign_boundary}
-      background_token={@background_token}
-      border={@border}
-      caret={@caret}
-      close_on_activation={@close_on_activation}
-      data_table={@data_table}
-      default_open={@default_open}
-      drop_shadow={@drop_shadow}
-      enter_delay_ms={@enter_delay_ms}
-      high_contrast={@high_contrast}
-      keyboard_only={@keyboard_only}
-      leave_delay_ms={@leave_delay_ms}
-      open={@open}
-      size={@size}
-      tab_tip={@tab_tip}
-      timeout_id={@timeout_id}
-      toolbar_action={@toolbar_action}
-      {@rest}
-    >
+    <CoreComponents.tooltip {@component_attrs} {@rest}>
       <%= for trigger <- @trigger do %>
         {render_slot(trigger)}
       <% end %>
@@ -171,6 +176,7 @@ defmodule Graphene.CarbonComponents.Tooltip do
     default: "content"
 
   attr :tab_tip, :boolean, doc: "Render the component using the tab tip variant"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

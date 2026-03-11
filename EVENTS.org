@@ -1,0 +1,237 @@
+* IBM Products (c4p) close/dismiss
+** Simple
+*** TODO c4p-coachmark-tagline: close                                  :close:coachmark:product:ui:simple:signal-close:
+    - Hook: Graphene.JS.events listens to close on `c4p-coachmark-tagline` and can hide/close the element (e.g. remove `open`) while pushing a server event.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-guide-banner: close                                       :close:banner:product:ui:simple:signal-close:
+    - Hook: Graphene.JS.events listens to close on `c4p-guide-banner` and can hide/close the element (e.g. remove `open`) while pushing a server event.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-notification: dismiss                                     :close:notification:product:ui:simple:signal-close:
+    - Hook: Graphene.JS.events listens to dismiss on `c4p-notification` and can hide/close the element (e.g. remove `open`) while pushing a server event.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-options-tile: close                                       :close:tile:product:ui:simple:self-close:
+    - Hook: Graphene.JS.events listens to close on `c4p-options-tile` and can hide/close the element (e.g. remove `open`) while pushing a server event.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+
+** Mixed
+*** TODO c4p-about-modal: beingclosed, closed                          :close:modal:intercept:product:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO c4p-interstitial-screen: beingclosed, closed                  :close:interstitial:intercept:product:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO c4p-notification-panel: beingclosed, dismiss-all, click-outside :close:panel:product:ui:mixed:self-close:signal-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (dismiss-all, click-outside) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO c4p-side-panel: beingclosed, closed                           :close:panel:intercept:product:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO c4p-tearsheet: beingclosed, closed                            :close:tearsheet:intercept:product:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+
+* IBM Products (c4p) other user-action events
+** Simple
+*** TODO c4p-checklist: view-all, toggle                               :action:checklist:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-checklist` and listens for view-all, toggle; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-checklist-item: clicked                                   :action:checklist:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-checklist-item` and listens for clicked; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-coachmark: opened                                          :open:coachmark:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-coachmark` and listens for opened; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-coachmark-beacon: clicked                                 :action:coachmark:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-coachmark-beacon` and listens for clicked; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-coachmark-tagline: cta-click                               :action:coachmark:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-coachmark-tagline` and listens for cta-click; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-guide-banner: toggle                                       :toggle:banner:product:ui:simple:
+    - Hook: Graphene.JS.events listens to toggle on `c4p-guide-banner` and toggles UI state (attributes/classes) while optionally pushing telemetry.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-interstitial-screen: opened                                :open:interstitial:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-interstitial-screen` and listens for opened; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-notification-footer: view-all, settings                    :action:notification:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-notification-footer` and listens for view-all, settings; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-notification-panel: donot-disturb-change                   :toggle:notification:product:ui:simple:
+    - Hook: Graphene.JS.events listens to donot-disturb-change on `c4p-notification-panel` and toggles UI state (attributes/classes) while optionally pushing telemetry.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-options-tile: open                                         :open:tile:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-options-tile` and listens for open; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO c4p-side-panel: navigate-back                                 :navigation:panel:product:ui:simple:
+    - Hook: Graphene.JS.events attaches to `c4p-side-panel` and listens for navigate-back; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+
+** Mixed
+*** TODO c4p-interstitial-screen-body: on-before-step-change, on-after-step-change :flow:interstitial:product:ui:mixed:
+    - Hook: custom hook handles `on-before-step-change` by calling proceed() after validation/confirmation, and can use Graphene.JS.events for `on-after-step-change` analytics.
+    - Why: step navigation is async/guarded; JS.events only observes.
+*** TODO c4p-interstitial-screen-footer: on-action                      :action:interstitial:product:ui:mixed:
+    - Hook: custom hook handles `on-action` to gate progress or validation before continuing; Graphene.JS.events can still push for telemetry.
+    - Why: action can be async/guarded; JS.events alone cannot gate it.
+
+* Carbon (cds) close/dismiss
+** Mixed
+*** TODO cds-modal: beingclosed, closed                                :close:modal:intercept:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-side-panel: beingclosed, closed                           :close:panel:intercept:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-tearsheet: beingclosed, closed                            :close:tearsheet:intercept:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-actionable-notification: beingclosed, closed              :close:notification:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-callout-notification: beingclosed, closed                 :close:notification:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-inline-notification: beingclosed, closed                  :close:notification:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-toast-notification: beingclosed, closed                   :close:notification:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-dismissible-tag: beingclosed, closed (also tag events)     :close:tag:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed (also tag events)) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-tag: beingclosed, closed                                  :close:tag:carbon:ui:mixed:self-close:
+    - Hook: custom hook intercepts cancelable events (beingclosed) to prevent/await confirmation, then Graphene.JS.events handles final events (closed) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-file-uploader-item: beingdeleted, deleted                 :close:file:carbon:ui:mixed:signal-close:
+    - Hook: custom hook intercepts cancelable events (beingdeleted) to prevent/await confirmation, then Graphene.JS.events handles final events (deleted) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+
+** Custom
+*** TODO cds-table-batch-actions: cancel-clicked                       :close:table:carbon:ui:custom:signal-close:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+*** TODO cds-table: batch-actions-cancel-clicked                       :close:table:carbon:ui:custom:signal-close:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+
+* Carbon (cds) other user-action events
+** Simple
+*** TODO cds-checkbox: changed                                         :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-checkbox` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-contained-list-item: click                                :action:list:carbon:ui:simple:
+    - Hook: Graphene.JS.events attaches to `cds-contained-list-item` and listens for click; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-date-picker: changed                                      :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-date-picker` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-file-uploader-button: changed                             :change:file:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-file-uploader-button` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-file-uploader-drop-container: changed                     :change:file:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-file-uploader-drop-container` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-fluid-number-input: number-input                          :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to number-input on `cds-fluid-number-input` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-fluid-search: search-input                                :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to search-input on `cds-fluid-search` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-fluid-select: select-selected                             :select:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to select-selected on `cds-fluid-select` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-fluid-time-picker: change                                 :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to change on `cds-fluid-time-picker` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-header-menu-button: toggled                               :toggle:nav:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to toggled on `cds-header-menu-button` and toggles UI state (attributes/classes) while optionally pushing telemetry.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-overflow-menu-item: clicked                               :action:menu:carbon:ui:simple:
+    - Hook: Graphene.JS.events attaches to `cds-overflow-menu-item` and listens for clicked; it can run JS and/or push payloads.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-pagination: changed-current, page-sizes-select-changed     :change:pagination:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed-current, page-sizes-select-changed on `cds-pagination` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-pagination-nav: page-changed                              :change:pagination:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to page-changed on `cds-pagination-nav` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-radio-button: changed                                     :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-radio-button` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-radio-button-group: group-changed, changed                :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to group-changed, changed on `cds-radio-button-group` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-search: search-input                                      :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to search-input on `cds-search` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-select: select-selected                                   :select:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to select-selected on `cds-select` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-slider: input-changed, changed                            :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to input-changed, changed on `cds-slider` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-slider-input: input-changed                               :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to input-changed on `cds-slider-input` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-selectable-tile: changed                                  :select:tile:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed on `cds-selectable-tile` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-radio-tile: selected                                      :select:tile:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to selected on `cds-radio-tile` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-tile-group: current-radio-tile-selection, current-selectable-tile-selections :select:tile:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to current-radio-tile-selection, current-selectable-tile-selections on `cds-tile-group` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-time-picker: change                                       :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to change on `cds-time-picker` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-toggle: changed, checkbox-changed                         :change:form:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to changed, checkbox-changed on `cds-toggle` and pushes value/selection payloads (:detail or :target).
+    - Why: direct event wiring is sufficient; no derived state sync required.
+*** TODO cds-tree-node: eventSelected, eventToggled                    :toggle:tree:carbon:ui:simple:
+    - Hook: Graphene.JS.events listens to eventSelected, eventToggled on `cds-tree-node` and toggles UI state (attributes/classes) while optionally pushing telemetry.
+    - Why: direct event wiring is sufficient; no derived state sync required.
+
+** Mixed
+*** TODO cds-accordion-item: beingtoggled, toggled                     :toggle:accordion:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingtoggled) to prevent/await confirmation, then Graphene.JS.events handles final events (toggled) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-combo-box: beingselected, selected, beingtoggled, toggled  :select:form:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingselected, beingtoggled) to prevent/await confirmation, then Graphene.JS.events handles final events (selected, toggled) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-content-switcher: beingselected, selected                 :select:switcher:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingselected) to prevent/await confirmation, then Graphene.JS.events handles final events (selected) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-dropdown: beingselected, selected, beingtoggled, toggled   :select:form:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingselected, beingtoggled) to prevent/await confirmation, then Graphene.JS.events handles final events (selected, toggled) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-expandable-tile: beingtoggled, toggled                    :toggle:tile:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingtoggled) to prevent/await confirmation, then Graphene.JS.events handles final events (toggled) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-tabs: beingselected, selected                             :select:tabs:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beingselected) to prevent/await confirmation, then Graphene.JS.events handles final events (selected) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-operational-tag: beforeselected, selected                 :select:tag:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beforeselected) to prevent/await confirmation, then Graphene.JS.events handles final events (selected) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+*** TODO cds-selectable-tag: beforeselected, selected                  :select:tag:carbon:ui:mixed:
+    - Hook: custom hook intercepts cancelable events (beforeselected) to prevent/await confirmation, then Graphene.JS.events handles final events (selected) for cleanup/push.
+    - Why: cancelable/async flows need a hook plus JS.events for the final lifecycle.
+
+** Custom
+*** TODO cds-table: header-cell-sort, change-selection-all, row-change-selection, row-expando-toggled, row-selected, row-all-selected, sorted, filtered :table:carbon:ui:custom:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+*** TODO cds-table-header-cell: header-cell-sort                       :table:carbon:ui:custom:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+*** TODO cds-table-header-row: change-selection-all, row-change-selection, radio-button-changed, checkbox-changed, row-expando-beingtoggled, row-expando-toggled :table:carbon:ui:custom:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+*** TODO cds-table-row: row-change-selection, radio-button-changed, checkbox-changed, row-expando-beingtoggled, row-expando-toggled :table:carbon:ui:custom:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.
+*** TODO cds-table-toolbar-search: search-input                        :table:carbon:ui:custom:
+    - Hook: BasicComponentsTable computes selection payloads, syncs UI, wraps filtering/search, and emits graphene:table-* events.
+    - Why: requires derived payloads and state sync; JS.events adds little.

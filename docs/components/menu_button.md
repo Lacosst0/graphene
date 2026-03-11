@@ -13,14 +13,12 @@
 ```html
 <cds-menu-button kind="primary" label="Actions" menu-alignment="bottom" menu-background-token="layer" size="lg" tab-index="0" id="menu-button-single-default">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="First action">
+  <cds-menu-item danger-description="danger" label="First action">
   
     
   
@@ -28,8 +26,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Second action">
+  <cds-menu-item danger-description="danger" label="Second action">
   
     
   
@@ -37,8 +34,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item disabled label="Third action">
+  <cds-menu-item danger-description="danger" disabled label="Third action">
   
     
   
@@ -64,14 +60,12 @@
 ```html
 <cds-menu-button kind="ghost" label="Menu" menu-alignment="bottom" menu-background-token="layer" size="md" tab-index="0" id="menu-button-single-ghost">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Edit">
+  <cds-menu-item danger-description="danger" label="Edit">
   
     
   
@@ -79,8 +73,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item kind="danger" label="Delete">
+  <cds-menu-item danger-description="danger" kind="danger" label="Delete">
   
     
   
@@ -114,14 +107,12 @@
 ```html
 <cds-menu-button kind="primary" label="Menu" menu-alignment="bottom" menu-background-token="layer" size="sm" tab-index="0" id="menu-button-sizes-sm">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Item A">
+  <cds-menu-item danger-description="danger" label="Item A">
   
     
   
@@ -129,8 +120,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Item B">
+  <cds-menu-item danger-description="danger" label="Item B">
   
     
   
@@ -142,17 +132,14 @@
 </cds-menu>
 
 </cds-menu-button>
-
 <cds-menu-button kind="primary" label="Menu" menu-alignment="bottom" menu-background-token="layer" size="md" tab-index="0" id="menu-button-sizes-md">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Item A">
+  <cds-menu-item danger-description="danger" label="Item A">
   
     
   
@@ -160,8 +147,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Item B">
+  <cds-menu-item danger-description="danger" label="Item B">
   
     
   
@@ -173,17 +159,14 @@
 </cds-menu>
 
 </cds-menu-button>
-
 <cds-menu-button kind="primary" label="Menu" menu-alignment="bottom" menu-background-token="layer" size="lg" tab-index="0" id="menu-button-sizes-lg">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Item A">
+  <cds-menu-item danger-description="danger" label="Item A">
   
     
   
@@ -191,8 +174,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Item B">
+  <cds-menu-item danger-description="danger" label="Item B">
   
     
   

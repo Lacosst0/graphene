@@ -58,6 +58,7 @@ defmodule Graphene.CarbonComponents.Pagination do
 
   attr :total_items, :string, doc: "The number of total items."
   attr :total_pages, :string, doc: "The number of total pages.", default: "1"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :page_sizes_select, doc: "Where to put in the `<page-sizes-select>`."
   slot :inner_block
@@ -107,6 +108,7 @@ defmodule Graphene.CarbonComponents.Pagination do
     default: "bottom"
 
   attr :total_items, :string, doc: "The total number of items.", default: "1"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

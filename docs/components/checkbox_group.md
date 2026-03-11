@@ -1,6 +1,6 @@
 # `checkbox_group`
 
-## checkbox/basic
+## checkbox
 
 ### default
 
@@ -12,16 +12,14 @@
 ```
 
 ```html
-<cds-checkbox-group legend-text="Notifications" orientation="vertical" id="basic-single-default">
+<cds-checkbox-group legend-text="Notifications" orientation="vertical" id="checkbox-single-default">
   
   
-    
-<cds-checkbox id="checkbox" label-text="Email" value="email">
+    <cds-checkbox id="checkbox" label-text="Email" value="email">
   
 </cds-checkbox>
   
-    
-<cds-checkbox id="checkbox" label-text="SMS" value="sms">
+    <cds-checkbox id="checkbox" label-text="SMS" value="sms">
   
 </cds-checkbox>
   
@@ -39,16 +37,14 @@
 ```
 
 ```html
-<cds-checkbox-group legend-text="Status" orientation="vertical" id="basic-single-with-checked">
+<cds-checkbox-group legend-text="Status" orientation="vertical" id="checkbox-single-with-checked">
   
   
-    
-<cds-checkbox checked id="checkbox" label-text="Active" value="active">
+    <cds-checkbox checked id="checkbox" label-text="Active" value="active">
   
 </cds-checkbox>
   
-    
-<cds-checkbox id="checkbox" label-text="Paused" value="paused">
+    <cds-checkbox id="checkbox" label-text="Paused" value="paused">
   
 </cds-checkbox>
   
@@ -66,16 +62,14 @@
 ```
 
 ```html
-<cds-checkbox-group invalid invalid-text="Select at least one" legend-text="Required" orientation="vertical" id="basic-single-invalid">
+<cds-checkbox-group invalid invalid-text="Select at least one" legend-text="Required" orientation="vertical" id="checkbox-single-invalid">
   
   
-    
-<cds-checkbox id="checkbox" label-text="Option A" value="a">
+    <cds-checkbox id="checkbox" label-text="Option A" value="a">
   
 </cds-checkbox>
   
-    
-<cds-checkbox id="checkbox" label-text="Option B" value="b">
+    <cds-checkbox id="checkbox" label-text="Option B" value="b">
   
 </cds-checkbox>
   

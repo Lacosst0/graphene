@@ -15,6 +15,7 @@ defmodule Graphene.CarbonComponents.HeaderNav do
 
   """
   attr :menu_bar_label, :string, doc: "The `aria-label` attribute for the menu bar UI."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -43,6 +44,7 @@ defmodule Graphene.CarbonComponents.HeaderNav do
 
   attr :target, :string, doc: "The link target."
   attr :title, :string, doc: "The title."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

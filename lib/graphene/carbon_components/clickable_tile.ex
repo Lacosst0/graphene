@@ -34,6 +34,7 @@ defmodule Graphene.CarbonComponents.ClickableTile do
   attr :target, :string, doc: "The link target."
   attr :type, :string, doc: "MIME type of the `target`."
   attr :visited, :boolean, doc: "`true` if the link has been visited."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -13,15 +13,12 @@
 ```html
 <cds-stack gap="4" orientation="horizontal" id="stack-single-horizontal">
   
-  
-<cds-tag open size="md" title="Clear filter" type="green">
+  <cds-tag open size="md" title="Clear filter" type="green">
   One
 </cds-tag>
-
 <cds-tag open size="md" title="Clear filter" type="blue">
   Two
 </cds-tag>
-
 <cds-tag open size="md" title="Clear filter" type="red">
   Three
 </cds-tag>
@@ -41,11 +38,9 @@
 ```html
 <cds-stack gap="3" orientation="vertical" id="stack-single-vertical">
   
-  
-<cds-tag open size="md" title="Clear filter" type="purple">
+  <cds-tag open size="md" title="Clear filter" type="purple">
   Alpha
 </cds-tag>
-
 <cds-tag open size="md" title="Clear filter" type="cool-gray">
   Beta
 </cds-tag>
@@ -66,15 +61,12 @@
 ```html
 <cds-stack gap="2" orientation="horizontal" id="stack-single-tight">
   
-  
-<cds-tag open size="md" title="Clear filter" type="magenta">
+  <cds-tag open size="md" title="Clear filter" type="magenta">
   A
 </cds-tag>
-
 <cds-tag open size="md" title="Clear filter" type="cyan">
   B
 </cds-tag>
-
 <cds-tag open size="md" title="Clear filter" type="teal">
   C
 </cds-tag>

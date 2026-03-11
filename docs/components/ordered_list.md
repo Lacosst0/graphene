@@ -16,24 +16,21 @@
 <cds-ordered-list id="ordered-single-default">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       First item
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Second item
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Third item
     
@@ -59,16 +56,14 @@
 <cds-ordered-list native id="ordered-single-native">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Step one
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Step two
     
@@ -94,16 +89,14 @@
 <cds-ordered-list is-expressive id="ordered-single-expressive">
   
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Expressive one
     
   
 </cds-list-item>
   
-    
-<cds-list-item>
+    <cds-list-item>
   
       Expressive two
     

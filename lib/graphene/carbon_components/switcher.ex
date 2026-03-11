@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.Switcher do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -28,6 +29,7 @@ defmodule Graphene.CarbonComponents.Switcher do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -49,6 +51,7 @@ defmodule Graphene.CarbonComponents.Switcher do
     doc: "Specify if this is a large variation of the side nav link",
     default: "0"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

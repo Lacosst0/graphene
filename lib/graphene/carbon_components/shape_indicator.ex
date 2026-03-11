@@ -33,6 +33,7 @@ defmodule Graphene.CarbonComponents.ShapeIndicator do
 
   attr :label, :string, doc: "Label next to the shape."
   attr :text_size, :string, doc: "Shape indicator size (12 or 14)", default: "12"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

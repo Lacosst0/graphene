@@ -15,6 +15,7 @@ defmodule Graphene.CarbonComponents.AiSkeleton do
 
   """
   attr :custom_styles, :string, doc: "Custom styles to apply to skeleton icon"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -29,6 +30,7 @@ defmodule Graphene.CarbonComponents.AiSkeleton do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -51,6 +53,7 @@ defmodule Graphene.CarbonComponents.AiSkeleton do
     doc: "width (in px or %) of single line of text or max-width of paragraph lines",
     default: "100%"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

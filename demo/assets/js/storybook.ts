@@ -3,12 +3,14 @@ import { buildHooks } from "./hooks";
 
 (function () {
   (window as any).Graphene = Graphene;
-  const { WebComponentManager, mergeWebComponentsAttrs } = Graphene;
+  const { EventManager, WebComponentManager, mergeWebComponentsAttrs } = Graphene;
   const componentManager = new WebComponentManager({
     hideUntilReady: true,
     readyTimeoutMs: 3000
   });
   componentManager.connect();
+  const eventManager = new EventManager();
+  eventManager.connect();
   (window as any).storybook = {
     Hooks: buildHooks(),
     LiveSocketOptions: {
@@ -18,4 +20,5 @@ import { buildHooks } from "./hooks";
     }
   };
   (window as any).componentManager = componentManager;
+  (window as any).eventManager = eventManager;
 })();

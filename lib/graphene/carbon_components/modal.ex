@@ -38,7 +38,10 @@ defmodule Graphene.CarbonComponents.Modal do
     doc: "Specify the description for the loading icon",
     default: "Loading"
 
-  attr :loading_status, :any, doc: "Specify the loading status"
+  attr :loading_status, :string,
+    doc: "Specify the loading status",
+    values: ["error", "inactive", "active", "finished"],
+    default: "inactive"
 
   attr :loading_success_delay, :string,
     doc: "Provide a delay for the setTimeout for success",
@@ -56,6 +59,7 @@ defmodule Graphene.CarbonComponents.Modal do
       "Specify if Enter key should be used as \"submit\" action that clicks the primary footer button"
 
   attr :size, :string, doc: "Modal size.", values: ["xs", "sm", "md", "lg"], default: "md"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :label
   slot :heading
@@ -80,29 +84,32 @@ defmodule Graphene.CarbonComponents.Modal do
       |> assign_new(:full_width, fn -> false end)
       |> assign_new(:has_scrolling_content, fn -> false end)
       |> assign_new(:loading_description, fn -> nil end)
-      |> assign_new(:loading_status, fn -> nil end)
       |> assign_new(:open, fn -> false end)
       |> assign_new(:prevent_close, fn -> false end)
       |> assign_new(:prevent_close_on_click_outside, fn -> false end)
       |> assign_new(:should_submit_on_enter, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alert,
+        :container_class,
+        :full_width,
+        :has_scrolling_content,
+        :loading_description,
+        :loading_icon_description,
+        :loading_status,
+        :loading_success_delay,
+        :open,
+        :prevent_close,
+        :prevent_close_on_click_outside,
+        :should_submit_on_enter,
+        :size
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.modal
-      alert={@alert}
-      container_class={@container_class}
-      full_width={@full_width}
-      has_scrolling_content={@has_scrolling_content}
-      loading_description={@loading_description}
-      loading_icon_description={@loading_icon_description}
-      loading_status={@loading_status}
-      loading_success_delay={@loading_success_delay}
-      open={@open}
-      prevent_close={@prevent_close}
-      prevent_close_on_click_outside={@prevent_close_on_click_outside}
-      should_submit_on_enter={@should_submit_on_enter}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.modal {@component_attrs} {@rest}>
       <CoreComponents.modal_header>
         <%= for label <- @label do %>
           <CoreComponents.modal_label>{render_slot(label)}</CoreComponents.modal_label>
@@ -144,29 +151,32 @@ defmodule Graphene.CarbonComponents.Modal do
       |> assign_new(:full_width, fn -> false end)
       |> assign_new(:has_scrolling_content, fn -> false end)
       |> assign_new(:loading_description, fn -> nil end)
-      |> assign_new(:loading_status, fn -> nil end)
       |> assign_new(:open, fn -> false end)
       |> assign_new(:prevent_close, fn -> false end)
       |> assign_new(:prevent_close_on_click_outside, fn -> false end)
       |> assign_new(:should_submit_on_enter, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alert,
+        :container_class,
+        :full_width,
+        :has_scrolling_content,
+        :loading_description,
+        :loading_icon_description,
+        :loading_status,
+        :loading_success_delay,
+        :open,
+        :prevent_close,
+        :prevent_close_on_click_outside,
+        :should_submit_on_enter,
+        :size
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.modal
-      alert={@alert}
-      container_class={@container_class}
-      full_width={@full_width}
-      has_scrolling_content={@has_scrolling_content}
-      loading_description={@loading_description}
-      loading_icon_description={@loading_icon_description}
-      loading_status={@loading_status}
-      loading_success_delay={@loading_success_delay}
-      open={@open}
-      prevent_close={@prevent_close}
-      prevent_close_on_click_outside={@prevent_close_on_click_outside}
-      should_submit_on_enter={@should_submit_on_enter}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.modal {@component_attrs} {@rest}>
       <CoreComponents.modal_header>
         <%= for label <- @label do %>
           <CoreComponents.modal_label>{render_slot(label)}</CoreComponents.modal_label>
@@ -208,29 +218,32 @@ defmodule Graphene.CarbonComponents.Modal do
       |> assign_new(:full_width, fn -> false end)
       |> assign_new(:has_scrolling_content, fn -> false end)
       |> assign_new(:loading_description, fn -> nil end)
-      |> assign_new(:loading_status, fn -> nil end)
       |> assign_new(:open, fn -> false end)
       |> assign_new(:prevent_close, fn -> false end)
       |> assign_new(:prevent_close_on_click_outside, fn -> false end)
       |> assign_new(:should_submit_on_enter, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alert,
+        :container_class,
+        :full_width,
+        :has_scrolling_content,
+        :loading_description,
+        :loading_icon_description,
+        :loading_status,
+        :loading_success_delay,
+        :open,
+        :prevent_close,
+        :prevent_close_on_click_outside,
+        :should_submit_on_enter,
+        :size
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.modal
-      alert={@alert}
-      container_class={@container_class}
-      full_width={@full_width}
-      has_scrolling_content={@has_scrolling_content}
-      loading_description={@loading_description}
-      loading_icon_description={@loading_icon_description}
-      loading_status={@loading_status}
-      loading_success_delay={@loading_success_delay}
-      open={@open}
-      prevent_close={@prevent_close}
-      prevent_close_on_click_outside={@prevent_close_on_click_outside}
-      should_submit_on_enter={@should_submit_on_enter}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.modal {@component_attrs} {@rest}>
       <CoreComponents.modal_header>
         <%= for label <- @label do %>
           <CoreComponents.modal_label>{render_slot(label)}</CoreComponents.modal_label>
@@ -272,29 +285,32 @@ defmodule Graphene.CarbonComponents.Modal do
       |> assign_new(:full_width, fn -> false end)
       |> assign_new(:has_scrolling_content, fn -> false end)
       |> assign_new(:loading_description, fn -> nil end)
-      |> assign_new(:loading_status, fn -> nil end)
       |> assign_new(:open, fn -> false end)
       |> assign_new(:prevent_close, fn -> false end)
       |> assign_new(:prevent_close_on_click_outside, fn -> false end)
       |> assign_new(:should_submit_on_enter, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alert,
+        :container_class,
+        :full_width,
+        :has_scrolling_content,
+        :loading_description,
+        :loading_icon_description,
+        :loading_status,
+        :loading_success_delay,
+        :open,
+        :prevent_close,
+        :prevent_close_on_click_outside,
+        :should_submit_on_enter,
+        :size
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.modal
-      alert={@alert}
-      container_class={@container_class}
-      full_width={@full_width}
-      has_scrolling_content={@has_scrolling_content}
-      loading_description={@loading_description}
-      loading_icon_description={@loading_icon_description}
-      loading_status={@loading_status}
-      loading_success_delay={@loading_success_delay}
-      open={@open}
-      prevent_close={@prevent_close}
-      prevent_close_on_click_outside={@prevent_close_on_click_outside}
-      should_submit_on_enter={@should_submit_on_enter}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.modal {@component_attrs} {@rest}>
       <CoreComponents.modal_header>
         <%= for label <- @label do %>
           <CoreComponents.modal_label>{render_slot(label)}</CoreComponents.modal_label>
@@ -343,6 +359,7 @@ defmodule Graphene.CarbonComponents.Modal do
     doc: "Specify a label for the close button of the modal; defaults to close",
     default: "Close"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -357,6 +374,7 @@ defmodule Graphene.CarbonComponents.Modal do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -371,6 +389,7 @@ defmodule Graphene.CarbonComponents.Modal do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -385,6 +404,7 @@ defmodule Graphene.CarbonComponents.Modal do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -1,7 +1,5 @@
 # `fluid_select`
 
-## basic
-
 ### default
 
 ```heex
@@ -15,9 +13,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-default-input" name="fluid-select-default" value="">
-
-<cds-fluid-select name="fluid-select-default" required-validity-message="Please fill out this field." size="md" id="basic-single-default" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="basic-single-default-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-select-single-default-input" name="fluid-select-default" value="">
+<cds-fluid-select name="fluid-select-default" required-validity-message="Please fill out this field." size="md" id="fluid-select-single-default" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="fluid-select-single-default-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="label-text">
@@ -26,29 +23,25 @@
   
   
   
-    
-<cds-select-item value="">
+    <cds-select-item value="">
   
       Choose one
     
 </cds-select-item>
   
-    
-<cds-select-item value="option-1">
+    <cds-select-item value="option-1">
   
       Option 1
     
 </cds-select-item>
   
-    
-<cds-select-item value="option-2">
+    <cds-select-item value="option-2">
   
       Option 2
     
 </cds-select-item>
   
-    
-<cds-select-item value="option-3">
+    <cds-select-item value="option-3">
   
       Option 3
     
@@ -77,9 +70,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-inline-input" name="fluid-select-inline" value="">
-
-<cds-fluid-select inline name="fluid-select-inline" required-validity-message="Please fill out this field." size="md" id="basic-single-inline" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="basic-single-inline-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-select-single-inline-input" name="fluid-select-inline" value="">
+<cds-fluid-select inline name="fluid-select-inline" required-validity-message="Please fill out this field." size="md" id="fluid-select-single-inline" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="fluid-select-single-inline-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="label-text">
@@ -88,15 +80,13 @@
   
   
   
-    
-<cds-select-item value="alpha">
+    <cds-select-item value="alpha">
   
       Alpha
     
 </cds-select-item>
   
-    
-<cds-select-item value="beta">
+    <cds-select-item value="beta">
   
       Beta
     
@@ -125,9 +115,8 @@
 ```
 
 ```html
-<input type="hidden" id="basic-single-invalid-input" name="fluid-select-invalid" value="">
-
-<cds-fluid-select invalid invalid-text="Pick a value" name="fluid-select-invalid" required-validity-message="Please fill out this field." size="md" id="basic-single-invalid" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="basic-single-invalid-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<input type="hidden" id="fluid-select-single-invalid-input" name="fluid-select-invalid" value="">
+<cds-fluid-select invalid invalid-text="Pick a value" name="fluid-select-invalid" required-validity-message="Please fill out this field." size="md" id="fluid-select-single-invalid" data-form-detail="checked" data-form-event="cds-select-selected" data-form-input="fluid-select-single-invalid-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="label-text">
@@ -136,15 +125,13 @@
   
   
   
-    
-<cds-select-item value="one">
+    <cds-select-item value="one">
   
       One
     
 </cds-select-item>
   
-    
-<cds-select-item value="two">
+    <cds-select-item value="two">
   
       Two
     

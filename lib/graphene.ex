@@ -14,8 +14,6 @@ defmodule Graphene do
 
   ### `accordion`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -251,8 +249,6 @@ defmodule Graphene do
 
   ### `button`
 
-  #### basic
-
   ##### primary
 
   ```heex
@@ -405,7 +401,7 @@ defmodule Graphene do
 
   ### `checkbox_group`
 
-  #### checkbox/basic
+  #### checkbox
 
   ##### default
 
@@ -471,8 +467,6 @@ defmodule Graphene do
 
 
   ### `combo_box`
-
-  #### basic
 
   ##### default
 
@@ -545,8 +539,6 @@ defmodule Graphene do
 
   ### `contained_list`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -591,8 +583,6 @@ defmodule Graphene do
 
 
   ### `content_switcher`
-
-  #### basic
 
   ##### default
 
@@ -672,6 +662,9 @@ defmodule Graphene do
   <.data_table
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
+    selectable
+    expandable
+    batch_expansion
     with_row_ai_labels
   >
     <:title>DataTable</:title>
@@ -694,6 +687,9 @@ defmodule Graphene do
     size="sm"
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
+    selectable
+    expandable
+    batch_expansion
     with_row_ai_labels
   >
     <:title>DataTable</:title>
@@ -718,9 +714,9 @@ defmodule Graphene do
   <.data_table
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
-    with_row_ai_labels
     expandable
     batch_expansion
+    with_row_ai_labels
   >
     <:title>DataTable</:title>
     <:description>AI labels with expansion</:description>
@@ -746,9 +742,9 @@ defmodule Graphene do
     size="sm"
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
-    with_row_ai_labels
     expandable
     batch_expansion
+    with_row_ai_labels
   >
     <:title>DataTable</:title>
     <:description>Compact AI expansion</:description>
@@ -973,10 +969,10 @@ defmodule Graphene do
 
   ```heex
   <div class="psb-sandbox">
-        <.button phx-click="add-row">Add row</.button>
+        <Graphene.CarbonComponents.button phx-click="add-row">Add row</Graphene.CarbonComponents.button>
       </div>
 
-      <.data_table
+      <Graphene.CarbonComponents.data_table
         id="carbon-dynamic-table"
         rows={@rows}
         row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
@@ -988,7 +984,7 @@ defmodule Graphene do
         <:col :for={col <- @columns} :let={row} label={col.label}>
           <%= Map.get(row, col.key) %>
         </:col>
-      </.data_table>
+      </Graphene.CarbonComponents.data_table>
   ```
 
 
@@ -1107,10 +1103,10 @@ defmodule Graphene do
   ##### example
 
   ```heex
-  <.data_table
+  <Graphene.CarbonComponents.data_table
         id="carbon-events-table"
         rows={@rows}
-        row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
+        row_id={&Storybook.CarbonComponents.DataTable.Shared.row_id/1}
         selectable={true}
         sortable={true}
         expandable={true}
@@ -1127,15 +1123,15 @@ defmodule Graphene do
         <:title>DataTable</:title>
         <:description>Advanced interactivity with callbacks</:description>
         <:toolbar>
-          <.table_toolbar>
-            <.table_batch_actions total_rows_count="6">
-              <.button kind="ghost">Delete</.button>
-              <.button kind="ghost">Save</.button>
-              <.button kind="ghost" href="#">Download</.button>
-            </.table_batch_actions>
-            <.table_toolbar_content has_batch_actions>
-              <.table_toolbar_search placeholder="Filter table" />
-              <.overflow_menu toolbar_action>
+          <Graphene.CarbonComponents.table_toolbar>
+            <Graphene.CarbonComponents.table_batch_actions total_rows_count="6">
+              <Graphene.CarbonComponents.button kind="ghost">Delete</Graphene.CarbonComponents.button>
+              <Graphene.CarbonComponents.button kind="ghost">Save</Graphene.CarbonComponents.button>
+              <Graphene.CarbonComponents.button kind="ghost" href="#">Download</Graphene.CarbonComponents.button>
+            </Graphene.CarbonComponents.table_batch_actions>
+            <Graphene.CarbonComponents.table_toolbar_content has_batch_actions>
+              <Graphene.CarbonComponents.table_toolbar_search placeholder="Filter table" />
+              <Graphene.CarbonComponents.overflow_menu toolbar_action>
                 <:icon>
                   <Storybook.CarbonComponents.DataTable.Shared.overflow_icon />
                 </:icon>
@@ -1143,10 +1139,10 @@ defmodule Graphene do
                 <:item>Action 1</:item>
                 <:item>Action 2</:item>
                 <:item>Action 3</:item>
-              </.overflow_menu>
-              <.button>Add new</.button>
-            </.table_toolbar_content>
-          </.table_toolbar>
+              </Graphene.CarbonComponents.overflow_menu>
+              <Graphene.CarbonComponents.button>Add new</Graphene.CarbonComponents.button>
+            </Graphene.CarbonComponents.table_toolbar_content>
+          </Graphene.CarbonComponents.table_toolbar>
         </:toolbar>
 
         <:row_decorator :let={row}>
@@ -1160,7 +1156,7 @@ defmodule Graphene do
         </:col>
 
         <:action :let={_row}>
-          <.overflow_menu toolbar_action flipped>
+          <Graphene.CarbonComponents.overflow_menu toolbar_action flipped>
             <:icon>
               <Storybook.CarbonComponents.DataTable.Shared.overflow_icon />
             </:icon>
@@ -1168,14 +1164,14 @@ defmodule Graphene do
             <:item>Stop app</:item>
             <:item>Restart app</:item>
             <:item>Rename</:item>
-          </.overflow_menu>
+          </Graphene.CarbonComponents.overflow_menu>
         </:action>
 
         <:expanded_row :let={row}>
           <h6>Expandable row content</h6>
           <div>{Storybook.CarbonComponents.DataTable.Shared.expanded_content(row)}</div>
         </:expanded_row>
-      </.data_table>
+      </Graphene.CarbonComponents.data_table>
 
       <h4>Event log</h4>
       <pre id="carbon-events-log">
@@ -1188,7 +1184,7 @@ defmodule Graphene do
       <p>These buttons dispatch the same events as the built-in controls.</p>
       <div id="carbon-events-simulator">
         <%= for {label, detail} <- simulator_events() do %>
-          <.button
+          <Graphene.CarbonComponents.button
             kind="tertiary"
             phx-click={
               JS.dispatch(
@@ -1199,7 +1195,7 @@ defmodule Graphene do
             }
           >
             {label}
-          </.button>
+          </Graphene.CarbonComponents.button>
         <% end %>
       </div>
   ```
@@ -1364,8 +1360,8 @@ defmodule Graphene do
   <.data_table
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
-    sortable
     selectable
+    sortable
     selection_name="carbon-radio-sorting"
     radio
   >
@@ -1384,8 +1380,8 @@ defmodule Graphene do
     size="sm"
     rows={[%{id: 1, name: "Load Balancer 3", port: "3000", status: "Disabled", protocol: "HTTP", group: "Kevin's VM Groups", rule: "Round robin"}, %{id: 2, name: "Load Balancer 1", port: "443", status: "Starting", protocol: "HTTP", group: "Maureen's VM Groups", rule: "Round robin"}, %{id: 3, name: "Load Balancer 2", port: "80", status: "Active", protocol: "HTTP", group: "Andrew's VM Groups", rule: "DNS delegation"}, %{id: 4, name: "Load Balancer 6", port: "3000", status: "Disabled", protocol: "HTTP", group: "Marc's VM Groups", rule: "Round robin"}, %{id: 5, name: "Load Balancer 4", port: "443", status: "Starting", protocol: "HTTP", group: "Mel's VM Groups", rule: "Round robin"}, %{id: 6, name: "Load Balancer 5", port: "80", status: "Active", protocol: "HTTP", group: "Ronja's VM Groups", rule: "DNS delegation"}]}
     row_id={&Graphene.CarbonComponents.DataTable.Shared.row_id/1}
-    sortable
     selectable
+    sortable
     selection_name="carbon-radio-sorting"
     radio
   >
@@ -1635,8 +1631,6 @@ defmodule Graphene do
 
   ### `date_picker`
 
-  #### basic
-
   ##### single
 
   ```heex
@@ -1694,8 +1688,6 @@ defmodule Graphene do
 
   ### `dropdown`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -1736,6 +1728,66 @@ defmodule Graphene do
     <:item value="one">One</:item>
     <:item value="two">Two</:item>
   </.dropdown>
+  ```
+
+
+  ### `expandable_tile`
+
+  ##### default
+
+  ```heex
+  <.expandable_tile >
+      <:above_the_fold_content>
+        <div>Above the fold content here</div>
+      </:above_the_fold_content>
+      <Graphene.CarbonComponents.tile_below_the_fold_content>
+        <div>Below the fold content here</div>
+      </Graphene.CarbonComponents.tile_below_the_fold_content>
+    </.expandable_tile>
+  ```
+
+  ##### with_interactive
+
+  ```heex
+  <.expandable_tile with_interactive>
+      <:above_the_fold_content>
+        <div style="width: 100%;">
+          <Graphene.CarbonComponents.heading>Usage limits</Graphene.CarbonComponents.heading>
+          <p>Summarize the key status in the collapsed view.</p>
+          <Graphene.CarbonComponents.button kind="ghost" size="sm">Manage</Graphene.CarbonComponents.button>
+        </div>
+      </:above_the_fold_content>
+      <Graphene.CarbonComponents.tile_below_the_fold_content>
+        <div style="width: 100%;">
+          <Graphene.CarbonComponents.stack orientation="vertical" gap="2">
+            <Graphene.CarbonComponents.link href="#">View details</Graphene.CarbonComponents.link>
+            <Graphene.CarbonComponents.link href="#">See pricing</Graphene.CarbonComponents.link>
+          </Graphene.CarbonComponents.stack>
+        </div>
+      </Graphene.CarbonComponents.tile_below_the_fold_content>
+    </.expandable_tile>
+  ```
+
+  ##### narrow_content
+
+  ```heex
+  <.expandable_tile with_interactive expanded>
+      <:above_the_fold_content>
+        <div style="width: 100%;">
+          <div style="max-width: 12rem;">
+            <Graphene.CarbonComponents.heading>Starter plan</Graphene.CarbonComponents.heading>
+            <p>Compact summary copy.</p>
+          </div>
+        </div>
+      </:above_the_fold_content>
+      <Graphene.CarbonComponents.tile_below_the_fold_content>
+        <div style="width: 100%;">
+          <div style="max-width: 12rem;">
+            <p>Expanded details stay narrow but the tile remains full width.</p>
+          </div>
+        </div>
+      </Graphene.CarbonComponents.tile_below_the_fold_content>
+    </.expandable_tile>
   ```
 
 
@@ -1836,7 +1888,7 @@ defmodule Graphene do
             phx-hook={"\#{inspect(__MODULE__)}.CarbonFileUploaderBridge"}
             data-accept=".pdf .png .txt"
           >
-            <.file_uploader
+            <Graphene.CarbonComponents.file_uploader
               id="file-uploader"
               name="file_uploader_upload"
               label_title="Upload evidence"
@@ -1845,35 +1897,35 @@ defmodule Graphene do
               <:button>Select files</:button>
 
             <%= for entry <- @selected_files do %>
-              <.file_uploader_item
+              <Graphene.CarbonComponents.file_uploader_item
                 id={"file-upload-entry-\#{entry.id}"}
                 data-file-id={entry.id}
                 state="edit"
               >
                 {entry.name} ({format_size(entry.size)})
-              </.file_uploader_item>
+              </Graphene.CarbonComponents.file_uploader_item>
             <% end %>
 
             <%= for file <- @uploaded_files do %>
-              <.file_uploader_item
+              <Graphene.CarbonComponents.file_uploader_item
                 id={"file-upload-complete-\#{file.id}"}
                 data-file-id={file.id}
                 state="complete"
               >
                 {file.name} ({format_size(file.size)}) —
                 <code data-testid="carbon-file-upload-hash">{file.hash}</code>
-              </.file_uploader_item>
+              </Graphene.CarbonComponents.file_uploader_item>
             <% end %>
-            </.file_uploader>
+            </Graphene.CarbonComponents.file_uploader>
           </div>
 
           <.file_uploader_bridge_hook />
 
           <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
-            <.button kind="secondary" type="button" phx-click="clear_uploads">
+            <Graphene.CarbonComponents.button kind="secondary" type="button" phx-click="clear_uploads">
               Clear
-            </.button>
-            <.button
+            </Graphene.CarbonComponents.button>
+            <Graphene.CarbonComponents.button
               kind="primary"
               type="button"
               phx-click="upload_submit"
@@ -1881,7 +1933,7 @@ defmodule Graphene do
               disabled={@selected_files == []}
             >
               Upload & compute hash
-            </.button>
+            </Graphene.CarbonComponents.button>
           </div>
 
       </div>
@@ -1889,8 +1941,6 @@ defmodule Graphene do
 
 
   ### `fluid_number_input`
-
-  #### basic
 
   ##### default
 
@@ -1921,8 +1971,6 @@ defmodule Graphene do
 
   ### `fluid_search`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -1932,7 +1980,7 @@ defmodule Graphene do
   ##### expandable
 
   ```heex
-  <.fluid_search name="fluid-search-expandable" expandable label_text="Search" expanded/>
+  <.fluid_search name="fluid-search-expandable" expandable expanded label_text="Search"/>
   ```
 
   ##### disabled
@@ -1951,8 +1999,6 @@ defmodule Graphene do
 
 
   ### `fluid_select`
-
-  #### basic
 
   ##### default
 
@@ -1989,8 +2035,6 @@ defmodule Graphene do
 
   ### `fluid_text_input`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -2019,8 +2063,6 @@ defmodule Graphene do
 
 
   ### `fluid_textarea`
-
-  #### basic
 
   ##### default
 
@@ -2056,23 +2098,23 @@ defmodule Graphene do
   ```heex
   <div style="display: grid; gap: 2rem;">
         <Graphene.CarbonComponents.form>
-          <.text_input id="form-name" name="name" value="Ada Lovelace">
+          <Graphene.CarbonComponents.text_input id="form-name" name="name" value="Ada Lovelace">
             <:label_text>Name</:label_text>
-          </.text_input>
-          <.text_input id="form-role" name="role" value="Engineer">
+          </Graphene.CarbonComponents.text_input>
+          <Graphene.CarbonComponents.text_input id="form-role" name="role" value="Engineer">
             <:label_text>Role</:label_text>
-          </.text_input>
-          <.button type="submit">Submit</.button>
+          </Graphene.CarbonComponents.text_input>
+          <Graphene.CarbonComponents.button type="submit">Submit</Graphene.CarbonComponents.button>
         </Graphene.CarbonComponents.form>
 
         <Graphene.CarbonComponents.form>
-          <.text_input id="form-email" name="email" value="ada@graphene.dev" type="email">
+          <Graphene.CarbonComponents.text_input id="form-email" name="email" value="ada@graphene.dev" type="email">
             <:label_text>Email</:label_text>
-          </.text_input>
-          <.password_input id="form-password" name="password" value="password">
+          </Graphene.CarbonComponents.text_input>
+          <Graphene.CarbonComponents.password_input id="form-password" name="password" value="password">
             <:label_text>Password</:label_text>
-          </.password_input>
-          <.button kind="secondary" type="submit">Create account</.button>
+          </Graphene.CarbonComponents.password_input>
+          <Graphene.CarbonComponents.button kind="secondary" type="submit">Create account</Graphene.CarbonComponents.button>
         </Graphene.CarbonComponents.form>
       </div>
   ```
@@ -2089,30 +2131,30 @@ defmodule Graphene do
             <div style="display: grid; gap: 1.5rem;">
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Boolean inputs</h3>
-                <.checkbox field={@form[:subscribe]} label_text="Receive updates" />
-                <.toggle field={@form[:feature]} label_a="On" label_b="Off">
+                <Graphene.CarbonComponents.checkbox field={@form[:subscribe]} label_text="Receive updates" />
+                <Graphene.CarbonComponents.toggle field={@form[:feature]} label_a="On" label_b="Off">
                   <:label_text>Enable feature</:label_text>
-                </.toggle>
+                </Graphene.CarbonComponents.toggle>
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Radio group</h3>
-                <.radio_button_group field={@form[:plan]} legend_text="Choose a plan">
-                  <CoreComponents.radio_button value="starter" label_text="Starter" />
-                  <CoreComponents.radio_button value="pro" label_text="Pro" />
-                  <CoreComponents.radio_button value="enterprise" label_text="Enterprise" />
-                </.radio_button_group>
+                <Graphene.CarbonComponents.radio_button_group field={@form[:plan]} legend_text="Choose a plan">
+                  <Graphene.CarbonComponents.radio_button value="starter" label_text="Starter" />
+                  <Graphene.CarbonComponents.radio_button value="pro" label_text="Pro" />
+                  <Graphene.CarbonComponents.radio_button value="enterprise" label_text="Enterprise" />
+                </Graphene.CarbonComponents.radio_button_group>
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Numbers</h3>
-                <.number_input field={@form[:quantity]} min="0" max="Infinity">
+                <Graphene.CarbonComponents.number_input field={@form[:quantity]} min="0" max="Infinity">
                   <:label_text>Quantity</:label_text>
-                </.number_input>
-                <.fluid_number_input field={@form[:fluid_quantity]} min="0" max="Infinity">
+                </Graphene.CarbonComponents.number_input>
+                <Graphene.CarbonComponents.fluid_number_input field={@form[:fluid_quantity]} min="0" max="Infinity">
                   <:label_text>Fluid quantity</:label_text>
-                </.fluid_number_input>
-                <.slider
+                </Graphene.CarbonComponents.fluid_number_input>
+                <Graphene.CarbonComponents.slider
                   field={@form[:slo]}
                   id={@form[:slo].id}
                   name={@form[:slo].name}
@@ -2122,85 +2164,85 @@ defmodule Graphene do
                   step="5"
                 >
                   <:label_text>Utilization target</:label_text>
-                </.slider>
+                </Graphene.CarbonComponents.slider>
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Text</h3>
-                <.text_input field={@form[:name]} label="Name" />
-                <.fluid_text_input field={@form[:title]} label="Title" />
-                <.password_input field={@form[:password]} label="Password" />
-                <.textarea field={@form[:bio]} label="Bio" />
-                <.fluid_textarea field={@form[:notes]} label="Notes" />
+                <Graphene.CarbonComponents.text_input field={@form[:name]} label="Name" />
+                <Graphene.CarbonComponents.fluid_text_input field={@form[:title]} label="Title" />
+                <Graphene.CarbonComponents.password_input field={@form[:password]} label="Password" />
+                <Graphene.CarbonComponents.textarea field={@form[:bio]} label="Bio" />
+                <Graphene.CarbonComponents.fluid_textarea field={@form[:notes]} label="Notes" />
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Search</h3>
-                <.search field={@form[:search]} label_text="Search" />
-                <.fluid_search field={@form[:fluid_search]} label_text="Fluid search" />
+                <Graphene.CarbonComponents.search field={@form[:search]} label_text="Search" />
+                <Graphene.CarbonComponents.fluid_search field={@form[:fluid_search]} label_text="Fluid search" />
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Selects</h3>
-                <.select field={@form[:select]}>
+                <Graphene.CarbonComponents.select field={@form[:select]}>
                   <:label_text>Select option</:label_text>
                   <:item value="option-1">Option 1</:item>
                   <:item value="option-2">Option 2</:item>
                   <:item value="option-3">Option 3</:item>
-                </.select>
-                <.fluid_select field={@form[:fluid_select]}>
+                </Graphene.CarbonComponents.select>
+                <Graphene.CarbonComponents.fluid_select field={@form[:fluid_select]}>
                   <:label_text>Fluid select</:label_text>
                   <:item value="option-1">Option 1</:item>
                   <:item value="option-2">Option 2</:item>
                   <:item value="option-3">Option 3</:item>
-                </.fluid_select>
-                <.dropdown field={@form[:dropdown]} label="Dropdown">
+                </Graphene.CarbonComponents.fluid_select>
+                <Graphene.CarbonComponents.dropdown field={@form[:dropdown]} label="Dropdown">
                   <:item value="option-1">Option 1</:item>
                   <:item value="option-2">Option 2</:item>
                   <:item value="option-3">Option 3</:item>
-                </.dropdown>
-                <.combo_box field={@form[:combo]} label="Combo box">
+                </Graphene.CarbonComponents.dropdown>
+                <Graphene.CarbonComponents.combo_box field={@form[:combo]} label="Combo box">
                   <:item value="option-1">Option 1</:item>
                   <:item value="option-2">Option 2</:item>
                   <:item value="option-3">Option 3</:item>
-                </.combo_box>
-                <.multi_select field={@form[:multi]} label="Multi select">
+                </Graphene.CarbonComponents.combo_box>
+                <Graphene.CarbonComponents.multi_select field={@form[:multi]} label="Multi select">
                   <:item value="option-1">Option 1</:item>
                   <:item value="option-2">Option 2</:item>
                   <:item value="option-3">Option 3</:item>
-                </.multi_select>
+                </Graphene.CarbonComponents.multi_select>
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>Date & time</h3>
-                <.date_picker field={@form[:date]}>
-                  <CoreComponents.date_picker_input
+                <Graphene.CarbonComponents.date_picker field={@form[:date]}>
+                  <Graphene.CarbonComponents.date_picker_input
                     label_text="Start date"
                     placeholder="mm/dd/yyyy"
                     kind="single"
                   />
-                </.date_picker>
-                <.time_picker field={@form[:time]}>
+                </Graphene.CarbonComponents.date_picker>
+                <Graphene.CarbonComponents.time_picker field={@form[:time]}>
                   <:label_text>Select time</:label_text>
-                </.time_picker>
+                </Graphene.CarbonComponents.time_picker>
               </div>
 
               <div style="display: grid; gap: 0.75rem;">
                 <h3>File upload</h3>
-                <.file_uploader field={@form[:attachments]} label_title="Upload evidence">
+                <Graphene.CarbonComponents.file_uploader field={@form[:attachments]} label_title="Upload evidence">
                   <:button label="Add files" />
                   <:item state="complete">audit-report.pdf</:item>
-                </.file_uploader>
+                </Graphene.CarbonComponents.file_uploader>
               </div>
             </div>
 
             <div style="margin-top: 1.5rem;">
-              <.button
+              <Graphene.CarbonComponents.button
                 type="button"
                 phx-click={JS.dispatch("submit", to: "#form-components-form")}
               >
                 Send form state
-              </.button>
+              </Graphene.CarbonComponents.button>
             </div>
           </form>
         </div>
@@ -2399,8 +2441,6 @@ defmodule Graphene do
 
   ### `inline_loading`
 
-  #### basic
-
   ##### active
 
   ```heex
@@ -2459,8 +2499,6 @@ defmodule Graphene do
 
 
   ### `layer`
-
-  #### basic
 
   ##### base
 
@@ -2627,54 +2665,50 @@ defmodule Graphene do
 
   ### `modal`
 
-  #### basic
-
   ##### example
 
   ```heex
   <div style="display: grid; gap: 1rem;">
         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-          <.button kind="primary" phx-click="open_modal" phx-value-id="small">
+          <Graphene.CarbonComponents.button kind="primary" phx-click="open_modal" phx-value-id="small">
             Open small modal
-          </.button>
-          <.button kind="secondary" phx-click="open_modal" phx-value-id="large">
+          </Graphene.CarbonComponents.button>
+          <Graphene.CarbonComponents.button kind="secondary" phx-click="open_modal" phx-value-id="large">
             Open large modal
-          </.button>
-          <.button kind="danger--tertiary" phx-click="open_modal" phx-value-id="danger">
+          </Graphene.CarbonComponents.button>
+          <Graphene.CarbonComponents.button kind="danger--tertiary" phx-click="open_modal" phx-value-id="danger">
             Open danger modal
-          </.button>
+          </Graphene.CarbonComponents.button>
         </div>
 
-        <.modal open={@open_modal == "small"} size="sm">
+        <Graphene.CarbonComponents.modal open={@open_modal == "small"} size="sm">
           <:label>Optional label</:label>
           <:heading>Modal heading</:heading>
           <:body>Add your modal content here. Use descriptive text to explain next steps.</:body>
           <:footer_button kind="secondary" attrs={%{"phx-click" => "close_modal"}}>Cancel</:footer_button>
           <:footer_button kind="primary" attrs={%{"phx-click" => "close_modal"}}>Submit</:footer_button>
-        </.modal>
+        </Graphene.CarbonComponents.modal>
 
-        <.modal open={@open_modal == "large"} size="lg">
+        <Graphene.CarbonComponents.modal open={@open_modal == "large"} size="lg">
           <:label>Large modal</:label>
           <:heading>Modal heading</:heading>
           <:body>Large modal content with additional context.</:body>
           <:footer_button kind="secondary" attrs={%{"phx-click" => "close_modal"}}>Back</:footer_button>
           <:footer_button kind="primary" attrs={%{"phx-click" => "close_modal"}}>Continue</:footer_button>
-        </.modal>
+        </Graphene.CarbonComponents.modal>
 
-        <.modal open={@open_modal == "danger"} size="sm">
+        <Graphene.CarbonComponents.modal open={@open_modal == "danger"} size="sm">
           <:label>Danger</:label>
           <:heading>Delete item</:heading>
           <:body>Are you sure you want to delete this item?</:body>
           <:footer_button kind="secondary" attrs={%{"phx-click" => "close_modal"}}>Cancel</:footer_button>
           <:footer_button kind="danger" attrs={%{"phx-click" => "close_modal"}}>Delete</:footer_button>
-        </.modal>
+        </Graphene.CarbonComponents.modal>
       </div>
   ```
 
 
   ### `multi_select`
-
-  #### basic
 
   ##### default
 
@@ -2709,8 +2743,6 @@ defmodule Graphene do
 
 
   ### `number_input`
-
-  #### basic
 
   ##### default
 
@@ -2772,8 +2804,6 @@ defmodule Graphene do
 
 
   ### `overflow_menu`
-
-  #### basic
 
   ##### default
 
@@ -2874,8 +2904,6 @@ defmodule Graphene do
 
   ### `pagination`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -2891,13 +2919,11 @@ defmodule Graphene do
   ##### unknown
 
   ```heex
-  <.pagination total_items="" pages_unknown page_size="10"/>
+  <.pagination total_items="" page_size="10" pages_unknown/>
   ```
 
 
   ### `password_input`
-
-  #### basic
 
   ##### default
 
@@ -3034,8 +3060,6 @@ defmodule Graphene do
 
   ### `progress_indicator`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -3060,7 +3084,7 @@ defmodule Graphene do
   ##### spaced
 
   ```heex
-  <.progress_indicator space_equally current_index="0">
+  <.progress_indicator current_index="0" space_equally>
     <:step label="Step one" current />
     <:step label="Step two" />
     <:step label="Step three" />
@@ -3070,7 +3094,7 @@ defmodule Graphene do
 
   ### `radio_button_group`
 
-  #### radio_button/basic
+  #### radio_button
 
   ##### default
 
@@ -3102,8 +3126,6 @@ defmodule Graphene do
 
   ### `search`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -3113,7 +3135,7 @@ defmodule Graphene do
   ##### expandable
 
   ```heex
-  <.search name="search-expandable" expandable label_text="Search" expanded/>
+  <.search name="search-expandable" expandable expanded label_text="Search"/>
   ```
 
   ##### group: sizes
@@ -3126,8 +3148,6 @@ defmodule Graphene do
 
 
   ### `select`
-
-  #### basic
 
   ##### default
 
@@ -3254,8 +3274,6 @@ defmodule Graphene do
 
   ### `slider`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -3343,7 +3361,7 @@ defmodule Graphene do
   ```heex
   <.structured_list
     rows={[%{id: "1", name: "Load Balancer 1", status: "Active"}, %{id: "2", name: "Load Balancer 2", status: "Disabled"}, %{id: "3", name: "Gateway", status: "Active"}]}
-    row_id={#Function<0.122453106/1 in Storybook.CarbonComponents.StructuredList.row_id>}
+    row_id={#Function<0.109126383/1 in Storybook.CarbonComponents.StructuredList.row_id>}
     selection_name="structured-list"
     selected_ids={["1"]}
   >
@@ -3377,8 +3395,6 @@ defmodule Graphene do
 
 
   ### `tabs`
-
-  #### basic
 
   ##### default
 
@@ -3423,8 +3439,6 @@ defmodule Graphene do
 
   ### `tag`
 
-  #### basic
-
   ##### blue
 
   ```heex
@@ -3466,8 +3480,6 @@ defmodule Graphene do
 
   ### `text_input`
 
-  #### basic
-
   ##### default
 
   ```heex
@@ -3495,8 +3507,6 @@ defmodule Graphene do
 
 
   ### `textarea`
-
-  #### basic
 
   ##### default
 
@@ -3550,10 +3560,45 @@ defmodule Graphene do
   </.tile>
   ```
 
+  ##### content_layout
+
+  ```heex
+  <.tile >
+    <Graphene.CarbonComponents.stack orientation="vertical" gap="3">
+      <Graphene.CarbonComponents.heading>Plan overview</Graphene.CarbonComponents.heading>
+      <p>Keep content concise and use stack for spacing instead of extra padding wrappers.</p>
+      <Graphene.CarbonComponents.stack orientation="horizontal" gap="2">
+        <Graphene.CarbonComponents.tag type="cool-gray">Draft</Graphene.CarbonComponents.tag>
+        <Graphene.CarbonComponents.button kind="secondary" size="sm">Review</Graphene.CarbonComponents.button>
+      </Graphene.CarbonComponents.stack>
+    </Graphene.CarbonComponents.stack>
+  </.tile>
+  ```
+
+  ##### group: scrollable_collection
+
+  ```heex
+  <div style="max-height: 16rem; overflow-y: auto; padding-right: 0.25rem;">
+    <.tile >
+      Alpha
+    </.tile>
+    <.tile >
+      Beta
+    </.tile>
+    <.tile >
+      Gamma
+    </.tile>
+    <.tile >
+      Delta
+    </.tile>
+    <.tile >
+      Epsilon
+    </.tile>
+  </div>
+  ```
+
 
   ### `time_picker`
-
-  #### basic
 
   ##### default
 
@@ -3624,7 +3669,7 @@ defmodule Graphene do
   ##### on
 
   ```heex
-  <.toggle name="toggle-on" label_a="On" label_b="Off" toggled>
+  <.toggle name="toggle-on" label_b="Off" label_a="On" toggled>
     <:label_text>Notifications</:label_text>
   </.toggle>
   ```
@@ -3632,7 +3677,7 @@ defmodule Graphene do
   ##### off
 
   ```heex
-  <.toggle name="toggle-off" label_a="On" label_b="Off">
+  <.toggle name="toggle-off" label_b="Off" label_a="On">
     <:label_text>Notifications</:label_text>
   </.toggle>
   ```
@@ -3640,7 +3685,7 @@ defmodule Graphene do
   ##### disabled
 
   ```heex
-  <.toggle disabled name="toggle-disabled" label_a="On" label_b="Off">
+  <.toggle disabled name="toggle-disabled" label_b="Off" label_a="On">
     <:label_text>Disabled</:label_text>
   </.toggle>
   ```
@@ -3699,7 +3744,9 @@ defmodule Graphene do
 
   ```heex
   <.tooltip align="bottom">
-    <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-content">Hover me</Graphene.CarbonComponents.button>
+    <:trigger>
+      <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-content">Hover me</Graphene.CarbonComponents.button>
+    </:trigger>
     <:content id="tooltip-content">Tooltip content</:content>
   </.tooltip>
   ```
@@ -3708,7 +3755,9 @@ defmodule Graphene do
 
   ```heex
   <.tooltip align="top">
-    <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-top">Top tooltip</Graphene.CarbonComponents.button>
+    <:trigger>
+      <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-top">Top tooltip</Graphene.CarbonComponents.button>
+    </:trigger>
     <:content id="tooltip-top">Top content</:content>
   </.tooltip>
   ```
@@ -3717,15 +3766,15 @@ defmodule Graphene do
 
   ```heex
   <.tooltip align="right">
-    <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-right">Right tooltip</Graphene.CarbonComponents.button>
+    <:trigger>
+      <Graphene.CarbonComponents.button kind="ghost" aria-labelledby="tooltip-right">Right tooltip</Graphene.CarbonComponents.button>
+    </:trigger>
     <:content id="tooltip-right">Right content</:content>
   </.tooltip>
   ```
 
 
   ### `tree_view`
-
-  #### basic
 
   ##### default
 
@@ -3780,36 +3829,698 @@ defmodule Graphene do
   ##### example
 
   ```heex
-  <.ui_shell content_class="psb-ui-shell-content">
+  <Graphene.CarbonComponents.ui_shell content_class="psb-ui-shell-content">
         <:skip_to_content>
           <a href="#main-content">Skip to content</a>
         </:skip_to_content>
         <:header>
-          <.header>
-            <:name href="#">Graphene</:name>
-            <.header_nav>
-              <.header_nav_item href="#">Home</.header_nav_item>
-              <.header_nav_item href="#">Docs</.header_nav_item>
-            </.header_nav>
-          </.header>
+          <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+            <Graphene.CarbonComponents.header_menu_button
+              button_label_active="Close menu"
+              button_label_inactive="Open menu"
+              collapse_mode="rail"
+            />
+            <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+            <Graphene.CarbonComponents.header_nav menu_bar_label="IBM [Platform]">
+              <Graphene.CarbonComponents.header_nav_item href="#">Link 1</Graphene.CarbonComponents.header_nav_item>
+              <Graphene.CarbonComponents.header_nav_item href="#">Link 2</Graphene.CarbonComponents.header_nav_item>
+              <Graphene.CarbonComponents.header_nav_item href="#">Link 3</Graphene.CarbonComponents.header_nav_item>
+              <Graphene.CarbonComponents.header_menu menu_label="Link 4" trigger_content="Link 4">
+                <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.header_menu_item>
+                <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.header_menu_item>
+                <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.header_menu_item>
+              </Graphene.CarbonComponents.header_menu>
+            </Graphene.CarbonComponents.header_nav>
+            <:global>
+              <Graphene.CarbonComponents.header_global_action
+                button_label_inactive="Search"
+                button_label_active="Search"
+                tooltip_text="Search"
+              >
+                <:icon name="search" size={20} />
+              </Graphene.CarbonComponents.header_global_action>
+              <Graphene.CarbonComponents.header_global_action
+                button_label_inactive="Notifications"
+                button_label_active="Notifications"
+                tooltip_text="Notifications"
+              >
+                <:icon name="notification" size={20} />
+              </Graphene.CarbonComponents.header_global_action>
+              <Graphene.CarbonComponents.header_global_action
+                button_label_inactive="App Switcher"
+                button_label_active="App Switcher"
+                tooltip_text="App Switcher"
+                tooltip_alignment="right"
+              >
+                <:icon name="switcher" size={20} />
+              </Graphene.CarbonComponents.header_global_action>
+            </:global>
+          </Graphene.CarbonComponents.header>
         </:header>
         <:side_nav>
-          <.side_nav expanded={true}>
-            <.side_nav_items>
-              <.side_nav_link href="#">Dashboard</.side_nav_link>
-              <.side_nav_link href="#">Settings</.side_nav_link>
-            </.side_nav_items>
-          </.side_nav>
+          <Graphene.CarbonComponents.side_nav aria-label="Side navigation" collapse_mode="rail">
+            <Graphene.CarbonComponents.side_nav_items>
+              <Graphene.CarbonComponents.side_nav_menu title="Category title">
+                <:title_icon>
+                  <Graphene.CarbonComponents.icon name="analytics" size={16} />
+                </:title_icon>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#" active>Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              </Graphene.CarbonComponents.side_nav_menu>
+              <Graphene.CarbonComponents.side_nav_menu title="Category title">
+                <:title_icon>
+                  <Graphene.CarbonComponents.icon name="cloud-services" size={16} />
+                </:title_icon>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              </Graphene.CarbonComponents.side_nav_menu>
+              <Graphene.CarbonComponents.side_nav_menu title="Category title">
+                <:title_icon>
+                  <Graphene.CarbonComponents.icon name="security" size={16} />
+                </:title_icon>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              </Graphene.CarbonComponents.side_nav_menu>
+              <Graphene.CarbonComponents.side_nav_link href="#">
+                <:title_icon_container>
+                  <Graphene.CarbonComponents.icon name="catalog" size={16} />
+                </:title_icon_container>
+                Link
+              </Graphene.CarbonComponents.side_nav_link>
+              <Graphene.CarbonComponents.side_nav_link href="#">
+                <:title_icon_container>
+                  <Graphene.CarbonComponents.icon name="settings" size={16} />
+                </:title_icon_container>
+                Link
+              </Graphene.CarbonComponents.side_nav_link>
+            </Graphene.CarbonComponents.side_nav_items>
+          </Graphene.CarbonComponents.side_nav>
         </:side_nav>
         <:content>
           <div id="main-content" style="padding: 1rem;">
-            <.button kind="secondary" href="/" size="sm">Return to storybook</.button>
+            <Graphene.CarbonComponents.button kind="secondary" href="/" size="sm">Return to storybook</Graphene.CarbonComponents.button>
             <div style="margin-top: 1rem;">
               Main content area
             </div>
           </div>
         </:content>
-      </.ui_shell>
+      </Graphene.CarbonComponents.ui_shell>
+  ```
+
+
+  ### `ui_shell_variants`
+
+  #### fixed_side_nav
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.side_nav
+        is_not_child_of_header
+        usage_mode="regular"
+        aria-label="Side navigation"
+        collapse_mode="fixed"
+        expanded
+      >
+        <Graphene.CarbonComponents.side_nav_items>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page" target="_blank">
+              L0 menu item
+            </Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link href="#">L0 link</Graphene.CarbonComponents.side_nav_link>
+          <Graphene.CarbonComponents.side_nav_link href="#">L0 link</Graphene.CarbonComponents.side_nav_link>
+        </Graphene.CarbonComponents.side_nav_items>
+      </Graphene.CarbonComponents.side_nav>
+      <Helpers.story_content responsive_offset={false} />
+  ```
+
+
+  #### fixed_side_nav_divider
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.side_nav
+        is_not_child_of_header
+        usage_mode="regular"
+        aria-label="Side navigation"
+        collapse_mode="fixed"
+        expanded
+      >
+        <Graphene.CarbonComponents.side_nav_items>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="L0 menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">L0 menu item</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link href="#">L0 link</Graphene.CarbonComponents.side_nav_link>
+          <Graphene.CarbonComponents.side_nav_link href="#">L0 link</Graphene.CarbonComponents.side_nav_link>
+        </Graphene.CarbonComponents.side_nav_items>
+      </Graphene.CarbonComponents.side_nav>
+      <Helpers.story_content responsive_offset={false} />
+  ```
+
+
+  #### fixed_side_nav_icons
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.side_nav is_not_child_of_header aria-label="Side navigation" collapse_mode="fixed" expanded>
+        <Graphene.CarbonComponents.side_nav_items>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link href="#">
+            <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+            Link
+          </Graphene.CarbonComponents.side_nav_link>
+          <Graphene.CarbonComponents.side_nav_link href="#">
+            <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+            Link
+          </Graphene.CarbonComponents.side_nav_link>
+        </Graphene.CarbonComponents.side_nav_items>
+      </Graphene.CarbonComponents.side_nav>
+      <Helpers.story_content responsive_offset={false} />
+  ```
+
+
+  #### header_base
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+      </Graphene.CarbonComponents.header>
+  ```
+
+
+  #### header_base_actions
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+      </Graphene.CarbonComponents.header>
+  ```
+
+
+  #### header_base_actions_right_panel
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            panel_id="notification-panel"
+            button_label_inactive="Notification"
+            tooltip_text="Notification"
+          >
+            <:icon name="notification" size={20} />
+            <Graphene.CarbonComponents.badge_indicator count={4} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+        <Graphene.CarbonComponents.header_panel id="notification-panel" aria-label="Header Panel" />
+      </Graphene.CarbonComponents.header>
+  ```
+
+
+  #### header_base_actions_switcher
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_active="Close switcher"
+            button_label_inactive="Open switcher"
+            tooltip_text="Open switcher"
+            panel_id="switcher-panel"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+        <Graphene.CarbonComponents.header_panel id="switcher-panel" aria-label="Header Panel">
+          <Graphene.CarbonComponents.switcher aria-label="Switcher Container">
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 1" href="#">Link 1</Graphene.CarbonComponents.switcher_item>
+            <Graphene.CarbonComponents.switcher_divider />
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 2" href="#">Link 2</Graphene.CarbonComponents.switcher_item>
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 3" href="#">Link 3</Graphene.CarbonComponents.switcher_item>
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 4" href="#">Link 4</Graphene.CarbonComponents.switcher_item>
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 5" href="#">Link 5</Graphene.CarbonComponents.switcher_item>
+            <Graphene.CarbonComponents.switcher_divider />
+            <Graphene.CarbonComponents.switcher_item aria-label="Link 6" href="#">Link 6</Graphene.CarbonComponents.switcher_item>
+          </Graphene.CarbonComponents.switcher>
+        </Graphene.CarbonComponents.header_panel>
+      </Graphene.CarbonComponents.header>
+      <Helpers.story_content />
+  ```
+
+
+  #### header_base_navigation
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_menu_button button_label_active="Close menu" button_label_inactive="Open menu" />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <Graphene.CarbonComponents.header_nav menu_bar_label="IBM [Platform]">
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 1</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 2</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 3</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_menu menu_label="Link 4" trigger_content="Link 4">
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item is_active href="#">Sub-link 2</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.header_menu_item>
+          </Graphene.CarbonComponents.header_menu>
+        </Graphene.CarbonComponents.header_nav>
+        <Graphene.CarbonComponents.side_nav is_not_persistent aria-label="Side navigation" collapse_mode="responsive">
+          <Graphene.CarbonComponents.side_nav_items>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 1</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 2</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 3</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_menu title="Link 4">
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+          </Graphene.CarbonComponents.side_nav_items>
+        </Graphene.CarbonComponents.side_nav>
+      </Graphene.CarbonComponents.header>
+  ```
+
+
+  #### header_base_navigation_actions
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_menu_button button_label_active="Close menu" button_label_inactive="Open menu" />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <Graphene.CarbonComponents.header_nav menu_bar_label="IBM [Platform]">
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 1</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 2</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 3</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_menu is_active menu_label="Link 4" trigger_content="Link 4">
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.header_menu_item>
+          </Graphene.CarbonComponents.header_menu>
+        </Graphene.CarbonComponents.header_nav>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+        <Graphene.CarbonComponents.side_nav is_not_persistent aria-label="Side navigation" collapse_mode="responsive">
+          <Graphene.CarbonComponents.side_nav_items>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 1</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 2</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">Link 3</Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_menu title="Link 4">
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+          </Graphene.CarbonComponents.side_nav_items>
+        </Graphene.CarbonComponents.side_nav>
+      </Graphene.CarbonComponents.header>
+  ```
+
+
+  #### header_base_navigation_actions_side_nav
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_menu_button button_label_active="Close menu" button_label_inactive="Open menu" />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <Graphene.CarbonComponents.header_nav menu_bar_label="IBM [Platform]">
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 1</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 2</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 3</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_menu menu_label="Link 4" trigger_content="Link 4">
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.header_menu_item>
+          </Graphene.CarbonComponents.header_menu>
+        </Graphene.CarbonComponents.header_nav>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+        <Graphene.CarbonComponents.side_nav aria-label="Side navigation" collapse_mode="responsive">
+          <Graphene.CarbonComponents.side_nav_items>
+            <Graphene.CarbonComponents.header_side_nav_items has_divider>
+              <Graphene.CarbonComponents.side_nav_link href="#">Link 1</Graphene.CarbonComponents.side_nav_link>
+              <Graphene.CarbonComponents.side_nav_link href="#">Link 2</Graphene.CarbonComponents.side_nav_link>
+              <Graphene.CarbonComponents.side_nav_link href="#">Link 3</Graphene.CarbonComponents.side_nav_link>
+              <Graphene.CarbonComponents.side_nav_menu title="Link 4">
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.side_nav_menu_item>
+                <Graphene.CarbonComponents.side_nav_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.side_nav_menu_item>
+              </Graphene.CarbonComponents.side_nav_menu>
+            </Graphene.CarbonComponents.header_side_nav_items>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item aria_current="page" href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#" active>Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+          </Graphene.CarbonComponents.side_nav_items>
+        </Graphene.CarbonComponents.side_nav>
+      </Graphene.CarbonComponents.header>
+      <Helpers.story_content />
+  ```
+
+
+  #### header_base_side_nav
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_menu_button button_label_active="Close menu" button_label_inactive="Open menu" />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <Graphene.CarbonComponents.side_nav aria-label="Side navigation" collapse_mode="responsive">
+          <Graphene.CarbonComponents.side_nav_items>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+          </Graphene.CarbonComponents.side_nav_items>
+        </Graphene.CarbonComponents.side_nav>
+      </Graphene.CarbonComponents.header>
+      <Helpers.story_content />
+  ```
+
+
+  #### header_base_skip_to_content
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.skip_to_content />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+      </Graphene.CarbonComponents.header>
+      <Helpers.story_content />
+  ```
+
+
+  #### side_nav_large_items
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.side_nav is_not_child_of_header aria-label="Side navigation" collapse_mode="fixed" expanded>
+        <Graphene.CarbonComponents.side_nav_items>
+          <Graphene.CarbonComponents.side_nav_menu large title="Large menu">
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 1</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 2</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 3</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link large href="#">Large link</Graphene.CarbonComponents.side_nav_link>
+          <Graphene.CarbonComponents.side_nav_menu large title="Large menu w/icon">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 1</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 2</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Menu 3</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link large href="#">
+            <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+            Large link w/icon
+          </Graphene.CarbonComponents.side_nav_link>
+        </Graphene.CarbonComponents.side_nav_items>
+      </Graphene.CarbonComponents.side_nav>
+      <Helpers.story_content />
+  ```
+
+
+  #### side_nav_rail
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.side_nav aria-label="Side navigation" collapse_mode="rail">
+        <Graphene.CarbonComponents.side_nav_items>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_menu title="Category title">
+            <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+          </Graphene.CarbonComponents.side_nav_menu>
+          <Graphene.CarbonComponents.side_nav_link href="#">
+            <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+            Link
+          </Graphene.CarbonComponents.side_nav_link>
+          <Graphene.CarbonComponents.side_nav_link href="#">
+            <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+            Link
+          </Graphene.CarbonComponents.side_nav_link>
+        </Graphene.CarbonComponents.side_nav_items>
+      </Graphene.CarbonComponents.side_nav>
+      <Helpers.story_content />
+  ```
+
+
+  #### side_nav_rail_header
+
+  ##### example
+
+  ```heex
+  <Graphene.CarbonComponents.header aria-label="IBM Platform Name">
+        <Graphene.CarbonComponents.header_menu_button button_label_active="Close menu" button_label_inactive="Open menu" />
+        <Graphene.CarbonComponents.header_name href="#" prefix="IBM">[Platform]</Graphene.CarbonComponents.header_name>
+        <Graphene.CarbonComponents.header_nav menu_bar_label="IBM [Platform]">
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 1</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 2</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_nav_item href="#">Link 3</Graphene.CarbonComponents.header_nav_item>
+          <Graphene.CarbonComponents.header_menu menu_label="Link 4" trigger_content="Link 4">
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 1</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 2</Graphene.CarbonComponents.header_menu_item>
+            <Graphene.CarbonComponents.header_menu_item href="#">Sub-link 3</Graphene.CarbonComponents.header_menu_item>
+          </Graphene.CarbonComponents.header_menu>
+        </Graphene.CarbonComponents.header_nav>
+        <:global>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Search" tooltip_text="Search">
+            <:icon name="search" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action button_label_inactive="Notification" tooltip_text="Notification">
+            <:icon name="notification" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+          <Graphene.CarbonComponents.header_global_action
+            button_label_inactive="App Switcher"
+            tooltip_text="App Switcher"
+            tooltip_alignment="right"
+          >
+            <:icon name="switcher" size={20} />
+          </Graphene.CarbonComponents.header_global_action>
+        </:global>
+        <Graphene.CarbonComponents.side_nav aria-label="Side navigation" collapse_mode="rail">
+          <Graphene.CarbonComponents.side_nav_items>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#" active aria_current="page">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_menu title="Category title">
+              <:title_icon><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+              <Graphene.CarbonComponents.side_nav_menu_item href="#">Link</Graphene.CarbonComponents.side_nav_menu_item>
+            </Graphene.CarbonComponents.side_nav_menu>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+            <Graphene.CarbonComponents.side_nav_link href="#">
+              <:title_icon_container><Graphene.CarbonComponents.icon name="analytics" size={16} /></:title_icon_container>
+              Link
+            </Graphene.CarbonComponents.side_nav_link>
+          </Graphene.CarbonComponents.side_nav_items>
+        </Graphene.CarbonComponents.side_nav>
+      </Graphene.CarbonComponents.header>
+      <Helpers.story_content />
   ```
 
 

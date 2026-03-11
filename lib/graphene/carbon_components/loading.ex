@@ -27,6 +27,7 @@ defmodule Graphene.CarbonComponents.Loading do
   attr :overlay, :boolean, doc: "`true` if overlay should be applied."
   attr :small, :boolean, doc: "Specify whether you would like the small variant of <Loading>"
   attr :type, :string, values: [nil, "regular", "small"]
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

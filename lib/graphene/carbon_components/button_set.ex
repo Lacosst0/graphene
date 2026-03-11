@@ -17,6 +17,7 @@ defmodule Graphene.CarbonComponents.ButtonSet do
   attr :stacked, :boolean,
     doc: "`true` if the buttons should be stacked. Only applies to the button-set variant."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -31,6 +32,7 @@ defmodule Graphene.CarbonComponents.ButtonSet do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

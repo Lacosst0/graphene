@@ -23,6 +23,7 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
     values: ["sm", "md"],
     default: "md"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -39,8 +40,13 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
       assigns
       |> assign_new(:no_trailing_slash, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [:no_trailing_slash, :size])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.breadcrumb no_trailing_slash={@no_trailing_slash} size={@size} {@rest}>
+    <CoreComponents.breadcrumb {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.breadcrumb_item>
           <%= if item[:href] do %>
@@ -71,6 +77,7 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -101,6 +108,7 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
   attr :target, :string, doc: "The link target."
   attr :type, :string, doc: "MIME type of the `target`."
   attr :visited, :boolean, doc: "`true` if the link has been visited."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -214,6 +222,7 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :icon, doc: "The icon for the trigger button."
   slot :inner_block
@@ -231,6 +240,7 @@ defmodule Graphene.CarbonComponents.Breadcrumb do
   attr :items, :string, doc: "Number of items to render."
   attr :no_trailing_slash, :boolean, doc: "`true` to omit the trailing slash."
   attr :size, :string, doc: "Breadcrumb size."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

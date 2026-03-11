@@ -7,6 +7,36 @@ defmodule Graphene.Internal.CoreComponents do
 
   def version(), do: ~S|2.48.0|
 
+  defp normalize_events(nil), do: []
+
+  defp normalize_events(events) when is_map(events) do
+    Map.to_list(events)
+  end
+
+  defp normalize_events(events) when is_list(events) do
+    if Enum.all?(events, &match?({_, _}, &1)) do
+      events
+    else
+      Enum.map(events, &{&1, []})
+    end
+  end
+
+  defp normalize_events(event), do: [{event, []}]
+
+  defp apply_events(assigns) do
+    assigns = assign_new(assigns, :events, fn -> nil end)
+    events = normalize_events(assigns[:events])
+
+    if events == [] do
+      assigns
+    else
+      rest = Map.get(assigns, :rest, %{})
+      id = Map.get(assigns, :id) || Map.get(rest, :id)
+      event_attrs = Graphene.JS.events(events: events, id: id)
+      assign(assigns, :rest, Map.merge(rest, event_attrs))
+    end
+  end
+
   @doc """
   Component `<cds-accordion>` from `./src/components/accordion/accordion.ts`
 
@@ -34,11 +64,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["sm", "md", "lg"],
     doc: "Accordion size should be sm, md, lg."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def accordion(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-accordion
       alignment={assigns[:alignment]}
@@ -72,11 +106,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :open, :boolean, default: false, doc: "`true` if the accordion item should be open."
   attr :title, :string, default: nil, doc: "The title text."
   attr :controlled, :boolean, default: nil, doc: "Whether the item is controlled by the parent."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def accordion_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-accordion-item
       disabled={assigns[:disabled]}
@@ -105,11 +144,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :count, :string, default: nil, doc: "Set number of items to render."
   attr :is_flush, :boolean, default: nil, doc: "Specify whether Accordion text should be flush."
   attr :open, :boolean, default: nil, doc: "`true` if the first accordion item should be open."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def accordion_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-accordion-skeleton
       alignment={assigns[:alignment]}
@@ -167,9 +211,11 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any,
+  attr :timeout, :string,
     default: nil,
     doc: "Specify an optional duration the notification should be closed in"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
 
   attr :rest, :global
 
@@ -179,6 +225,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def actionable_notification(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-actionable-notification
       action-button-label={assigns[:action_button_label]}
@@ -300,11 +348,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def actionable_notification_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-actionable-notification-button
       autofocus={assigns[:autofocus]}
@@ -406,6 +458,9 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "AI Label size should be mini, 2xs, xs, sm, md, lg, xl."
 
   attr :slot, :string, default: "ai-label"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :body_text, doc: "Content for the AI label body.", do: attr(:tag, :string)
@@ -413,6 +468,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def ai_label(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ai-label
       ai-text={assigns[:ai_text]}
@@ -543,11 +600,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def ai_label_action_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ai-label-action-button
       autofocus={assigns[:autofocus]}
@@ -590,11 +651,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :custom_styles, :string, default: nil, doc: "Custom styles to apply to skeleton icon"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def ai_skeleton_icon(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ai-skeleton-icon
       custom-styles={assigns[:custom_styles]}
@@ -613,11 +679,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def ai_skeleton_placeholder(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ai-skeleton-placeholder {@rest}>
       {render_slot(@inner_block)}
@@ -641,11 +711,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "100%",
     doc: "width (in px or %) of single line of text or max-width of paragraph lines"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def ai_skeleton_text(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ai-skeleton-text
       heading={assigns[:heading]}
@@ -673,11 +747,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "badge-indicator",
     doc: "The shadow slot the badge-indicator should be in."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def badge_indicator(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-badge-indicator
       count={assigns[:count]}
@@ -707,11 +785,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Specify the size of the Breadcrumb. Currently\nsupports the following: `sm` & `md` (default: 'md')"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def breadcrumb(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-breadcrumb
       no-trailing-slash={assigns[:no_trailing_slash]}
@@ -731,11 +813,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def breadcrumb_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-breadcrumb-item {@rest}>
       {render_slot(@inner_block)}
@@ -768,11 +854,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :target, :string, default: nil, doc: "The link target."
   attr :type, :string, default: nil, doc: "MIME type of the `target`."
   attr :visited, :boolean, default: false, doc: "`true` if the link has been visited."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def breadcrumb_link(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-breadcrumb-link
       disabled={assigns[:disabled]}
@@ -931,12 +1022,16 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :icon, doc: "The icon for the trigger button.", do: attr(:tag, :string)
   slot :inner_block
 
   def breadcrumb_overflow_menu(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-breadcrumb-overflow-menu
       align={assigns[:align]}
@@ -994,11 +1089,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :items, :string, default: nil, doc: "Number of items to render."
   attr :no_trailing_slash, :boolean, default: nil, doc: "`true` to omit the trailing slash."
   attr :size, :string, default: nil, doc: "Breadcrumb size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def breadcrumb_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-breadcrumb-skeleton
       items={assigns[:items]}
@@ -1103,12 +1203,16 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :icon, doc: "Icon.", do: attr(:tag, :string)
   slot :inner_block
 
   def button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-button
       autofocus={assigns[:autofocus]}
@@ -1156,11 +1260,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "`true` if the buttons should be stacked. Only applies to the button-set variant."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def button_set(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-button-set
       stacked={assigns[:stacked]}
@@ -1179,11 +1287,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def button_set_base(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-button-set-base {@rest}>
       {render_slot(@inner_block)}
@@ -1198,11 +1310,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def button_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-button-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -1254,11 +1370,14 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any,
+  attr :timeout, :string,
     default: nil,
     doc: "Specify an optional duration the notification should be closed in"
 
   attr :title_id, :string, default: nil, doc: "Specify the id for the title element."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :action, doc: "The action button.", do: attr(:tag, :string)
@@ -1267,6 +1386,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def callout_notification(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-callout-notification
       action-button-label={assigns[:action_button_label]}
@@ -1322,11 +1443,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify whether the `ChatButton` should be disabled"
 
   attr :size, :string, default: "lg", values: ["sm", "md", "lg"], doc: "Chat button size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def chat_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-chat-button
       disabled={assigns[:disabled]}
@@ -1355,11 +1481,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Specify the size of the `ChatButtonSkeleton`, from the following list of sizes: 'sm', 'md', 'lg'"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def chat_button_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-chat-button-skeleton
       size={assigns[:size]}
@@ -1437,11 +1567,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Provide the text that is displayed when the Checkbox is in a warn state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def checkbox(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-checkbox
       checked={assigns[:checked]}
@@ -1513,11 +1647,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the form group is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def checkbox_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-checkbox-group
       disabled={assigns[:disabled]}
@@ -1544,11 +1682,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def checkbox_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-checkbox-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -1585,11 +1727,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :target, :string, default: nil, doc: "The link target."
   attr :type, :string, default: nil, doc: "MIME type of the `target`."
   attr :visited, :boolean, default: false, doc: "`true` if the link has been visited."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def clickable_tile(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-clickable-tile
       ai-label={assigns[:ai_label]}
@@ -1677,11 +1824,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "The type of code snippet."
 
   attr :wrap_text, :boolean, default: false, doc: "`true` if the button should be disabled."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def code_snippet(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-code-snippet
       copy-text={assigns[:copy_text]}
@@ -1717,11 +1869,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: [nil, "single", "inline", "multi"],
     doc: "Code snippet type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def code_snippet_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-code-snippet-skeleton
       type={assigns[:type]}
@@ -1751,11 +1907,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :span, :any, default: nil
   attr :xlg, :any, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def column(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-column
       lg={assigns[:lg]}
@@ -1779,11 +1940,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def column_hang(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-column-hang {@rest}>
       {render_slot(@inner_block)}
@@ -1902,11 +2067,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Provide the text that is displayed when the control is in warning state"
 
   attr :controlled, :boolean, default: nil, doc: "Whether the combobox is controlled."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def combo_box(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-combo-box
       allow-custom-value={assigns[:allow_custom_value]}
@@ -1963,11 +2133,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `value` attribute that is set to the parent `<cds-dropdown>` when this dropdown item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def combo_box_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-combo-box-item
       disabled={assigns[:disabled]}
@@ -2041,11 +2215,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Additional actions",
     doc: "Provide the tooltip content for the icon button."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def combo_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-combo-button
       disabled={assigns[:disabled]}
@@ -2075,7 +2253,14 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify whether the dividing lines in between list items should be inset."
 
   attr :kind, :any, default: nil, doc: "The kind of ContainedList you want to display"
-  attr :size, :any, default: nil, doc: "Specify the size of the contained list."
+
+  attr :size, :string,
+    default: nil,
+    values: [nil, nil, "lg", "md", "sm", "xl"],
+    doc: "Specify the size of the contained list."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :action, doc: "The action slot for interactive elements in header", do: attr(:tag, :string)
@@ -2083,6 +2268,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def contained_list(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-contained-list
       is-inset={assigns[:is_inset]}
@@ -2109,11 +2296,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def contained_list_description(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-contained-list-description {@rest}>
       {render_slot(@inner_block)}
@@ -2134,6 +2325,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :clickable, :boolean, default: false, doc: "Whether this item is clickable"
   attr :disabled, :boolean, default: false, doc: "Whether this item is disabled."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :action, doc: "The action slot for interactive elements", do: attr(:tag, :string)
@@ -2141,6 +2335,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def contained_list_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-contained-list-item
       clickable={assigns[:clickable]}
@@ -2189,11 +2385,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Content switcher size."
 
   attr :value, :string, default: nil, doc: "The value of the selected item."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def content_switcher(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-content-switcher
       icon={assigns[:icon]}
@@ -2241,12 +2442,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `value` attribute that is set to the parent `<cds-content-switcher>`\nwhen this content switcher item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :tooltip_content, doc: "Tooltip content for the item.", do: attr(:tag, :string)
   slot :inner_block
 
   def content_switcher_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-content-switcher-item
       align={assigns[:align]}
@@ -2394,11 +2599,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def copy(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-copy
       align={assigns[:align]}
@@ -2483,11 +2692,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "2000",
     doc: "The number in milliseconds to determine how long the tooltip should remain."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def copy_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-copy-button
       align={assigns[:align]}
@@ -2549,11 +2762,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The date(s) in ISO8601 format (date portion only), for range mode, '/' is used for separate start/end dates."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def date_picker(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-date-picker
       allow-input={assigns[:allow_input]}
@@ -2629,11 +2846,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def date_picker_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-date-picker-input
       color-scheme={assigns[:color_scheme]}
@@ -2675,11 +2896,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Date picker kind."
 
   attr :range, :boolean, default: nil, doc: "`true` if the input is a range."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def date_picker_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-date-picker-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -2717,12 +2943,16 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specifies whether the `DefinitionTooltip` should open on hover or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :definition, doc: "Definition content.", do: attr(:tag, :string)
   slot :inner_block
 
   def definition_tooltip(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-definition-tooltip
       align={assigns[:align]}
@@ -2801,11 +3031,15 @@ defmodule Graphene.Internal.CoreComponents do
     ],
     doc: "The type of the tag."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def dismissible_tag(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-dismissible-tag
       disabled={assigns[:disabled]}
@@ -2905,12 +3139,16 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :title_text, doc: "Title text content.", do: attr(:tag, :string)
   slot :inner_block
 
   def dropdown(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-dropdown
       autoalign={assigns[:autoalign]}
@@ -2967,11 +3205,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `value` attribute that is set to the parent `<cds-dropdown>` when this dropdown item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def dropdown_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-dropdown-item
       disabled={assigns[:disabled]}
@@ -2993,11 +3235,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :hide_label, :boolean, default: nil, doc: "Specify whether the label should be hidden."
   attr :size, :string, default: nil, values: [nil, "sm", "md", "lg"], doc: "Dropdown size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def dropdown_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-dropdown-skeleton
       hide-label={assigns[:hide_label]}
@@ -3031,12 +3278,17 @@ defmodule Graphene.Internal.CoreComponents do
       "Specify if the `ExpandableTile` component should be rendered with rounded corners.\nOnly valid when `ai-label` prop is present"
 
   attr :with_interactive, :boolean, default: false, doc: "`true` to expand this expandable tile."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :above_the_fold_content, doc: "Above-the-fold content.", do: attr(:tag, :string)
   slot :inner_block
 
   def expandable_tile(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-expandable-tile
       color-scheme={assigns[:color_scheme]}
@@ -3069,11 +3321,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Enable reduced label spacing for v12 toggle."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def feature_flags(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <feature-flags
       enable-v12-toggle-reduced-label-spacing={assigns[:enable_v12_toggle_reduced_label_spacing]}
@@ -3099,11 +3355,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :input_state, :string, default: nil, doc: "Input state for the uploader."
   attr :input_name, :string, default: nil, doc: "Name attribute for the input."
   attr :icon_description, :string, default: nil, doc: "Description for the status icon."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def file_uploader(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-file-uploader
       disabled={assigns[:disabled]}
@@ -3164,11 +3425,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "drop-container",
     doc: "The shadow DOM slot to put this drop container in."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def file_uploader_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-file-uploader-button
       accept={assigns[:accept]}
@@ -3215,11 +3480,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "drop-container",
     doc: "The shadow DOM slot to put this drop container in."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def file_uploader_drop_container(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-file-uploader-drop-container
       accept={assigns[:accept]}
@@ -3268,6 +3537,8 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["uploading", "complete", "edit"],
     doc: "The state of this file uploader item."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :validity, doc: "message The validity message.", do: attr(:tag, :string)
@@ -3279,6 +3550,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def file_uploader_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-file-uploader-item
       error-body={assigns[:error_body]}
@@ -3312,11 +3585,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def file_uploader_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-file-uploader-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -3460,6 +3737,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -3473,6 +3752,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_number_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-number-input
       allow-empty={assigns[:allow_empty]}
@@ -3552,11 +3833,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "`true` if the label should be hidden. Corresponds to the attribute with the same name."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_number_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-number-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -3610,11 +3895,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :type, :string, default: nil, doc: "The `<input>` name."
   attr :value, :string, default: nil, doc: "The value."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_search(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-search
       autocomplete={assigns[:autocomplete]}
@@ -3650,11 +3940,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["sm", "md", "lg", "xl"],
     doc: "The search box size. Corresponds to the attribute with the same name."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_search_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-search-skeleton
       size={assigns[:size]}
@@ -3722,6 +4016,9 @@ defmodule Graphene.Internal.CoreComponents do
   attr :value, :string, default: nil, doc: "The value of the text area."
   attr :warn, :boolean, default: false, doc: "Specify if the currently value is warn."
   attr :warn_text, :string, default: nil, doc: "Message which is displayed if the value is warn."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -3735,6 +4032,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_select(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-select
       autofocus={assigns[:autofocus]}
@@ -3797,11 +4096,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "`true` if the label should be hidden. Corresponds to the attribute with the same name."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_select_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-select-skeleton
       hide-label={assigns[:hide_label]}
@@ -3917,6 +4220,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -3930,6 +4235,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_text_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-text-input
       autocomplete={assigns[:autocomplete]}
@@ -3999,11 +4306,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the label should be hidden, or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_text_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-text-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -4036,8 +4347,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :cols, :any, default: nil, doc: "The number of columns for the textarea to show by default"
 
-  attr :counter_mode, :any,
-    default: nil,
+  attr :counter_mode, :string,
+    default: "character",
+    values: ["character", "word"],
     doc: "Specify the method used for calculating the counter number"
 
   attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
@@ -4129,6 +4441,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -4142,6 +4456,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_textarea(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-textarea
       autocomplete={assigns[:autocomplete]}
@@ -4215,11 +4531,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the label should be hidden, or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_textarea_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-textarea-skeleton
       hide-label={assigns[:hide_label]}
@@ -4268,6 +4588,9 @@ defmodule Graphene.Internal.CoreComponents do
   attr :type, :string, default: "text", doc: "Input type"
   attr :value, :string, default: nil, doc: "Value of the input"
   attr :warning, :boolean, default: false, doc: "Specify whether the control is in warning state"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :invalid_text, doc: "The invalid text.", do: attr(:tag, :string)
@@ -4286,6 +4609,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_time_picker(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-time-picker
       disabled={assigns[:disabled]}
@@ -4405,6 +4730,9 @@ defmodule Graphene.Internal.CoreComponents do
   attr :value, :string, default: nil, doc: "The value of the text area."
   attr :warn, :boolean, default: false, doc: "Specify if the currently value is warn."
   attr :warn_text, :string, default: nil, doc: "Message which is displayed if the value is warn."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -4418,6 +4746,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def fluid_time_picker_select(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-time-picker-select
       autofocus={assigns[:autofocus]}
@@ -4481,11 +4811,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify if there are only two TimePicker elements."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def fluid_time_picker_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-fluid-time-picker-skeleton
       is-only-two={assigns[:is_only_two]}
@@ -4504,11 +4838,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def form(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-form {@rest}>
       {render_slot(@inner_block)}
@@ -4543,11 +4881,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text for the message in the Form Group"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def form_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-form-group
       invalid={assigns[:invalid]}
@@ -4570,11 +4912,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def form_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-form-item {@rest}>
       {render_slot(@inner_block)}
@@ -4628,6 +4974,8 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Row gap spacing token suffix for grid rows (for example \"05\"). Defaults to \"07\" via CSS fallback; \"narrow\" defaults to \"05\" and \"condensed\" defaults to \"gutter\". You can set --graphene-grid-row-gap on a parent to let nested grids inherit."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
@@ -4672,6 +5020,8 @@ defmodule Graphene.Internal.CoreComponents do
         assigns
       end
 
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-grid
       align={assigns[:align]}
@@ -4694,12 +5044,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header(assigns) do
     assigns = merge_rest_class(assigns, "cds--header")
+    assigns = apply_events(assigns)
 
     ~H"""
     <cds-header {@rest}>
@@ -4815,11 +5168,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_global_action(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-global-action
       active={assigns[:active]}
@@ -4873,11 +5230,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :menu_label, :string, default: nil, doc: "The `aria-label` attribute for the menu UI."
   attr :trigger_content, :string, default: nil, doc: "The content of the trigger button."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_menu(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-menu
       expanded={assigns[:expanded]}
@@ -4925,11 +5287,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "If `true` will style the side nav to sit below the header"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_menu_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-menu-button
       active={assigns[:active]}
@@ -4968,11 +5334,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :target, :string, default: nil, doc: "The link target."
   attr :title, :string, default: nil, doc: "The title."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_menu_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-menu-item
       href={assigns[:href]}
@@ -4998,11 +5369,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :href, :string, default: nil, doc: "Link `href`."
   attr :prefix, :string, default: nil, doc: "The product name prefix."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_name(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-name
       href={assigns[:href]}
@@ -5026,11 +5402,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "The `aria-label` attribute for the menu bar UI."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_nav(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-nav
       menu-bar-label={assigns[:menu_bar_label]}
@@ -5064,11 +5444,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :target, :string, default: nil, doc: "The link target."
   attr :title, :string, default: nil, doc: "The title."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_nav_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-nav-item
       href={assigns[:href]}
@@ -5093,11 +5478,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :expanded, :any, default: nil, doc: "Specify whether the panel is expanded"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_panel(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-panel
       expanded={assigns[:expanded]}
@@ -5121,11 +5511,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Optionally specify if container will have a bottom divider to differentiate\nbetween original sidenav items and header menu items. False by default."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def header_side_nav_items(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-header-side-nav-items
       has-divider={assigns[:has_divider]}
@@ -5144,11 +5538,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def heading(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-heading {@rest}>
       {render_slot(@inner_block)}
@@ -5167,11 +5565,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :class, :string, default: nil, doc: "Custom CSS classes"
   attr :icon, :any, default: nil, doc: "The imported icon"
   attr :size, :string, default: "16", doc: "The size of the icon (16, 20, 24, 32)"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def icon(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-icon
       class={assigns[:class]}
@@ -5301,12 +5704,16 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :tooltip_content, doc: "Tooltip content.", do: attr(:tag, :string)
   slot :inner_block
 
   def icon_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-icon-button
       align={assigns[:align]}
@@ -5385,11 +5792,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :label, :string, default: nil, doc: "Label next to the icon."
   attr :size, :string, default: "16", doc: "Icon indicator should be size 16 or 20"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def icon_indicator(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-icon-indicator
       kind={assigns[:kind]}
@@ -5429,11 +5841,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Provide a delay for the setTimeout for success"
 
   attr :controlled, :boolean, default: nil, doc: "Whether the loading state is controlled."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def inline_loading(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-inline-loading
       assistive-text={assigns[:assistive_text]}
@@ -5475,9 +5892,11 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any,
+  attr :timeout, :string,
     default: nil,
     doc: "Specify an optional duration the notification should be closed in"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
 
   attr :rest, :global
 
@@ -5486,6 +5905,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def inline_notification(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-inline-notification
       hide-close-button={assigns[:hide_close_button]}
@@ -5525,12 +5946,17 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify the layer level and override any existing levels based on hierarchy"
 
   attr :with_background, :any, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :children, doc: "The elements contained within the component.", do: attr(:tag, :string)
   slot :inner_block
 
   def layer(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-layer
       layers={assigns[:layers]}
@@ -5566,11 +5992,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :target, :string, default: nil, doc: "The link target."
   attr :type, :string, default: nil, doc: "MIME type of the `target`."
   attr :visited, :boolean, default: false, doc: "`true` if the link has been visited."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def link(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-link
       disabled={assigns[:disabled]}
@@ -5600,12 +6031,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :nested, doc: "The nested child list.", do: attr(:tag, :string)
   slot :inner_block
 
   def list_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-list-item {@rest}>
       {render_slot(@inner_block)}
@@ -5642,11 +6077,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify whether you would like the small variant of <Loading>"
 
   attr :type, :string, default: nil, values: [nil, "regular", "small"]
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def loading(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-loading
       active={assigns[:active]}
@@ -5678,11 +6118,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :menu_alignment, :string, default: nil, doc: "Alignment of the menu."
   attr :x, :string, default: nil, doc: "Horizontal position of the menu."
   attr :y, :string, default: nil, doc: "Vertical position of the menu."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu
       open={assigns[:open]}
@@ -5752,11 +6197,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify the size of the button and menu."
 
   attr :tab_index, :string, default: "0", doc: "Specify the tabIndex of the button."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-button
       disabled={assigns[:disabled]}
@@ -5801,12 +6251,17 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Whether the menu submen for an item is open or not."
 
   attr :selected, :boolean, default: nil, doc: "Whether the menu item is selected."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :submenu, doc: "Submenu content.", do: attr(:tag, :string)
   slot :inner_block
 
   def menu_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-item
       boundaries={assigns[:boundaries]}
@@ -5835,11 +6290,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu_item_divider(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-item-divider {@rest}>
       {render_slot(@inner_block)}
@@ -5856,11 +6315,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :label, :any, default: nil, doc: "Label for the menu item."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu_item_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-item-group
       label={assigns[:label]}
@@ -5883,11 +6347,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :items, :any, default: nil, doc: "List of items in the radio group."
   attr :label, :any, default: nil, doc: "Label for the menu item radio group."
   attr :selected_item, :any, default: nil, doc: "Selected item in the radio group."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu_item_radio_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-item-radio-group
       itemToString={assigns[:item_to_string]}
@@ -5913,11 +6382,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :render_icon, :any, default: nil, doc: "Sets the menu item's icon."
   attr :selected, :boolean, default: false, doc: "Whether the menu item is selected or not."
   attr :shortcut, :any, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def menu_item_selectable(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-menu-item-selectable
       label={assigns[:label]}
@@ -5969,7 +6443,10 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Loading",
     doc: "Specify the description for the loading icon"
 
-  attr :loading_status, :any, default: nil, doc: "Specify the loading status"
+  attr :loading_status, :string,
+    default: "inactive",
+    values: ["error", "inactive", "active", "finished"],
+    doc: "Specify the loading status"
 
   attr :loading_success_delay, :string,
     default: "1500",
@@ -5991,11 +6468,16 @@ defmodule Graphene.Internal.CoreComponents do
       "Specify if Enter key should be used as \"submit\" action that clicks the primary footer button"
 
   attr :size, :string, default: "md", values: ["xs", "sm", "md", "lg"], doc: "Modal size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal
       alert={assigns[:alert]}
@@ -6026,11 +6508,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_body(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-body {@rest}>
       {render_slot(@inner_block)}
@@ -6046,11 +6532,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_body_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-body-content {@rest}>
       {render_slot(@inner_block)}
@@ -6070,11 +6560,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Close",
     doc: "Specify a label for the close button of the modal; defaults to close"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_close_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-close-button
       close-button-label={assigns[:close_button_label]}
@@ -6097,11 +6591,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "`true` if this modal footer has more than two buttons."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_footer(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-footer
       has-three-buttons={assigns[:has_three_buttons]}
@@ -6204,11 +6702,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_footer_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-footer-button
       autofocus={assigns[:autofocus]}
@@ -6249,11 +6751,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_header(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-header {@rest}>
       {render_slot(@inner_block)}
@@ -6269,11 +6775,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_heading(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-heading {@rest}>
       {render_slot(@inner_block)}
@@ -6289,11 +6799,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def modal_label(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-modal-label {@rest}>
       {render_slot(@inner_block)}
@@ -6415,12 +6929,16 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :title_text, doc: "Title text content.", do: attr(:tag, :string)
   slot :inner_block
 
   def multi_select(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-multi-select
       autoalign={assigns[:autoalign]}
@@ -6497,11 +7015,16 @@ defmodule Graphene.Internal.CoreComponents do
       "The `value` attribute that is set to the parent `<cds-dropdown>` when this dropdown item is selected."
 
   attr :selected, :boolean, default: nil, doc: "Whether the item is selected."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def multi_select_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-multi-select-item
       disabled={assigns[:disabled]}
@@ -6655,6 +7178,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -6668,6 +7193,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def number_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-number-input
       allow-empty={assigns[:allow_empty]}
@@ -6743,11 +7270,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :hide_label, :boolean, default: nil, doc: "Specify whether the label should be hidden."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def number_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-number-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -6793,11 +7325,15 @@ defmodule Graphene.Internal.CoreComponents do
     ],
     doc: "The type of the tag."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def operational_tag(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-operational-tag
       disabled={assigns[:disabled]}
@@ -6828,11 +7364,16 @@ defmodule Graphene.Internal.CoreComponents do
       "Specify whether the ordered list should use native list styles instead of\ncustom counter"
 
   attr :nested, :boolean, default: false, doc: "Specify whether the list is nested, or not"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def ordered_list(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-ordered-list
       is-expressive={assigns[:is_expressive]}
@@ -6981,6 +7522,8 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :icon, doc: "The icon for the trigger button.", do: attr(:tag, :string)
@@ -6992,6 +7535,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def overflow_menu(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-overflow-menu
       align={assigns[:align]}
@@ -7061,11 +7606,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :flipped, :boolean, default: false, doc: "How the menu is aligned to the trigger button."
   attr :size, :string, default: "md", values: ["sm", "md", "lg"], doc: "The overflow menu size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def overflow_menu_body(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-overflow-menu-body
       direction={assigns[:direction]}
@@ -7103,11 +7653,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["sm", "md", "lg"],
     doc: "The size of the overflow menu item."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def overflow_menu_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-overflow-menu-item
       danger={assigns[:danger]}
@@ -7130,11 +7684,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def page_header(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header {@rest}>
       {render_slot(@inner_block)}
@@ -7165,6 +7723,8 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Set to `true` if the breadcrumb bar is sitting within a grid\n(ie. when used in tandem with page-header-hero-image)"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :content_actions, doc: "Content actions for the breadcrumb.", do: attr(:tag, :string)
@@ -7172,6 +7732,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def page_header_breadcrumb(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header-breadcrumb
       border={assigns[:border]}
@@ -7214,6 +7776,8 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Set to `true` if the breadcrumb bar is sitting within a grid\n(ie. when used in tandem with page-header-hero-image)"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :contextual_actions,
@@ -7224,6 +7788,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def page_header_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header-content
       title={assigns[:title]}
@@ -7258,11 +7824,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :subtitle, :string, default: nil, doc: "Subtitle text of the page-header-content"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def page_header_content_text(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header-content-text
       subtitle={assigns[:subtitle]}
@@ -7281,11 +7852,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def page_header_hero_image(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header-hero-image {@rest}>
       {render_slot(@inner_block)}
@@ -7301,12 +7876,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :tags, doc: "Tags for the page header.", do: attr(:tag, :string)
   slot :inner_block
 
   def page_header_tabs(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-page-header-tabs {@rest}>
       {render_slot(@inner_block)}
@@ -7378,6 +7957,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :total_items, :string, default: nil, doc: "The number of total items."
   attr :total_pages, :string, default: "1", doc: "The number of total pages."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :page_sizes_select,
@@ -7387,6 +7969,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def pagination(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-pagination
       backward-text={assigns[:backward_text]}
@@ -7462,11 +8046,16 @@ defmodule Graphene.Internal.CoreComponents do
       "Specify the position of the tooltip for the icon-only next/prev buttons.\nCan be one of: top, right, bottom, or left."
 
   attr :total_items, :string, default: "1", doc: "The total number of items."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def pagination_nav(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-pagination-nav
       disable-overflow={assigns[:disable_overflow]}
@@ -7589,6 +8178,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -7602,6 +8193,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def password_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-password-input
       autocomplete={assigns[:autocomplete]}
@@ -7671,11 +8264,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the label should be hidden, or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def password_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-password-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -7734,11 +8331,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify whether the component is currently open or closed"
 
   attr :tab_tip, :boolean, default: false, doc: "Render the component using the tab tip variant"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def popover(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-popover
       align={assigns[:align]}
@@ -7801,11 +8403,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "The shadow slot this popover content should be in."
 
   attr :tab_tip, :boolean, default: false, doc: "Render the component using the tab tip variant"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def popover_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-popover-content
       align={assigns[:align]}
@@ -7854,11 +8461,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Defines the alignment variant of the progress bar."
 
   attr :value, :any, default: nil, doc: "The current value."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def progress_bar(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-progress-bar
       helper-text={assigns[:helper_text]}
@@ -7901,11 +8513,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Determines whether or not the progress indicator should be rendered\nvertically."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def progress_indicator(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-progress-indicator
       current-index={assigns[:current_index]}
@@ -7926,11 +8542,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :vertical, :boolean, default: nil, doc: "`true` to render the vertical variant."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def progress_indicator_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-progress-indicator-skeleton
       vertical={assigns[:vertical]}
@@ -7968,12 +8589,16 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["complete", "current", "incomplete", "invalid"],
     doc: "The progress state."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :secondary_label_text, doc: "The secondary progress label.", do: attr(:tag, :string)
   slot :inner_block
 
   def progress_step(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-progress-step
       clickable={assigns[:clickable]}
@@ -8008,11 +8633,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :vertical, :boolean, default: nil, doc: "`true` to render the vertical variant."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def progress_step_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-progress-step-skeleton
       vertical={assigns[:vertical]}
@@ -8086,12 +8716,16 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :ai_label, doc: "AI label content.", do: attr(:tag, :string)
   slot :inner_block
 
   def radio_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-radio-button
       checked={assigns[:checked]}
@@ -8180,11 +8814,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def radio_button_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-radio-button-group
       defaultSelected={assigns[:default_selected]}
@@ -8215,11 +8853,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def radio_button_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-radio-button-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -8257,11 +8899,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :name, :string, default: nil
   attr :selected, :boolean, default: false, doc: "`true` to show the selected state."
   attr :value, :string, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def radio_tile(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-radio-tile
       checkmark-label={assigns[:checkmark_label]}
@@ -8322,11 +8969,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :type, :string, default: nil, doc: "The `<input>` name."
   attr :value, :string, default: nil, doc: "The value."
   attr :color_scheme, :string, default: nil, doc: "Color scheme for the search."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def search(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-search
       autocomplete={assigns[:autocomplete]}
@@ -8407,6 +9059,9 @@ defmodule Graphene.Internal.CoreComponents do
   attr :value, :string, default: nil, doc: "The value of the text area."
   attr :warn, :boolean, default: false, doc: "Specify if the currently value is warn."
   attr :warn_text, :string, default: nil, doc: "Message which is displayed if the value is warn."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -8420,6 +9075,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def select(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-select
       autofocus={assigns[:autofocus]}
@@ -8487,11 +9144,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :selected, :boolean, default: false, doc: "`true` to select this option."
   attr :value, :string, default: nil, doc: "The value."
   attr :text, :string, default: nil, doc: "Text for the select item."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def select_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-select-item
       disabled={assigns[:disabled]}
@@ -8516,11 +9178,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :disabled, :boolean, default: false, doc: "`true` to disable this option."
   attr :label, :string, default: nil, doc: "The label."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def select_item_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-select-item-group
       disabled={assigns[:disabled]}
@@ -8540,11 +9207,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :hide_label, :boolean, default: nil, doc: "Specify whether the label should be hidden."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def select_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-select-skeleton
       hide-label={assigns[:hide_label]}
@@ -8571,11 +9243,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :selected, :boolean, default: false, doc: "Specify the state of the selectable tag."
   attr :size, :string, default: "md", values: ["lg", "md", "sm"], doc: "The size of the tag."
   attr :text, :string, default: nil, doc: "Provide text to be rendered inside of a the tag."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def selectable_tag(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-selectable-tag
       disabled={assigns[:disabled]}
@@ -8618,11 +9295,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :name, :string, default: nil
   attr :selected, :boolean, default: false, doc: "`true` to show the selected state."
   attr :value, :string, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def selectable_tile(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-selectable-tile
       checkmark-label={assigns[:checkmark_label]}
@@ -8667,11 +9349,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :label, :string, default: nil, doc: "Label next to the shape."
   attr :text_size, :string, default: "12", doc: "Shape indicator size (12 or 14)"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def shape_indicator(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-shape-indicator
       kind={assigns[:kind]}
@@ -8711,6 +9398,9 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify if the side-nav will be persistent above the lg breakpoint"
 
   attr :usage_mode, :string, default: nil, doc: "Usage mode for the side nav."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
@@ -8720,6 +9410,8 @@ defmodule Graphene.Internal.CoreComponents do
       assigns
       |> merge_rest_class("cds--side-nav")
       |> merge_rest_class_if(assigns[:expanded], "cds--side-nav--expanded")
+
+    assigns = apply_events(assigns)
 
     ~H"""
     <cds-side-nav
@@ -8743,11 +9435,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def side_nav_divider(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-nav-divider {@rest}>
       {render_slot(@inner_block)}
@@ -8763,11 +9459,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def side_nav_items(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-nav-items {@rest}>
       {render_slot(@inner_block)}
@@ -8792,6 +9492,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :rel, :string, default: nil, doc: "The link type."
   attr :target, :string, default: nil, doc: "The link target."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :link, doc: "The link.", do: attr(:tag, :string)
@@ -8800,6 +9503,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def side_nav_link(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-nav-link
       active={assigns[:active]}
@@ -8852,12 +9557,17 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify if this is a large variation of the side nav menu"
 
   attr :title, :string, default: nil, doc: "The title text."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :title_icon, doc: "The icon.", do: attr(:tag, :string)
   slot :inner_block
 
   def side_nav_menu(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-nav-menu
       active={assigns[:active]}
@@ -8891,11 +9601,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :href, :string, default: nil, doc: "Link `href`."
   attr :target, :string, default: nil, doc: "Link `target`."
   attr :title, :string, default: nil, doc: "The title."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def side_nav_menu_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-nav-menu-item
       active={assigns[:active]}
@@ -8976,11 +9691,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :slide_in, :boolean, default: false, doc: "Determines if this panel slides in"
   attr :title, :any, default: nil, doc: "Sets the title text"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def side_panel(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-side-panel
       animate-title={assigns[:animate_title]}
@@ -9013,11 +9733,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def skeleton_icon(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-skeleton-icon {@rest}>
       {render_slot(@inner_block)}
@@ -9037,11 +9761,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Specify optional classes to be added to your SkeletonText"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def skeleton_placeholder(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-skeleton-placeholder
       optional-classes={assigns[:optional_classes]}
@@ -9077,11 +9805,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "100%",
     doc: "width (in px or %) of single line of text or max-width of paragraph lines"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def skeleton_text(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-skeleton-text
       heading={assigns[:heading]}
@@ -9111,11 +9843,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Skip to main content",
     doc: "The assistive text for the link,"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def skip_to_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-skip-to-content
       href={assigns[:href]}
@@ -9183,6 +9919,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :controlled, :boolean, default: nil, doc: "Whether the slider is controlled."
   attr :format_label, :any, default: nil, doc: "Formatter for the slider label."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :label_text, doc: "The label text.", do: attr(:tag, :string)
@@ -9192,6 +9931,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def slider(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-slider
       disabled={assigns[:disabled]}
@@ -9272,11 +10013,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "true to specify if the control should display warn icon and text."
 
   attr :required, :boolean, default: nil, doc: "Whether the input is required."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def slider_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-slider-input
       disabled={assigns[:disabled]}
@@ -9305,11 +10051,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :two_handles, :boolean, default: nil, doc: "`true` to show two handles."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def slider_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-slider-skeleton
       two-handles={assigns[:two_handles]}
@@ -9391,11 +10142,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Show information",
     doc: "Specify the text that will be provided to the aria-label of the `Slug` button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def slug(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-slug
       ai-text={assigns[:ai_text]}
@@ -9513,11 +10268,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["button", "reset", "submit"],
     doc: "Button type."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def slug_action_button(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-slug-action-button
       autofocus={assigns[:autofocus]}
@@ -9582,11 +10341,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Turn on when passing in custom value to 'gap' attribute (ie. gap=\"2rem\")"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def stack(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-stack
       gap={assigns[:gap]}
@@ -9620,11 +10383,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `name` attribute for the `<input>` for selection.\nIf present, this structured list will be a selectable one."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list
       condensed={assigns[:condensed]}
@@ -9645,11 +10412,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_body(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-body {@rest}>
       {render_slot(@inner_block)}
@@ -9665,11 +10436,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_cell(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-cell {@rest}>
       {render_slot(@inner_block)}
@@ -9685,11 +10460,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_head(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-head {@rest}>
       {render_slot(@inner_block)}
@@ -9705,11 +10484,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_header_cell(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-header-cell {@rest}>
       {render_slot(@inner_block)}
@@ -9724,11 +10507,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_header_cell_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-header-cell-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -9749,11 +10536,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `name` attribute for the `<input>` for selection.\nIf present, this structured list header row will show its selectable version of the UI."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_header_row(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-header-row
       selection-name={assigns[:selection_name]}
@@ -9789,11 +10580,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "The `value` attribute for the `<input>` for selection."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def structured_list_row(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-structured-list-row
       selected={assigns[:selected]}
@@ -9815,11 +10610,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def switcher(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-switcher {@rest}>
       {render_slot(@inner_block)}
@@ -9835,11 +10634,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def switcher_divider(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-switcher-divider {@rest}>
       {render_slot(@inner_block)}
@@ -9865,11 +10668,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: "0",
     doc: "Specify if this is a large variation of the side nav link"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def switcher_item(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-switcher-item
       href={assigns[:href]}
@@ -9916,11 +10723,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The `value` attribute that is set to the parent `<cds-content-switcher>`\nwhen this content switcher item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tab(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tab
       align={assigns[:align]}
@@ -9946,11 +10757,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tab_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tab-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -9986,11 +10801,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Numeric representation of the total number of items in a table.\nThis number is used in the select all button text\nThis property controls the rendering of the Select all button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_batch_actions(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-batch-actions
       active={assigns[:active]}
@@ -10017,11 +10836,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "TODO: Uncomment when Carbon fully implements sticky header\nSpecify whether the header should be sticky.\nStill experimental: may not work with every combination of table props"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_body(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-body
       use-zebra-styles={assigns[:use_zebra_styles]}
@@ -10046,11 +10869,16 @@ defmodule Graphene.Internal.CoreComponents do
       "Specify whether the overflow menu (if it exists) should be shown always, or only on hover"
 
   attr :size, :any, default: nil, doc: "The table size."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_cell(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-cell
       overflow-menu-on-hover={assigns[:overflow_menu_on_hover]}
@@ -10070,11 +10898,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_cell_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-cell-content {@rest}>
       {render_slot(@inner_block)}
@@ -10153,6 +10985,9 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "true if AI Labels are added in the rows"
 
   attr :with_row_slugs, :boolean, default: false, doc: "true if slugs are added in the rows"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :title, doc: "Title", do: attr(:tag, :string)
@@ -10161,6 +10996,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def table_element(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table
       batch-expansion={assigns[:batch_expansion]}
@@ -10218,11 +11055,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "`true` if the previous table row has been selected"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_expanded_row(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-expanded-row
       colspan={assigns[:colspan]}
@@ -10245,11 +11086,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_head(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-head {@rest}>
       {render_slot(@inner_block)}
@@ -10298,11 +11143,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "The table sort direction.\nIf present, this table header cell will have a sorting UI. Choose between `ascending` or `descending`."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_header_cell(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-header-cell
       expandable={assigns[:expandable]}
@@ -10326,11 +11175,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_header_description(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-header-description {@rest}>
       {render_slot(@inner_block)}
@@ -10396,11 +11249,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "The `value` attribute for the `<input>` for selection."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_header_row(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-header-row
       batch-expansion={assigns[:batch_expansion]}
@@ -10428,11 +11285,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_header_title(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-header-title {@rest}>
       {render_slot(@inner_block)}
@@ -10500,11 +11361,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the control should be a radio button or inline checkbox."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_row(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-row
       batch-expansion={assigns[:batch_expansion]}
@@ -10554,11 +11419,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Specify if the table toolbar should be rendered as part of the skeleton."
 
   attr :zebra, :boolean, default: false, doc: "true to add useZebraStyles striping."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-skeleton
       column-count={assigns[:column_count]}
@@ -10583,11 +11453,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :size, :any, default: nil, doc: "Toolbar size"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_toolbar(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-toolbar
       size={assigns[:size]}
@@ -10611,11 +11486,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "`true` if this batch actions bar is active."
 
   attr :size, :any, default: nil, doc: "Table toolbar contents size"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_toolbar_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-toolbar-content
       has-batch-actions={assigns[:has_batch_actions]}
@@ -10671,11 +11551,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :type, :string, default: nil, doc: "The `<input>` name."
   attr :value, :string, default: nil, doc: "The value."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def table_toolbar_search(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-table-toolbar-search
       autocomplete={assigns[:autocomplete]}
@@ -10747,11 +11632,16 @@ defmodule Graphene.Internal.CoreComponents do
   attr :type, :string, default: "", values: ["", "container", "contained"], doc: "Tabs type."
   attr :value, :string, default: nil, doc: "The value of the selected item."
   attr :disabled, :boolean, default: nil, doc: "Whether the tabs are disabled."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tabs(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tabs
       icon={assigns[:icon]}
@@ -10781,11 +11671,16 @@ defmodule Graphene.Internal.CoreComponents do
   """
 
   attr :contained, :boolean, default: false, doc: "Provide the type of Tab"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tabs_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tabs-skeleton
       contained={assigns[:contained]}
@@ -10837,11 +11732,15 @@ defmodule Graphene.Internal.CoreComponents do
     ],
     doc: "The type of the tag."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tag(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tag
       disabled={assigns[:disabled]}
@@ -10872,11 +11771,15 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Specify the size of the Tag. Currently supports either `sm`,\n`md` (default) or `lg` sizes."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tag_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tag-skeleton
       size={assigns[:size]}
@@ -10934,11 +11837,15 @@ defmodule Graphene.Internal.CoreComponents do
     values: ["narrow", "wide"],
     doc: "The width of the influencer section, 'narrow' or 'wide'."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tearsheet(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tearsheet
       close-icon-description={assigns[:close_icon_description]}
@@ -11061,6 +11968,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -11074,6 +11983,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def text_input(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-text-input
       autocomplete={assigns[:autocomplete]}
@@ -11143,11 +12054,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the label should be hidden, or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def text_input_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-text-input-skeleton
       hide-label={assigns[:hide_label]}
@@ -11180,8 +12095,9 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :cols, :any, default: nil, doc: "The number of columns for the textarea to show by default"
 
-  attr :counter_mode, :any,
-    default: nil,
+  attr :counter_mode, :string,
+    default: "character",
+    values: ["character", "word"],
     doc: "Specify the method used for calculating the counter number"
 
   attr :disabled, :boolean, default: false, doc: "Controls the disabled state of the input"
@@ -11273,6 +12189,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :helper_text, doc: "The helper text.", do: attr(:tag, :string)
@@ -11286,6 +12204,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def textarea(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-textarea
       autocomplete={assigns[:autocomplete]}
@@ -11359,11 +12279,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the label should be hidden, or not"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def textarea_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-textarea-skeleton
       hide-label={assigns[:hide_label]}
@@ -11389,12 +12313,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc:
       "Specify if the `Tile` component should be rendered with rounded corners.\nOnly valid when `ai-label` prop is present"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :decorator, doc: "Decorator content.", do: attr(:tag, :string)
   slot :inner_block
 
   def tile(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tile
       color-scheme={assigns[:color_scheme]}
@@ -11420,11 +12348,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tile_above_the_fold_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tile-above-the-fold-content {@rest}>
       {render_slot(@inner_block)}
@@ -11439,11 +12371,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tile_below_the_fold_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tile-below-the-fold-content {@rest}>
       {render_slot(@inner_block)}
@@ -11473,12 +12409,17 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :radio_tiles, :any, default: nil
   attr :selectable_tiles, :any, default: nil
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :legend, doc: "Legend content.", do: attr(:tag, :string)
   slot :inner_block
 
   def tile_group(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tile-group
       currentRadioSelection={assigns[:current_radio_selection]}
@@ -11545,6 +12486,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: "Warning message.",
     doc: "Provide the text that is displayed when the control is in a warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :label_text, doc: "The label text.", do: attr(:tag, :string)
@@ -11561,6 +12504,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def time_picker(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-time-picker
       disabled={assigns[:disabled]}
@@ -11630,11 +12575,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "Size of the time picker select"
 
   attr :value, :string, default: nil, doc: "The value of the select."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def time_picker_select(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-time-picker-select
       default-value={assigns[:default_value]}
@@ -11679,9 +12629,11 @@ defmodule Graphene.Internal.CoreComponents do
     default: nil,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any,
+  attr :timeout, :string,
     default: nil,
     doc: "Specify an optional duration the notification should be closed in"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
 
   attr :rest, :global
 
@@ -11690,6 +12642,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def toast_notification(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-toast-notification
       caption={assigns[:caption]}
@@ -11778,6 +12732,8 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Provide the text that is displayed when the Checkbox is in a warn state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :checked_text, doc: "The text for the checked state.", do: attr(:tag, :string)
@@ -11786,6 +12742,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def toggle(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-toggle
       checked={assigns[:checked]}
@@ -11846,11 +12804,15 @@ defmodule Graphene.Internal.CoreComponents do
 
   """
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def toggle_skeleton(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-toggle-skeleton {@rest}>
       {render_slot(@inner_block)}
@@ -11896,6 +12858,9 @@ defmodule Graphene.Internal.CoreComponents do
   attr :button_label, :string, default: "Show information", doc: "The label for the toggle button"
   attr :default_open, :boolean, default: false, doc: "Set whether toggletip is open by default."
   attr :open, :boolean, default: false, doc: "Set whether toggletip is open"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :body_text, doc: "Body text content for the toggletip.", do: attr(:tag, :string)
@@ -11903,6 +12868,8 @@ defmodule Graphene.Internal.CoreComponents do
   slot :inner_block
 
   def toggletip(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-toggletip
       alignment={assigns[:alignment]}
@@ -12008,11 +12975,15 @@ defmodule Graphene.Internal.CoreComponents do
     default: false,
     doc: "Specify whether the tooltip should be open when it first renders"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tooltip(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tooltip
       align={assigns[:align]}
@@ -12084,11 +13055,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "The shadow slot this popover content should be in."
 
   attr :tab_tip, :boolean, default: false, doc: "Render the component using the tab tip variant"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tooltip_content(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tooltip-content
       align={assigns[:align]}
@@ -12140,11 +13116,16 @@ defmodule Graphene.Internal.CoreComponents do
     doc: "when adding an href to control the click functionality"
 
   attr :selected, :boolean, default: false, doc: "sets if tree node is selected"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tree_node(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tree-node
       active={assigns[:active]}
@@ -12185,11 +13166,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :controlled, :boolean, default: nil, doc: "Whether the tree view is controlled."
   attr :links, :boolean, default: nil, doc: "Whether the tree view renders links."
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def tree_view(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-tree-view
       hide-label={assigns[:hide_label]}
@@ -12214,11 +13200,16 @@ defmodule Graphene.Internal.CoreComponents do
 
   attr :is_expressive, :boolean, default: false, doc: "`true` if expressive theme enabled."
   attr :nested, :boolean, default: false, doc: "Specify whether the list is nested, or not"
+
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
+
   attr :rest, :global
 
   slot :inner_block
 
   def unordered_list(assigns) do
+    assigns = apply_events(assigns)
+
     ~H"""
     <cds-unordered-list
       is-expressive={assigns[:is_expressive]}

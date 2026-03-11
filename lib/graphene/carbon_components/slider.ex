@@ -51,12 +51,13 @@ defmodule Graphene.CarbonComponents.Slider do
 
   attr :controlled, :boolean, doc: "Whether the slider is controlled."
   attr :format_label, :any, doc: "Formatter for the slider label."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
   slot :label_text, doc: "The label text."
@@ -66,15 +67,6 @@ defmodule Graphene.CarbonComponents.Slider do
   slot :inner_block
 
   def slider(assigns) do
-    # Carbon's slider uses number-typed reactive properties; when attributes are absent,
-    # Lit can set those properties to `null`, causing crashes (e.g. `null.toString()`).
-    # Provide safe defaults that match Carbon's constructor defaults.
-    assigns =
-      assigns
-      |> assign(:min, if(is_nil(assigns[:min]) || assigns[:min] == "", do: "0", else: assigns[:min]))
-      |> assign(:max, if(is_nil(assigns[:max]) || assigns[:max] == "", do: "100", else: assigns[:max]))
-      |> assign(:step, if(is_nil(assigns[:step]) || assigns[:step] == "", do: "1", else: assigns[:step]))
-
     FormComponents.slider(assigns)
   end
 
@@ -102,16 +94,11 @@ defmodule Graphene.CarbonComponents.Slider do
   attr :value, :any, doc: "The value."
   attr :warn, :boolean, doc: "true to specify if the control should display warn icon and text."
   attr :required, :boolean, doc: "Whether the input is required."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
   def slider_input(assigns) do
-    assigns =
-      assigns
-      |> assign(:min, if(is_nil(assigns[:min]) || assigns[:min] == "", do: "0", else: assigns[:min]))
-      |> assign(:max, if(is_nil(assigns[:max]) || assigns[:max] == "", do: "100", else: assigns[:max]))
-      |> assign(:step, if(is_nil(assigns[:step]) || assigns[:step] == "", do: "1", else: assigns[:step]))
-
     CoreComponents.slider_input(assigns)
   end
 
@@ -122,6 +109,7 @@ defmodule Graphene.CarbonComponents.Slider do
 
   """
   attr :two_handles, :boolean, doc: "`true` to show two handles."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -80,6 +80,7 @@ defmodule Graphene.CarbonComponents.Button do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :icon, doc: "Icon."
   slot :inner_block
@@ -94,6 +95,7 @@ defmodule Graphene.CarbonComponents.Button do
   Button skeleton.
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

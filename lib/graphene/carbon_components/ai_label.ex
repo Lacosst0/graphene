@@ -69,6 +69,7 @@ defmodule Graphene.CarbonComponents.AiLabel do
     default: "xs"
 
   attr :slot, :string, default: "ai-label"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :body_text, doc: "Content for the AI label body."
   slot :actions, doc: "Action buttons for the AI label."
@@ -89,24 +90,28 @@ defmodule Graphene.CarbonComponents.AiLabel do
       |> assign_new(:previous_value, fn -> nil end)
       |> assign_new(:revert_active, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :ai_text,
+        :ai_text_label,
+        :alignment,
+        :alignment_axis_offset,
+        :autoalign,
+        :button_label,
+        :default_open,
+        :kind,
+        :open,
+        :previous_value,
+        :revert_active,
+        :revert_label,
+        :size,
+        :slot
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.ai_label
-      ai_text={assigns[:ai_text]}
-      ai_text_label={assigns[:ai_text_label]}
-      alignment={assigns[:alignment]}
-      alignment_axis_offset={assigns[:alignment_axis_offset]}
-      autoalign={assigns[:autoalign]}
-      button_label={assigns[:button_label]}
-      default_open={assigns[:default_open]}
-      kind={assigns[:kind]}
-      open={assigns[:open]}
-      previous_value={assigns[:previous_value]}
-      revert_active={assigns[:revert_active]}
-      revert_label={assigns[:revert_label]}
-      size={assigns[:size]}
-      slot={assigns[:slot]}
-      {@rest}
-    >
+    <CoreComponents.ai_label {@component_attrs} {@rest}>
       <.dynamic_tag :for={body <- @body_text} tag_name={Map.get(body, :tag, "div")} slot="body-text">
         {render_slot(body)}
       </.dynamic_tag>
@@ -205,6 +210,7 @@ defmodule Graphene.CarbonComponents.AiLabel do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

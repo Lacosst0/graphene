@@ -22,6 +22,7 @@ defmodule Graphene.CarbonComponents.Selectable do
   attr :selected, :boolean, doc: "Specify the state of the selectable tag."
   attr :size, :string, doc: "The size of the tag.", values: ["lg", "md", "sm"], default: "md"
   attr :text, :string, doc: "Provide text to be rendered inside of a the tag."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -52,6 +53,7 @@ defmodule Graphene.CarbonComponents.Selectable do
   attr :name, :string
   attr :selected, :boolean, doc: "`true` to show the selected state."
   attr :value, :string
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -16,8 +16,9 @@ defmodule Graphene.CodeGen.Component.Attr do
   }
   ```
   """
-  def parse(%{"name" => name} = data) do
-    type = extract_type(data)
+  def parse(%{"name" => name} = data, opts \\ []) do
+    attr_type_module = Keyword.get(opts, :attr_type_module, AttrType)
+    type = extract_type(data, attr_type_module)
     htmlname = extract_htmlname(data)
     atomname = extract_atomname(data)
     opts = extract_type_opts(data, type)
@@ -46,8 +47,8 @@ defmodule Graphene.CodeGen.Component.Attr do
     |> Util.atom_repr()
   end
 
-  defp extract_type(data) do
-    Map.get(data, "type") |> AttrType.new()
+  defp extract_type(data, attr_type_module) do
+    Map.get(data, "type") |> attr_type_module.new()
   end
 
   defp extract_doc_opts(%{"description" => doc}), do: [doc: doc]

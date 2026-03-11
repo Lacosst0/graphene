@@ -47,6 +47,7 @@ defmodule Graphene.CarbonComponents.Tag do
     ],
     default: "gray"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -67,6 +68,7 @@ defmodule Graphene.CarbonComponents.Tag do
     values: ["lg", "md", "sm"],
     default: "sm"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
