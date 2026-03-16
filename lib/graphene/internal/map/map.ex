@@ -17,10 +17,17 @@ defmodule Graphene.CarbonComponents.Custom.Map do
 
   ## Events
 
-  * `graphene:marker-click` - Marker selection changed.
+  * `graphene:map-marker-click` - Marker selection changed.
+
+  ## Actions
+
+  * `graphene:map-add-markers` - Adds multiple markers to the map.
+  * `graphene:map-focus-marker` - Focuses a marker on the map.
+  * `graphene:map-remove-markers` - Removes multiple markers from the map.
+  * `graphene:map-clear-markers` - Clears all markers from the map.
+
   """
 
-  # document events
   # check repo for used events
 
   attr :id, :string, required: true

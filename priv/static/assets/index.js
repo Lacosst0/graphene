@@ -26721,12 +26721,6 @@ var MapLibreHook = {
   },
   registerHandlers() {
     this.handleEvent(
-      "graphene:map-add-marker",
-      ({ id, data }) => {
-        this.markers[id] = this.createMarker(id, data);
-      }
-    );
-    this.handleEvent(
       "graphene:map-add-markers",
       ({ data }) => {
         for (const id in data) {
@@ -26741,16 +26735,6 @@ var MapLibreHook = {
         marker.getElement().dispatchEvent(new MouseEvent("click", { bubbles: true }));
       }
     });
-    this.handleEvent(
-      "graphene:map-remove-marker",
-      ({ id }) => {
-        const marker = this.markers[id];
-        if (marker) {
-          marker.remove();
-          delete this.markers[id];
-        }
-      }
-    );
     this.handleEvent(
       "graphene:map-remove-markers",
       ({ ids }) => {

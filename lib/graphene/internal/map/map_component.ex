@@ -4,10 +4,9 @@ defmodule Graphene.CarbonComponents.MapComponent do
   use Phoenix.LiveComponent
 
   @js_events [
-    "graphene:map-add-marker",
     "graphene:map-add-markers",
     "graphene:map-focus-marker",
-    "graphene:map-remove-marker",
+    "graphene:map-remove-markers",
     "graphene:map-clear-markers"
   ]
 

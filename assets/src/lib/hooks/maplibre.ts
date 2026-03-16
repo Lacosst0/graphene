@@ -87,13 +87,6 @@ export const MapLibreHook: MapLibreLiveHook = {
 
   registerHandlers() {
     this.handleEvent!(
-      "graphene:map-add-marker",
-      ({ id, data }: { id: string; data: MarkerData }) => {
-        this.markers[id] = this.createMarker(id, data);
-      }
-    );
-
-    this.handleEvent!(
       "graphene:map-add-markers",
       ({ data }: { data: Record<string, MarkerData> }) => {
         for (const id in data) {
@@ -112,16 +105,6 @@ export const MapLibreHook: MapLibreLiveHook = {
       }
     });
 
-    this.handleEvent!(
-      "graphene:map-remove-marker",
-      ({ id }: { id: string }) => {
-        const marker = this.markers[id];
-        if (marker) {
-          marker.remove();
-          delete this.markers[id];
-        }
-      }
-    );
     this.handleEvent!(
       "graphene:map-remove-markers",
       ({ ids }: { ids: string[] }) => {
