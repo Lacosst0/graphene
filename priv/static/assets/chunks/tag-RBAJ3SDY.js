@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:priv/static/assets/chunks/tag-RBAJ3SDY.js
 import "./chunk-S4VSMAQ5.js";
 import "./chunk-IKN5OYO4.js";
 import "./chunk-BVIX3CGA.js";
@@ -6,15 +5,6 @@ import {
   _16
 } from "./chunk-YGK4BVA2.js";
 import "./chunk-Z4HIH6RI.js";
-========
-import "./chunk-LSZ2PVLU.js";
-import "./chunk-X7WRA7XG.js";
-import "./chunk-HFGTZQQE.js";
-import {
-  _16
-} from "./chunk-YGK4BVA2.js";
-import "./chunk-DFLJB7UB.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/tag-APKQYZAW.js
 import "./chunk-GPZZH3QI.js";
 import "./chunk-4NCRUXEY.js";
 import {
@@ -26,35 +16,21 @@ import {
 import "./chunk-ML2VKJHQ.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/tag-RBAJ3SDY.js
 } from "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/tag-APKQYZAW.js
 import {
   FocusMixin
 } from "./chunk-73FE5HOG.js";
 import {
   e as e2
-<<<<<<<< HEAD:priv/static/assets/chunks/tag-RBAJ3SDY.js
 } from "./chunk-DT7CIZC4.js";
-========
-} from "./chunk-YOLTZNLE.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/tag-APKQYZAW.js
 import "./chunk-M2VBID3H.js";
 import {
   e,
   n,
   r
-<<<<<<<< HEAD:priv/static/assets/chunks/tag-RBAJ3SDY.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/tag-APKQYZAW.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -66,13 +42,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/tag-RBAJ3SDY.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/tag-APKQYZAW.js
 
 // node_modules/@carbon/web-components/es/components/tag/defs.js
 var TAG_SIZE;

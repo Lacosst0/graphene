@@ -1,16 +1,9 @@
 import {
   e
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-KORI2WJR.js
 } from "./chunk-DT7CIZC4.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-YOLTZNLE.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-BZXZJ7DW.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -22,11 +15,7 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-KORI2WJR.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-BZXZJ7DW.js
 
 // node_modules/@carbon/web-components/es/components/skeleton-text/defs.js
 var SKELETON_TEXT_TYPE;

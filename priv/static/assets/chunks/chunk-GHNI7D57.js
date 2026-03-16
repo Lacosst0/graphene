@@ -1,6 +1,5 @@
 import {
   getLoadingIcon
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-GHNI7D57.js
 } from "./chunk-GRCPM6CP.js";
 import {
   e
@@ -8,15 +7,6 @@ import {
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-D2ITTM54.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-XKPQ6AHK.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -28,11 +18,7 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-GHNI7D57.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-XKPQ6AHK.js
 
 // node_modules/@carbon/web-components/es/components/loading/defs.js
 var LOADING_TYPE;

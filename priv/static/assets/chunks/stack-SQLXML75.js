@@ -1,10 +1,6 @@
 import {
   n
-<<<<<<<< HEAD:priv/static/assets/chunks/stack-SQLXML75.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/stack-2YKDPWSA.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -16,13 +12,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/stack-SQLXML75.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/stack-2YKDPWSA.js
 
 // node_modules/@carbon/web-components/es/components/stack/stack.scss.js
 var styles = i([".cds--stack-horizontal,:host(cds-stack[orientation=horizontal]) div{-moz-column-gap:var(--cds-stack-gap,0);column-gap:var(--cds-stack-gap,0);display:inline-grid;grid-auto-flow:column}.cds--stack-vertical,:host(cds-stack[orientation=vertical]) div{display:grid;grid-auto-flow:row;row-gap:var(--cds-stack-gap,0)}.cds--stack-scale-1{--cds-stack-gap:0.125rem}.cds--stack-scale-2{--cds-stack-gap:0.25rem}.cds--stack-scale-3{--cds-stack-gap:0.5rem}.cds--stack-scale-4{--cds-stack-gap:0.75rem}.cds--stack-scale-5{--cds-stack-gap:1rem}.cds--stack-scale-6{--cds-stack-gap:1.5rem}.cds--stack-scale-7{--cds-stack-gap:2rem}.cds--stack-scale-8{--cds-stack-gap:2.5rem}.cds--stack-scale-9{--cds-stack-gap:3rem}.cds--stack-scale-10{--cds-stack-gap:4rem}.cds--stack-scale-11{--cds-stack-gap:5rem}.cds--stack-scale-12{--cds-stack-gap:6rem}.cds--stack-scale-13{--cds-stack-gap:10rem}:host(cds-stack) .cds--stack-scale-1{--cds-stack-gap:0.125rem}:host(cds-stack) .cds--stack-scale-2{--cds-stack-gap:0.25rem}:host(cds-stack) .cds--stack-scale-3{--cds-stack-gap:0.5rem}:host(cds-stack) .cds--stack-scale-4{--cds-stack-gap:0.75rem}:host(cds-stack) .cds--stack-scale-5{--cds-stack-gap:1rem}:host(cds-stack) .cds--stack-scale-6{--cds-stack-gap:1.5rem}:host(cds-stack) .cds--stack-scale-7{--cds-stack-gap:2rem}:host(cds-stack) .cds--stack-scale-8{--cds-stack-gap:2.5rem}:host(cds-stack) .cds--stack-scale-9{--cds-stack-gap:3rem}:host(cds-stack) .cds--stack-scale-10{--cds-stack-gap:4rem}:host(cds-stack) .cds--stack-scale-11{--cds-stack-gap:5rem}:host(cds-stack) .cds--stack-scale-12{--cds-stack-gap:6rem}:host(cds-stack) .cds--stack-scale-13{--cds-stack-gap:10rem}"]);

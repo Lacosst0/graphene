@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:priv/static/assets/chunks/ai-skeleton-DO7L46SN.js
 import "./chunk-HYHYMB3O.js";
 import "./chunk-WEUEINOS.js";
 import "./chunk-KORI2WJR.js";
@@ -7,16 +6,6 @@ import "./chunk-M2VBID3H.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-import "./chunk-TTZMATUR.js";
-import "./chunk-32LIKG53.js";
-import "./chunk-BZXZJ7DW.js";
-import "./chunk-YOLTZNLE.js";
-import "./chunk-M2VBID3H.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/ai-skeleton-OXJZMDKY.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -28,13 +17,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/ai-skeleton-DO7L46SN.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/ai-skeleton-OXJZMDKY.js
 
 // node_modules/@carbon/web-components/es/components/ai-skeleton/ai-skeleton.scss.js
 var styles = i(['@keyframes cds--hide-feedback{0%{opacity:1;visibility:inherit}to{opacity:0;visibility:hidden}}@keyframes cds--show-feedback{0%{opacity:0;visibility:hidden}to{opacity:1;visibility:inherit}}@keyframes cds--skeleton{0%{opacity:.3;transform:scaleX(0);transform-origin:left}20%{opacity:1;transform:scaleX(1);transform-origin:left}28%{transform:scaleX(1);transform-origin:right}51%{transform:scaleX(0);transform-origin:right}58%{transform:scaleX(0);transform-origin:right}82%{transform:scaleX(1);transform-origin:right}83%{transform:scaleX(1);transform-origin:left}96%{transform:scaleX(0);transform-origin:left}to{opacity:.3;transform:scaleX(0);transform-origin:left}}@keyframes ai-skeleton-animation{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}.cds--icon--skeleton{background:var(--cds-skeleton-background,#e8e8e8);border:none;box-shadow:none;padding:0;pointer-events:none;position:relative}.cds--icon--skeleton:active,.cds--icon--skeleton:focus,.cds--icon--skeleton:hover{border:none;cursor:default;outline:none}.cds--icon--skeleton:before{animation:cds--skeleton 3s ease-in-out infinite;background:var(--cds-skeleton-element,#c6c6c6);block-size:100%;content:"";inline-size:100%;inset-inline-start:0;position:absolute;will-change:transform-origin,transform,opacity}@media (prefers-reduced-motion:reduce){.cds--icon--skeleton:before{animation:none}}@media (forced-colors:active),screen and (-ms-high-contrast:active){.cds--icon--skeleton{background:CanvasText}.cds--icon--skeleton:before{background:Canvas;forced-color-adjust:none}}.cds--icon--skeleton{block-size:1rem;display:inline-block;inline-size:1rem}.cds--skeleton__placeholder{background:var(--cds-skeleton-background,#e8e8e8);border:none;box-shadow:none;padding:0;pointer-events:none;position:relative}.cds--skeleton__placeholder:active,.cds--skeleton__placeholder:focus,.cds--skeleton__placeholder:hover{border:none;cursor:default;outline:none}.cds--skeleton__placeholder:before{animation:cds--skeleton 3s ease-in-out infinite;background:var(--cds-skeleton-element,#c6c6c6);block-size:100%;content:"";inline-size:100%;inset-inline-start:0;position:absolute;will-change:transform-origin,transform,opacity}@media (prefers-reduced-motion:reduce){.cds--skeleton__placeholder:before{animation:none}}@media (forced-colors:active),screen and (-ms-high-contrast:active){.cds--skeleton__placeholder{background:CanvasText}.cds--skeleton__placeholder:before{background:Canvas;forced-color-adjust:none}}.cds--skeleton__placeholder{block-size:6.25rem;inline-size:6.25rem}.cds--skeleton__text{background:var(--cds-skeleton-background,#e8e8e8);border:none;box-shadow:none;padding:0;pointer-events:none;position:relative}.cds--skeleton__text:active,.cds--skeleton__text:focus,.cds--skeleton__text:hover{border:none;cursor:default;outline:none}.cds--skeleton__text:before{animation:cds--skeleton 3s ease-in-out infinite;background:var(--cds-skeleton-element,#c6c6c6);block-size:100%;content:"";inline-size:100%;inset-inline-start:0;position:absolute;will-change:transform-origin,transform,opacity}@media (prefers-reduced-motion:reduce){.cds--skeleton__text:before{animation:none}}@media (forced-colors:active),screen and (-ms-high-contrast:active){.cds--skeleton__text{background:CanvasText}.cds--skeleton__text:before{background:Canvas;forced-color-adjust:none}}.cds--skeleton__text{block-size:1rem;inline-size:100%;margin-block-end:.5rem}.cds--skeleton__heading{block-size:1.5rem}.cds--skeleton__icon--ai,.cds--skeleton__placeholder--ai,.cds--skeleton__text--ai{background:var(--cds-ai-skeleton-background,#d0e2ff);overflow:hidden}.cds--skeleton__icon--ai:before,.cds--skeleton__placeholder--ai:before,.cds--skeleton__text--ai:before{animation:ai-skeleton-animation 1.25s ease-in-out infinite;background:linear-gradient(90deg,rgba(69,137,255,0) 0,rgba(69,137,255,.5) 50%,rgba(69,137,255,0))}.cds--skeleton__icon--ai:before,.cds--skeleton__placeholder--ai:before{inline-size:200%}.cds--skeleton__placeholder--ai{border-radius:.5rem}.cds--skeleton__text--ai{border-radius:1rem}.cds--skeleton__icon--ai{border-radius:.125rem}@media (forced-colors:active),screen and (-ms-high-contrast:active){.cds--skeleton__icon--ai,.cds--skeleton__placeholder--ai,.cds--skeleton__text--ai{background:CanvasText}.cds--skeleton__icon--ai:before,.cds--skeleton__placeholder--ai:before,.cds--skeleton__text--ai:before{background:Canvas}}:host(cds-ai-skeleton-text){display:block;inline-size:100%}:host(cds-ai-skeleton-placeholder){display:block}:host(cds-ai-skeleton-icon){display:inline-block}']);

@@ -4,11 +4,7 @@ import {
 import {
   CDSButton$1,
   buttonStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-TYORUGZU.js
 } from "./chunk-3LINNEX3.js";
-========
-} from "./chunk-JYACJRIF.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LNZKRNEJ.js
 import {
   HostListener
 } from "./chunk-5HWAKYGL.js";
@@ -17,33 +13,19 @@ import {
 } from "./chunk-TGGEFEEZ.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-TYORUGZU.js
 } from "./chunk-PBKNMGYX.js";
 import {
   o
 } from "./chunk-NZEGYYG7.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import {
-  o
-} from "./chunk-DAFPBEYU.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LNZKRNEJ.js
 import {
   FocusMixin
 } from "./chunk-73FE5HOG.js";
 import {
   e
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-TYORUGZU.js
 } from "./chunk-DT7CIZC4.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-YOLTZNLE.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LNZKRNEJ.js
 import {
   prefix,
   selectorTabbable
@@ -56,11 +38,7 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-TYORUGZU.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LNZKRNEJ.js
 
 // node_modules/@carbon/web-components/es/components/modal/defs.js
 var MODAL_SIZE;

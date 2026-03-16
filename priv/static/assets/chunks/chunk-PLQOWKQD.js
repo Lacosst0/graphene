@@ -1,7 +1,6 @@
 import {
   CDSButton$1,
   buttonStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-PLQOWKQD.js
 } from "./chunk-3LINNEX3.js";
 import {
   o
@@ -9,15 +8,6 @@ import {
 import {
   e
 } from "./chunk-DT7CIZC4.js";
-========
-} from "./chunk-JYACJRIF.js";
-import {
-  o
-} from "./chunk-DAFPBEYU.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-MU62I7LL.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -27,11 +17,7 @@ import {
 import {
   __decorate,
   b
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-PLQOWKQD.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-MU62I7LL.js
 
 // node_modules/@carbon/web-components/es/components/button/button-skeleton.js
 var CDSButtonSkeleton = class CDSButtonSkeleton2 extends CDSButton$1 {

@@ -1,15 +1,7 @@
 import {
   f,
   u
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-4GPN2FR3.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import {
-  __spreadProps,
-  __spreadValues
-} from "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-V6ENGPT2.js
 
 // node_modules/@lit/reactive-element/decorators/property.js
 var o = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };

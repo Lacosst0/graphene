@@ -1,6 +1,5 @@
 import {
   tooltipStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-3IRHWZXN.js
 } from "./chunk-IKN5OYO4.js";
 import {
   CDSButton$1,
@@ -9,16 +8,6 @@ import {
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-X7WRA7XG.js";
-import {
-  CDSButton$1,
-  buttonStyles
-} from "./chunk-JYACJRIF.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-F6EIPXKQ.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -30,11 +19,7 @@ import {
   __decorate,
   b,
   i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-3IRHWZXN.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-F6EIPXKQ.js
 
 // node_modules/@carbon/web-components/es/components/icon-button/defs.js
 var ICON_BUTTON_SIZE;

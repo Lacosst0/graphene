@@ -2,7 +2,6 @@ import {
   _16,
   moderate02
 } from "./chunk-FJVIGXT2.js";
-<<<<<<<< HEAD:priv/static/assets/chunks/side-panel-7GDI2ZHK.js
 import "./chunk-MMSDCSDZ.js";
 import {
   _20
@@ -17,22 +16,6 @@ import "./chunk-Z4HIH6RI.js";
 import "./chunk-GPZZH3QI.js";
 import "./chunk-4NCRUXEY.js";
 import "./chunk-3LINNEX3.js";
-========
-import "./chunk-63DGZXAG.js";
-import {
-  _20
-} from "./chunk-IQV2XA2Y.js";
-import "./chunk-F6EIPXKQ.js";
-import "./chunk-LSZ2PVLU.js";
-import "./chunk-X7WRA7XG.js";
-import "./chunk-HFGTZQQE.js";
-import "./chunk-SMM5AFXN.js";
-import "./chunk-MU62I7LL.js";
-import "./chunk-DFLJB7UB.js";
-import "./chunk-GPZZH3QI.js";
-import "./chunk-IGHLRMAE.js";
-import "./chunk-JYACJRIF.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/side-panel-WEQMIBH5.js
 import {
   HostListener
 } from "./chunk-5HWAKYGL.js";
@@ -42,32 +25,19 @@ import {
 import "./chunk-ML2VKJHQ.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/side-panel-7GDI2ZHK.js
 } from "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
 import "./chunk-NZEGYYG7.js";
 import "./chunk-73FE5HOG.js";
 import "./chunk-DT7CIZC4.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
-import "./chunk-DAFPBEYU.js";
-import "./chunk-73FE5HOG.js";
-import "./chunk-YOLTZNLE.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/side-panel-WEQMIBH5.js
 import "./chunk-M2VBID3H.js";
 import {
   e,
   n,
   o,
   r
-<<<<<<<< HEAD:priv/static/assets/chunks/side-panel-7GDI2ZHK.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/side-panel-WEQMIBH5.js
 import {
   prefix,
   selectorTabbable
@@ -79,13 +49,8 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/side-panel-7GDI2ZHK.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/side-panel-WEQMIBH5.js
 
 // node_modules/@carbon/web-components/es/components/side-panel/defs.js
 var SIDE_PANEL_SIZE;

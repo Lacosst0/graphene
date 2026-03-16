@@ -2,17 +2,10 @@ import {
   c,
   e,
   n as n2
-<<<<<<<< HEAD:priv/static/assets/chunks/grid-UG374PUW.js
 } from "./chunk-XCAJWYT4.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-CQL5YJQZ.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/grid-6F73WRNG.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -24,13 +17,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/grid-UG374PUW.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/grid-6F73WRNG.js
 
 // node_modules/@carbon/web-components/es/components/grid/grid-context.js
 var gridContext = n2(Symbol("GridContext"));

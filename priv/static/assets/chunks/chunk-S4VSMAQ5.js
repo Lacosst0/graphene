@@ -1,27 +1,16 @@
 import {
   tooltipStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-S4VSMAQ5.js
 } from "./chunk-IKN5OYO4.js";
 import {
   popoverStyles
 } from "./chunk-Z4HIH6RI.js";
-========
-} from "./chunk-X7WRA7XG.js";
-import {
-  popoverStyles
-} from "./chunk-DFLJB7UB.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LSZ2PVLU.js
 import {
   POPOVER_ALIGNMENT
 } from "./chunk-GPZZH3QI.js";
 import {
   n,
   r
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-S4VSMAQ5.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LSZ2PVLU.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -33,11 +22,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-S4VSMAQ5.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-LSZ2PVLU.js
 
 // node_modules/@carbon/web-components/es/components/tooltip/definition-tooltip.js
 var CDSDefinitionTooltip = class CDSDefinitionTooltip2 extends i {

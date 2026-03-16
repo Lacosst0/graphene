@@ -1,38 +1,21 @@
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 import "./chunk-KUYCW3RR.js";
 import "./chunk-W3YJEPQE.js";
-========
-import "./chunk-ADPYHSH7.js";
-import "./chunk-NE2DBVMP.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 import {
   _16,
   _162
 } from "./chunk-45FXHNJI.js";
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 import "./chunk-YX5YHKY5.js";
 import "./chunk-7WTC3Q2E.js";
-========
-import "./chunk-UBPLMH62.js";
-import "./chunk-2G6ZGNK6.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 import "./chunk-MCK3EHK6.js";
 import "./chunk-MNFEJBUN.js";
 import "./chunk-BVJDLJUP.js";
 import "./chunk-357XJSHN.js";
 import "./chunk-MZGBQGXZ.js";
 import "./chunk-KDBKJKDV.js";
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 import "./chunk-BRMJAK24.js";
 import "./chunk-PLQOWKQD.js";
 import "./chunk-3QPROXNA.js";
 import "./chunk-3LINNEX3.js";
-========
-import "./chunk-SMM5AFXN.js";
-import "./chunk-MU62I7LL.js";
-import "./chunk-3QPROXNA.js";
-import "./chunk-JYACJRIF.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 import {
   HostListener
 } from "./chunk-5HWAKYGL.js";
@@ -42,7 +25,6 @@ import {
 import "./chunk-ML2VKJHQ.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 } from "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
@@ -51,25 +33,11 @@ import {
   FocusMixin
 } from "./chunk-73FE5HOG.js";
 import "./chunk-DT7CIZC4.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
-import "./chunk-DAFPBEYU.js";
-import {
-  FocusMixin
-} from "./chunk-73FE5HOG.js";
-import "./chunk-YOLTZNLE.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 import "./chunk-M2VBID3H.js";
 import {
   e,
   n
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -81,13 +49,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/pagination-WVVD74N5.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/pagination-DQHWKNQ6.js
 
 // node_modules/@carbon/web-components/es/components/pagination/defs.js
 var PAGINATION_SIZE;

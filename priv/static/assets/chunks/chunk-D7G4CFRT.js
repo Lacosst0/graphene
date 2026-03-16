@@ -1,16 +1,11 @@
 import {
   CDSCheckbox$1
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-D7G4CFRT.js
 } from "./chunk-FB454AWH.js";
-========
-} from "./chunk-K2SMH2Z3.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-ZWCJ76NN.js
 import {
   HostListenerMixin
 } from "./chunk-TGGEFEEZ.js";
 import {
   o
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-D7G4CFRT.js
 } from "./chunk-NZEGYYG7.js";
 import {
   e as e2
@@ -19,16 +14,6 @@ import {
   e,
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-DAFPBEYU.js";
-import {
-  e as e2
-} from "./chunk-YOLTZNLE.js";
-import {
-  e,
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-ZWCJ76NN.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -39,11 +24,7 @@ import {
   __decorate,
   b,
   i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-D7G4CFRT.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-ZWCJ76NN.js
 
 // node_modules/@carbon/web-components/es/components/toggle/defs.js
 var TOGGLE_SIZE;

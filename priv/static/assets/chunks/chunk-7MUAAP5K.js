@@ -1,16 +1,9 @@
 import {
   createIconTemplate
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-7MUAAP5K.js
 } from "./chunk-OZCPNA5T.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-LDCWSK5M.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-7TWDVSG2.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -21,11 +14,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-7MUAAP5K.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-7TWDVSG2.js
 
 // node_modules/@carbon/web-components/es/components/icon/icon.js
 var CDSIcon = class CDSIcon2 extends i {

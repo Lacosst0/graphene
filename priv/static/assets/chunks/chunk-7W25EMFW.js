@@ -1,10 +1,6 @@
 import {
   styles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-7W25EMFW.js
 } from "./chunk-FB454AWH.js";
-========
-} from "./chunk-K2SMH2Z3.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-KIDXGIQH.js
 import {
   _16 as _162
 } from "./chunk-BVJDLJUP.js";
@@ -13,7 +9,6 @@ import {
 } from "./chunk-357XJSHN.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-7W25EMFW.js
 } from "./chunk-PBKNMGYX.js";
 import {
   e
@@ -21,15 +16,6 @@ import {
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-KIDXGIQH.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -40,11 +26,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-7W25EMFW.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-KIDXGIQH.js
 
 // node_modules/@carbon/web-components/es/components/checkbox/defs.js
 var CHECKBOX_ORIENTATION;

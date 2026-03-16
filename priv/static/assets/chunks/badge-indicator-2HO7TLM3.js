@@ -1,10 +1,6 @@
 import {
   n
-<<<<<<<< HEAD:priv/static/assets/chunks/badge-indicator-2HO7TLM3.js
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/badge-indicator-FRGJT4GI.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -16,13 +12,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/badge-indicator-2HO7TLM3.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/badge-indicator-FRGJT4GI.js
 
 // node_modules/@carbon/web-components/es/components/badge-indicator/badge-indicator.scss.js
 var styles = i([".cds--badge-indicator,:host(cds-badge-indicator){background:var(--cds-support-error,#da1e28);border-radius:100px;color:var(--cds-text-on-color,#fff);display:flex;font-size:var(--cds-helper-text-01-font-size,.75rem);inset-block-start:0;inset-inline-end:0;letter-spacing:var(--cds-helper-text-01-letter-spacing,.32px);line-height:var(--cds-helper-text-01-line-height,1.33333);margin-block-start:.5rem;margin-inline-end:.5rem;max-block-size:1rem;min-block-size:.5rem;min-inline-size:.5rem;padding:0 .25rem .125rem;position:absolute}.cds--badge-indicator--count,:host(cds-badge-indicator[count]){margin-block-start:.25rem;margin-inline-end:.25rem}"]);

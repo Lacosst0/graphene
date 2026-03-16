@@ -1,7 +1,6 @@
 import {
   BUTTON_KIND,
   buttonStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-BRMJAK24.js
 } from "./chunk-3LINNEX3.js";
 import {
   e
@@ -9,15 +8,6 @@ import {
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-JYACJRIF.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-SMM5AFXN.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -28,11 +18,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-BRMJAK24.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-SMM5AFXN.js
 
 // node_modules/@carbon/web-components/es/components/button/button-set-base.js
 var CDSButtonSetBase = class CDSButtonSetBase2 extends i {

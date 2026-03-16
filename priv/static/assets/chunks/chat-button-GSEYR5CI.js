@@ -1,6 +1,5 @@
 import {
   buttonStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chat-button-GSEYR5CI.js
 } from "./chunk-3LINNEX3.js";
 import "./chunk-5HWAKYGL.js";
 import "./chunk-TGGEFEEZ.js";
@@ -14,21 +13,6 @@ import "./chunk-M2VBID3H.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-JYACJRIF.js";
-import "./chunk-5HWAKYGL.js";
-import "./chunk-TGGEFEEZ.js";
-import "./chunk-ML2VKJHQ.js";
-import "./chunk-DAFPBEYU.js";
-import "./chunk-73FE5HOG.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
-import "./chunk-M2VBID3H.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chat-button-2G6YFUUS.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -41,13 +25,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/chat-button-GSEYR5CI.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chat-button-2G6YFUUS.js
 
 // node_modules/@carbon/web-components/es/components/chat-button/defs.js
 var CHAT_BUTTON_SIZE;

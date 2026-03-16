@@ -444,12 +444,7 @@ var y2 = class extends HTMLElement {
     super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
   }
   _$Ev() {
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-XGWNKZOA.js
     this._$ES = new Promise((t3) => this.enableUpdating = t3), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate?.(), this.constructor.l?.forEach((t3) => t3(this));
-========
-    var _a6;
-    this._$ES = new Promise((t3) => this.enableUpdating = t3), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate?.(), (_a6 = this.constructor.l) == null ? void 0 : _a6.forEach((t3) => t3(this));
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-3GZFZEMV.js
   }
   addController(t3) {
     (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t3), void 0 !== this.renderRoot && this.isConnected && t3.hostConnected?.();

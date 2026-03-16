@@ -5,13 +5,8 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/feature-flags-RNLZBHLT.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/feature-flags-Q4NEPPKH.js
 
 // node_modules/@carbon/web-components/es/feature-flags/es/index.js
 var enabled$1 = {};

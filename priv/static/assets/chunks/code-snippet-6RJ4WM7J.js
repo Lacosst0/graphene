@@ -1,17 +1,11 @@
 import {
   o
-<<<<<<<< HEAD:priv/static/assets/chunks/code-snippet-6RJ4WM7J.js
 } from "./chunk-FDDJ7C65.js";
 import "./chunk-OBC6E7TO.js";
-========
-} from "./chunk-OYHNH2VO.js";
-import "./chunk-HWEHT6S6.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/code-snippet-FEUR4BCG.js
 import {
   _16
 } from "./chunk-MZGBQGXZ.js";
 import "./chunk-KDBKJKDV.js";
-<<<<<<<< HEAD:priv/static/assets/chunks/code-snippet-6RJ4WM7J.js
 import "./chunk-4RS6TBMV.js";
 import "./chunk-3IRHWZXN.js";
 import "./chunk-S4VSMAQ5.js";
@@ -23,25 +17,11 @@ import "./chunk-Z4HIH6RI.js";
 import "./chunk-GPZZH3QI.js";
 import "./chunk-4NCRUXEY.js";
 import "./chunk-3LINNEX3.js";
-========
-import "./chunk-KVC6R5GK.js";
-import "./chunk-F6EIPXKQ.js";
-import "./chunk-LSZ2PVLU.js";
-import "./chunk-X7WRA7XG.js";
-import "./chunk-HFGTZQQE.js";
-import "./chunk-SMM5AFXN.js";
-import "./chunk-MU62I7LL.js";
-import "./chunk-DFLJB7UB.js";
-import "./chunk-GPZZH3QI.js";
-import "./chunk-IGHLRMAE.js";
-import "./chunk-JYACJRIF.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/code-snippet-FEUR4BCG.js
 import "./chunk-5HWAKYGL.js";
 import "./chunk-TGGEFEEZ.js";
 import "./chunk-ML2VKJHQ.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/code-snippet-6RJ4WM7J.js
 } from "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
@@ -54,20 +34,6 @@ import "./chunk-M2VBID3H.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
-import "./chunk-DAFPBEYU.js";
-import {
-  FocusMixin
-} from "./chunk-73FE5HOG.js";
-import "./chunk-YOLTZNLE.js";
-import "./chunk-M2VBID3H.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/code-snippet-FEUR4BCG.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -79,13 +45,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/code-snippet-6RJ4WM7J.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/code-snippet-FEUR4BCG.js
 
 // node_modules/@carbon/web-components/es/components/code-snippet/defs.js
 var CODE_SNIPPET_TYPE;

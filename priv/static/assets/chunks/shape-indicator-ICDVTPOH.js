@@ -1,6 +1,5 @@
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/shape-indicator-ICDVTPOH.js
 } from "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
@@ -8,15 +7,6 @@ import "./chunk-M2VBID3H.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
-import "./chunk-M2VBID3H.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/shape-indicator-W5S2UF7V.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -28,13 +18,8 @@ import {
   b,
   i,
   i2
-<<<<<<<< HEAD:priv/static/assets/chunks/shape-indicator-ICDVTPOH.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/shape-indicator-W5S2UF7V.js
 
 // node_modules/@carbon/web-components/es/components/shape-indicator/shape-indicator.scss.js
 var styles = i(['.cds--shape-indicator,:host(cds-shape-indicator){color:var(--cds-text-secondary,#525252);display:flex;font-size:var(--cds-helper-text-01-font-size,.75rem);letter-spacing:var(--cds-helper-text-01-letter-spacing,.32px);line-height:var(--cds-helper-text-01-line-height,1.33333)}.cds--shape-indicator svg,:host(cds-shape-indicator) svg{align-self:center;margin-inline-end:.5rem}.cds--shape-indicator--14,:host(cds-shape-indicator[text-size="14"]){font-size:var(--cds-body-compact-01-font-size,.875rem);font-weight:var(--cds-body-compact-01-font-weight,400);letter-spacing:var(--cds-body-compact-01-letter-spacing,.16px);line-height:var(--cds-body-compact-01-line-height,1.28572)}.cds--shape-indicator--failed,:host(cds-shape-indicator[kind=failed]) svg{fill:var(--cds-status-red,#da1e28)}.cds--shape-indicator--critical,:host(cds-shape-indicator[kind=critical]) svg{fill:var(--cds-status-red,#da1e28)}.cds--shape-indicator--high,:host(cds-shape-indicator[kind=high]) svg{fill:var(--cds-status-red,#da1e28)}.cds--shape-indicator--medium,:host(cds-shape-indicator[kind=medium]) svg{fill:var(--cds-status-orange,#ff832b)}.cds--shape-indicator--medium path:first-of-type,:host(cds-shape-indicator[kind=medium]) svg path:first-of-type{fill:var(--cds-status-orange-outline,#ba4e00)}.cds--shape-indicator--low,:host(cds-shape-indicator[kind=low]) svg{fill:var(--cds-status-yellow,#f1c21b)}.cds--shape-indicator--low path:nth-of-type(2),:host(cds-shape-indicator[kind=low]) svg path:nth-of-type(2){fill:var(--cds-status-yellow-outline,#8e6a00)}.cds--shape-indicator--cautious,:host(cds-shape-indicator[kind=cautious]) svg{fill:var(--cds-status-yellow,#f1c21b)}.cds--shape-indicator--cautious path:first-of-type,:host(cds-shape-indicator[kind=cautious]) svg path:first-of-type{fill:var(--cds-status-yellow-outline,#8e6a00)}.cds--shape-indicator--undefined,:host(cds-shape-indicator[kind=undefined]) svg{fill:var(--cds-status-purple,#8a3ffc)}.cds--shape-indicator--stable,:host(cds-shape-indicator[kind=stable]) svg{fill:var(--cds-status-green,#24a148)}.cds--shape-indicator--informative,:host(cds-shape-indicator[kind=informative]) svg{fill:var(--cds-status-blue,#0043ce)}.cds--shape-indicator--incomplete path:nth-of-type(2),:host(cds-shape-indicator[kind=incomplete]) svg path:nth-of-type(2){fill:var(--cds-status-blue,#0043ce)}.cds--shape-indicator--draft,:host(cds-shape-indicator[kind=draft]) svg{fill:var(--cds-status-gray,#6f6f6f)}']);

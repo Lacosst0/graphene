@@ -1,16 +1,9 @@
 import {
   styles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-RAN6G7ZS.js
 } from "./chunk-W3YJEPQE.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-NE2DBVMP.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-XGE43AZ3.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -21,11 +14,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-RAN6G7ZS.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-XGE43AZ3.js
 
 // node_modules/@carbon/web-components/es/components/select/select-skeleton.js
 var CDSSelectSkeleton = class CDSSelectSkeleton2 extends i {

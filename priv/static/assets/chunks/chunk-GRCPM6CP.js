@@ -3,11 +3,7 @@ import {
 } from "./chunk-ITCMO2MJ.js";
 import {
   b
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-GRCPM6CP.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-D2ITTM54.js
 
 // node_modules/@carbon/web-components/es/components/loading/loading-icon.js
 var getLoadingIcon = ({ description, small }) => {

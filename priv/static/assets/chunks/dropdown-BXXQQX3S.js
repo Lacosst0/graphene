@@ -1,16 +1,8 @@
-<<<<<<<< HEAD:priv/static/assets/chunks/dropdown-BXXQQX3S.js
 import "./chunk-3L4UVYYW.js";
 import {
   DROPDOWN_SIZE,
   styles
 } from "./chunk-LH5C5YXH.js";
-========
-import "./chunk-4CFEDWQ4.js";
-import {
-  DROPDOWN_SIZE,
-  styles
-} from "./chunk-HB2Z2XIQ.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/dropdown-YJLPY3C2.js
 import "./chunk-XKCQS753.js";
 import "./chunk-MCK3EHK6.js";
 import "./chunk-MNFEJBUN.js";
@@ -23,7 +15,6 @@ import "./chunk-4NCRUXEY.js";
 import "./chunk-5HWAKYGL.js";
 import "./chunk-TGGEFEEZ.js";
 import "./chunk-ML2VKJHQ.js";
-<<<<<<<< HEAD:priv/static/assets/chunks/dropdown-BXXQQX3S.js
 import "./chunk-PBKNMGYX.js";
 import "./chunk-OZCPNA5T.js";
 import "./chunk-Z4SJF7V6.js";
@@ -36,20 +27,6 @@ import "./chunk-M2VBID3H.js";
 import {
   n
 } from "./chunk-4GPN2FR3.js";
-========
-import "./chunk-TRPNDHDH.js";
-import "./chunk-LDCWSK5M.js";
-import "./chunk-TEMKX2NW.js";
-import "./chunk-DAFPBEYU.js";
-import "./chunk-73FE5HOG.js";
-import {
-  e
-} from "./chunk-YOLTZNLE.js";
-import "./chunk-M2VBID3H.js";
-import {
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/dropdown-YJLPY3C2.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -60,13 +37,8 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/dropdown-BXXQQX3S.js
 } from "./chunk-XGWNKZOA.js";
 import "./chunk-WHMSFNPJ.js";
-========
-} from "./chunk-3GZFZEMV.js";
-import "./chunk-G6EI4S4W.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/dropdown-YJLPY3C2.js
 
 // node_modules/@carbon/web-components/es/components/dropdown/dropdown-skeleton.js
 var CDSDropdownSkeleton = class CDSDropdownSkeleton2 extends i {

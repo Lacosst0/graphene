@@ -2,11 +2,7 @@ import {
   CDSDropdown$1,
   DROPDOWN_KEYBOARD_ACTION,
   DROPDOWN_TYPE
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-O53MYWX4.js
 } from "./chunk-LH5C5YXH.js";
-========
-} from "./chunk-HB2Z2XIQ.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-K2C2EPEG.js
 import {
   filter,
   forEach
@@ -16,7 +12,6 @@ import {
 } from "./chunk-YGK4BVA2.js";
 import {
   iconLoader
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-O53MYWX4.js
 } from "./chunk-PBKNMGYX.js";
 import {
   e as e2
@@ -25,16 +20,6 @@ import {
   e,
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-TRPNDHDH.js";
-import {
-  e as e2
-} from "./chunk-YOLTZNLE.js";
-import {
-  e,
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-K2C2EPEG.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -45,11 +30,7 @@ import {
   __decorate,
   b,
   i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-O53MYWX4.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-K2C2EPEG.js
 
 // node_modules/@carbon/web-components/es/components/multi-select/defs.js
 var SELECTION_FEEDBACK_OPTION;

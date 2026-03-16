@@ -1,10 +1,6 @@
 import {
   popoverStyles
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-BVIX3CGA.js
 } from "./chunk-Z4HIH6RI.js";
-========
-} from "./chunk-DFLJB7UB.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-HFGTZQQE.js
 import {
   POPOVER_BACKGROUND_TOKEN
 } from "./chunk-GPZZH3QI.js";
@@ -19,19 +15,11 @@ import {
 } from "./chunk-TGGEFEEZ.js";
 import {
   e as e2
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-BVIX3CGA.js
 } from "./chunk-DT7CIZC4.js";
 import {
   e,
   n
 } from "./chunk-4GPN2FR3.js";
-========
-} from "./chunk-YOLTZNLE.js";
-import {
-  e,
-  n
-} from "./chunk-V6ENGPT2.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-HFGTZQQE.js
 import {
   prefix
 } from "./chunk-ITCMO2MJ.js";
@@ -42,11 +30,7 @@ import {
   __decorate,
   b,
   i2 as i
-<<<<<<<< HEAD:priv/static/assets/chunks/chunk-BVIX3CGA.js
 } from "./chunk-XGWNKZOA.js";
-========
-} from "./chunk-3GZFZEMV.js";
->>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2:priv/static/assets/chunks/chunk-HFGTZQQE.js
 
 // node_modules/@carbon/web-components/es/components/popover/popover.js
 var CDSPopover_1;
