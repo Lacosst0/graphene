@@ -40,7 +40,8 @@ defmodule Demo.MixProject do
       {:bandit, "~> 1.2"},
       {:graphene, path: ".."},
       {:tmp, "~> 0.2.0", only: :dev},
-      {:phoenix_storybook, "~> 0.9.3", optional: true}
+      {:phoenix_storybook, "~> 1.0.0", only: :dev},
+      {:maplibre, "~> 0.1.9"}
     ]
   end
 

@@ -10,7 +10,7 @@ config :esbuild,
       --splitting
       --chunk-names=chunks/[name]-[hash]
       --minify
-      --target=es2017
+      --target=es2020
       --format=esm
       --outdir=../priv/static/assets
       --loader:.woff=file
@@ -23,7 +23,7 @@ config :esbuild,
       src/index.ts
       src/graphene.css
       --bundle
-      --target=es2017
+      --target=es2020
       --format=esm
       --outdir=../priv/static/assets
       --splitting

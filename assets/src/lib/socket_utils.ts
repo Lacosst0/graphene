@@ -20,7 +20,8 @@
 // )
 
 export function mergeWebComponentsAttrs(from: HTMLElement, to: HTMLElement): void {
-    if (from.tagName.startsWith("cds-")) {
+  // Maybe check for tagName.lower(), but it's probably not necessary
+    if (from.tagName.startsWith("cds-") || from.tagName.startsWith("CDS-")) {
         const attributes = [...Array.from(to.attributes), ...Array.from(from.attributes)];
         attributes.forEach((attr) => {
             to.setAttribute(attr.name, attr.value);
