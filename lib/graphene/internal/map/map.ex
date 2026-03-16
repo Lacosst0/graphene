@@ -12,8 +12,8 @@ defmodule Graphene.CarbonComponents.Custom.Map do
   You can use [:maplibre](https://hex.pm/packages/maplibre) for easier style generation.
 
   ## Popup
-  `maplibre-popup` class and `popup_#\{@id\}` id are used to render the popup content.
-  Use it to customize the popup content.
+  The popup has `maplibregl-popup` class and `map-popup--\#\{@id\}` id.
+  Use popup slot to customize the popup content.
 
   ## Events
 

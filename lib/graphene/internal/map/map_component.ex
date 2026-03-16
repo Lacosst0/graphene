@@ -2,6 +2,7 @@ defmodule Graphene.CarbonComponents.MapComponent do
   @moduledoc false
 
   use Phoenix.LiveComponent
+  import Graphene.Utils
 
   @js_events [
     "graphene:map-add-markers",
@@ -53,11 +54,14 @@ defmodule Graphene.CarbonComponents.MapComponent do
       end)
       |> Enum.into(%{})
 
+    map_to_remove = Map.merge(changed_markers, removed_markers)
+    map_to_add = Map.merge(changed_markers, new_markers)
+
     socket
-    |> push_event("graphene:map-remove-markers", %{
-      ids: Map.merge(changed_markers, removed_markers) |> Map.keys()
+    |> push_event_if(map_to_remove != %{}, "graphene:map-remove-markers", %{
+      ids: map_to_remove |> Map.keys()
     })
-    |> push_event("graphene:map-add-markers", %{data: Map.merge(changed_markers, new_markers)})
+    |> push_event_if(map_to_add != %{}, "graphene:map-add-markers", %{data: map_to_add})
     |> assign(:current_markers, socket.assigns.markers)
   end
 
@@ -66,7 +70,7 @@ defmodule Graphene.CarbonComponents.MapComponent do
     ~H"""
     <div class="map-containter" style="width: 100%; height: 100%;">
       <%= if @popup do %>
-        <div id={"map-popup--#{@id}"} class="maplibre-popup" hidden>
+        <div id={"map-popup--#{@id}"} class="maplibregl-popup" hidden>
           {render_slot(@popup)}
         </div>
       <% end %>
