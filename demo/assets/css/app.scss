@@ -1,9 +1,12 @@
 /* Demo-specific styling layered on top of Graphene's vendored assets. */
-@import 'maplibre-gl/dist/maplibre-gl.css';
 
 .demo-web {
   background-color: var(--cds-background);
   color: var(--cds-text-primary);
   font-family: var(--cds-font-sans);
   min-height: 100vh;
+}
+
+.maplibregl-popup-content {
+  padding: 0px;
 }

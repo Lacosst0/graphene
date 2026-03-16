@@ -1,5 +1,4 @@
 /* Place for custom hooks */
-import { MapLibreHook } from "./demo/libremap_hook";
 
 type CustomEventHandler = (event: Event) => void;
 
@@ -56,7 +55,6 @@ const buildPayload = (event: Event, targetEl: CustomEventTarget | null) => {
   };
 };
 
-
 const StorybookCustomEvents: StorybookCustomEventsHook = {
   mounted() {
     const events = parseEvents(this.el.dataset.gfEvents);
@@ -89,5 +87,5 @@ const StorybookCustomEvents: StorybookCustomEventsHook = {
 
 export const buildHooks = () => {
   const GrapheneHooks = (window as any).Graphene?.Hooks ?? {};
-  return { ...GrapheneHooks, MapLibreHook, StorybookCustomEvents };
+  return { ...GrapheneHooks, StorybookCustomEvents };
 };

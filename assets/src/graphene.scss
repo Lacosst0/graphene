@@ -11,6 +11,7 @@
 @use './story-assets/interstitial-screen';
 @use '@carbon/grid' as grid;
 @use '@carbon/layout/scss/spacing' as carbon_spacing;
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
 @import '@ibm/plex/css/ibm-plex.css';
 

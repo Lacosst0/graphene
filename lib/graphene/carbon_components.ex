@@ -779,6 +779,7 @@ defmodule Graphene.CarbonComponents do
   defdelegate table(assigns), to: Graphene.CarbonComponents.Custom.Table
   defdelegate table_live(assigns), to: Graphene.CarbonComponents.Custom.DataTable
   defdelegate file_uploader(assigns), to: Graphene.CarbonComponents.Custom.FileUploader
+  defdelegate map(assigns), to: Graphene.CarbonComponents.Custom.Map
   defdelegate ui_shell(assigns), to: Graphene.CarbonComponents.Custom.UiShell
   defdelegate data_table(assigns), to: Graphene.CarbonComponents.Custom.DataTable
 end

@@ -107,7 +107,7 @@ let opts = {
     bundle: true,
     logLevel: "info",
     platform: "browser",
-    target: "es2017",
+    target: "es2020",
     format: "esm",
     splitting: enableChunks,
     chunkNames: enableChunks ? "chunks/[name]-[hash]" : undefined,
@@ -125,7 +125,7 @@ async function applyComponentPatches(outDir) {
             bundle: true,
             format: "cjs",
             platform: "node",
-            target: "es2017",
+            target: "es2020",
             write: false,
         });
         const module = { exports: {} };

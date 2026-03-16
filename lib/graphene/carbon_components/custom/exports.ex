@@ -15,6 +15,7 @@ defmodule Graphene.CarbonComponents.Custom.Exports do
       module: Graphene.CarbonComponents.Custom.FileUploader,
       import: true
     },
+    %{name: :map, arity: 1, module: Graphene.CarbonComponents.Custom.Map, import: true},
     %{name: :ui_shell, arity: 1, module: Graphene.CarbonComponents.Custom.UiShell, import: true},
     %{name: :data_table, arity: 1, module: Graphene.CarbonComponents.Custom.DataTable, import: false}
   ]

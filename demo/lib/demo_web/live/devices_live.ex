@@ -5,37 +5,69 @@ defmodule DemoWeb.DevicesLive do
   alias Demo.CloudEvents
   import DemoWeb.CloudHelpers
 
+  @map_style %{
+    version: 8,
+    sources: %{
+      "yandex-source": %{
+        type: "raster",
+        tiles: [
+          "https://core-renderer-tiles.maps.yandex.net/tiles?l=map&x={x}&y={y}&z={z}&scale=2&lang=ru_RU&projection=web_mercator"
+        ],
+        tileSize: 256,
+        attribution: "© Яндекс",
+        maxzoom: 20,
+        minzoom: 0
+      }
+    },
+    layers: [
+      %{
+        id: "yandex",
+        type: "raster",
+        source: "yandex-source"
+      }
+    ]
+  }
+
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: CloudEvents.subscribe()
 
     device_data = CloudData.devices()
-    random_device = device_data.devices |> Enum.random() |> Map.fetch!(:device_id)
+
+    random_device = device_data.devices |> Enum.random()
 
     socket =
       socket
       |> assign(
         active_page: :devices,
+        map_style: @map_style,
         page_title: "Devices · Nimbus Cloud",
         sites: device_data.sites,
         devices: device_data.devices,
         query: %{violations: false, offline: false},
-        focus_marker: random_device
+        selected_device: random_device,
+        map_center: [random_device.lon, random_device.lat]
       )
       |> assign_filtered()
+      |> push_event("graphene:map-focus-marker", %{"id" => random_device.device_id})
 
     {:ok, socket}
   end
 
   @impl true
-  def handle_event("toggle_filter", %{"field" => field}, socket) when field in ["violations", "offline"] do
+  def handle_event("toggle_filter", %{"field" => field}, socket)
+      when field in ["violations", "offline"] do
     new_query = Map.update!(socket.assigns.query, String.to_existing_atom(field), &(!&1))
     {:noreply, assign(socket, query: new_query) |> assign_filtered()}
   end
 
-  @impl true
-  def handle_event("focus_marker", %{"id" => id}, socket) do
-    {:noreply, assign(socket, focus_marker: id)}
+  def handle_info({"map-marker-click", %{"id" => id}, _}, socket) do
+    id = String.to_integer(id)
+
+    socket =
+      assign(socket, selected_device: socket.assigns.devices |> Enum.find(&(&1.device_id == id)))
+
+    {:noreply, socket}
   end
 
   # -- Filtering Helpers --
@@ -68,18 +100,13 @@ defmodule DemoWeb.DevicesLive do
 
     markers =
       Enum.map(filtered_devices, fn d ->
-        %{
-          id: d.device_id,
-          lat: d.lat,
-          lon: d.lon,
-          label: "Marker ##{d.serial_number}",
-          description: """
-          Site Address: #{d.site_address}
-          Device id: #{d.device_id}
-          Comment: #{d.comment}
-          """
-        }
+        {Integer.to_string(d.device_id),
+         %{
+           lat: d.lat,
+           lon: d.lon
+         }}
       end)
+      |> Map.new()
 
     assign(socket,
       filtered_devices: filtered_devices,
@@ -90,7 +117,9 @@ defmodule DemoWeb.DevicesLive do
 
   # -- Render Helpers --
 
-  defp count_violations(devices), do: devices |> violations_filter() |> Enum.uniq_by(& &1.site_id) |> length()
+  defp count_violations(devices),
+    do: devices |> violations_filter() |> Enum.uniq_by(& &1.site_id) |> length()
+
   defp count_offline(devices), do: devices |> offline_filter() |> length()
 
   @impl true
@@ -108,51 +137,73 @@ defmodule DemoWeb.DevicesLive do
       <:content_text subtitle="Health and status of devices on the sites." />
     </.page_header>
 
-    <.grid>
-      <:column span="100%">
-        <div class="demo-section demo-card">
-          <.grid>
-            <:column span="100%">
-              <.heading>Overview</.heading>
-            </:column>
-            <:column span="100%">
-              <.selectable_tag phx-click="toggle_filter" phx-value-field="violations" type="red" size="lg" text={"Sites with violations: #{count_violations(@devices)}"} />
-              <.selectable_tag phx-click="toggle_filter" phx-value-field="offline" type="red" size="lg" text={"Offline sensors: #{count_offline(@devices)}"} />
-            </:column>
-          </.grid>
-        </div>
-      </:column>
+    <%!-- <.table
+      id="sites-table"
+      rows={
+        [1, 2, 3, 4, 5]
+      }
+      locale="en"
+      expandable={true}
+    >
+      <:title>DataTable</:title>
+      <:description>With expansion</:description>
 
-      <:column span="100%">
-        <div class="demo-section demo-card">
-          <.grid>
-            <:column span="50%">
-              <.accordion alignment="start">
-                <:item :for={{site, devices} <- @filtered_sites} title={site.address} class="empty">
-                  <.grid row_gap="01" full_width>
-                    <:column :for={device <- devices} span="100%">
-                      <.button phx-click="focus_marker" variant="ghost" phx-value-id={device.device_id}>
-                        #{device.serial_number}
-                      </.button>
-                    </:column>
-                  </.grid>
-                </:item>
-              </.accordion>
-            </:column>
-            <:column span="50%">
-              <div
-                id="map"
-                phx-hook="MapLibreHook"
-                phx-update="ignore"
-                data-markers={Jason.encode!(@markers)}
-                data-focus={@focus_marker}
-                style="width: 100%; height: 400px;"
-              />
-            </:column>
-          </.grid>
-        </div>
-      </:column>
-    </.grid>
+      <:col :let={row} :for={col <- ["ID", "STUFF"]} label={col}>
+        1
+      </:col>
+
+      <:expanded_row :let={row}>
+        <h6>Expandable row content</h6>
+        <div>MEOW</div>
+      </:expanded_row>
+    </.table> --%>
+
+    <div style="padding-top: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <.tile style="display: flex; flex-direction: column; gap: 16px; height: 400px;">
+          <div style="display: flex; gap: 8px;">
+            <.selectable_tag
+              phx-click="toggle_filter"
+              phx-value-field="violations"
+              type="red"
+              size="lg"
+              text={"Sites with violations: #{count_violations(@devices)}"}
+            />
+            <.selectable_tag
+              phx-click="toggle_filter"
+              phx-value-field="offline"
+              type="red"
+              size="lg"
+              text={"Offline sensors: #{count_offline(@devices)}"}
+            />
+          </div>
+
+          <div style="overflow-y: scroll; "></div>
+        </.tile>
+
+        <.tile>
+          <div style="height: 400px;">
+            <.map
+              id="devices-map"
+              map_styles={Jason.encode!(@map_style)}
+              map_center={@map_center}
+              markers={@markers}
+              bubble_events={["map-marker-click"]}
+            >
+              <:popup>
+                <.tile style="display: flex; flex-direction: column;">
+                  <h5 style="margin-bottom: 8px;">Device #{@selected_device.serial_number}</h5>
+                  <div><strong>Coords:</strong> {@selected_device.lon} {@selected_device.lat}</div>
+                  <div style="font-weight: light;">
+                    <strong>ID:</strong> #{@selected_device.device_id}
+                  </div>
+                </.tile>
+              </:popup>
+            </.map>
+          </div>
+        </.tile>
+      </div>
+    </div>
     """
   end
 end

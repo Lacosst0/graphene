@@ -2,6 +2,7 @@
 
 export * from "./table";
 export * from "./form";
+export * from "./maplibre";
 export * from "./upload";
 export * from "./custom_events";
 export * from "./tabs";
