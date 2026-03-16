@@ -55,6 +55,7 @@ const buildPayload = (event: Event, targetEl: CustomEventTarget | null) => {
   };
 };
 
+
 const StorybookCustomEvents: StorybookCustomEventsHook = {
   mounted() {
     const events = parseEvents(this.el.dataset.gfEvents);

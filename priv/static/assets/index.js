@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   __commonJS,
   __export,
   __publicField,
@@ -26021,6 +26022,87 @@ ${n2.shaderPreludeCode.vertexSource}`, define: n2.shaderDefine }, defaultProject
   };
   ensureRandomUUID();
 })();
+=======
+  __export,
+  __spreadProps,
+  __spreadValues
+} from "./chunks/chunk-G6EI4S4W.js";
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
+
+// src/polyfills/crypto_random_uuid.ts
+(() => {
+  const makeRandomUUID = () => {
+    const cryptoSource = globalThis.crypto;
+    if (cryptoSource && typeof cryptoSource.getRandomValues === "function") {
+      const bytes = new Uint8Array(16);
+      cryptoSource.getRandomValues(bytes);
+      bytes[6] = bytes[6] & 15 | 64;
+      bytes[8] = bytes[8] & 63 | 128;
+      const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0"));
+      return `${hex[0]}${hex[1]}${hex[2]}${hex[3]}-${hex[4]}${hex[5]}-${hex[6]}${hex[7]}-${hex[8]}${hex[9]}-${hex[10]}${hex[11]}${hex[12]}${hex[13]}${hex[14]}${hex[15]}`;
+    }
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+      const rand = Math.random() * 16;
+      const value = char === "x" ? rand : rand % 4 + 8;
+      return Math.floor(value).toString(16);
+    });
+  };
+  const ensureRandomUUID = () => {
+    const cryptoObj = globalThis.crypto;
+    if (cryptoObj && typeof cryptoObj.randomUUID === "function") {
+      return;
+    }
+    const randomUUID = makeRandomUUID;
+    const attach = (target) => {
+      if (!target || typeof target.randomUUID === "function") {
+        return typeof (target == null ? void 0 : target.randomUUID) === "function";
+      }
+      try {
+        Object.defineProperty(target, "randomUUID", {
+          value: randomUUID,
+          configurable: true
+        });
+      } catch (_error) {
+        try {
+          target.randomUUID = randomUUID;
+        } catch (_inner) {
+        }
+      }
+      return typeof target.randomUUID === "function";
+    };
+    if (attach(cryptoObj)) {
+      return;
+    }
+    if (cryptoObj) {
+      try {
+        if (attach(Object.getPrototypeOf(cryptoObj))) {
+          return;
+        }
+      } catch (_error) {
+      }
+    }
+    const CryptoClass = globalThis.Crypto;
+    if ((CryptoClass == null ? void 0 : CryptoClass.prototype) && attach(CryptoClass.prototype)) {
+      return;
+    }
+    if (!cryptoObj) {
+      const fallbackCrypto = { randomUUID };
+      try {
+        Object.defineProperty(globalThis, "crypto", {
+          value: fallbackCrypto,
+          configurable: true,
+          writable: true
+        });
+      } catch (_error) {
+        try {
+          globalThis.crypto = fallbackCrypto;
+        } catch (_inner) {
+        }
+      }
+    }
+  };
+  ensureRandomUUID();
+})();
 
 // src/lib/hooks/index.ts
 var hooks_exports = {};
@@ -26029,7 +26111,10 @@ __export(hooks_exports, {
   GrapheneCustomEvents: () => GrapheneCustomEvents,
   GrapheneEventsRoot: () => GrapheneEventsRoot,
   GrapheneFormBridge: () => GrapheneFormBridge,
+<<<<<<< HEAD
   MapLibreHook: () => MapLibreHook,
+=======
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   TabsInit: () => TabsInit
 });
 
@@ -26602,6 +26687,7 @@ var GrapheneFormBridge = {
   }
 };
 
+<<<<<<< HEAD
 // src/lib/hooks/maplibre.ts
 var import_maplibre_gl = __toESM(require_maplibre_gl(), 1);
 var DEFAULT_STYLE = "https://styles.trailsta.sh/openmaptiles-osm.json";
@@ -26716,6 +26802,8 @@ var MapLibreHook = {
   }
 };
 
+=======
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 // src/lib/event_helpers.ts
 var parseEvents = (raw) => {
   if (!raw)
@@ -26731,7 +26819,11 @@ var readEvents = (el) => {
   return parseEvents(el.dataset.gfEvents);
 };
 var resolveTargets = (el, config) => {
+<<<<<<< HEAD
   const selector = config?.target || el.dataset.gfTargetSelector;
+=======
+  const selector = (config == null ? void 0 : config.target) || el.dataset.gfTargetSelector;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   if (!selector)
     return [el];
   if (selector === ":self")
@@ -26777,7 +26869,11 @@ var targetPayload = (event, fallbackTarget) => {
 var mergePayload = (base, extra) => {
   if (!extra || typeof extra !== "object")
     return base;
+<<<<<<< HEAD
   return { ...base, ...extra };
+=======
+  return __spreadValues(__spreadValues({}, base), extra);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 };
 var buildPayload2 = (spec, event, fallbackTarget) => {
   if (!spec)
@@ -26790,7 +26886,11 @@ var buildPayload2 = (spec, event, fallbackTarget) => {
     if (spec === "target")
       return target;
     if (spec === "all")
+<<<<<<< HEAD
       return { detail, ...target };
+=======
+      return __spreadValues({ detail }, target);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     return {};
   }
   if (Array.isArray(spec)) {
@@ -26821,9 +26921,16 @@ var isDomEvent = (value) => typeof Event !== "undefined" && value instanceof Eve
 var isDomWindow = (value) => typeof Window !== "undefined" && value instanceof Window;
 var isDomDocument = (value) => typeof Document !== "undefined" && value instanceof Document;
 var summarizeElement = (el) => {
+<<<<<<< HEAD
   const anyEl = el;
   const summary = {
     tagName: el.tagName?.toLowerCase?.() ?? null
+=======
+  var _a, _b, _c;
+  const anyEl = el;
+  const summary = {
+    tagName: (_c = (_b = (_a = el.tagName) == null ? void 0 : _a.toLowerCase) == null ? void 0 : _b.call(_a)) != null ? _c : null
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   };
   if ("id" in anyEl && anyEl.id)
     summary.id = anyEl.id;
@@ -26879,7 +26986,11 @@ var sanitizePayload = (value) => {
     return val;
   };
   try {
+<<<<<<< HEAD
     const json = JSON.stringify(value ?? {}, replacer);
+=======
+    const json = JSON.stringify(value != null ? value : {}, replacer);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     if (!json)
       return {};
     return JSON.parse(json);
@@ -26890,8 +27001,14 @@ var sanitizePayload = (value) => {
 
 // src/lib/hooks/custom_events.ts
 var execViewJS = (hook, sourceEl, encodedJS, eventType) => {
+<<<<<<< HEAD
   const view = hook.__view?.();
   execJS(view?.liveSocket, sourceEl, encodedJS, eventType);
+=======
+  var _a;
+  const view = (_a = hook.__view) == null ? void 0 : _a.call(hook);
+  execJS(view == null ? void 0 : view.liveSocket, sourceEl, encodedJS, eventType);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 };
 var GrapheneCustomEvents = {
   mounted() {
@@ -26930,11 +27047,21 @@ var GrapheneCustomEvents = {
 };
 var GrapheneEventsRoot = {
   mounted() {
+<<<<<<< HEAD
     this._handlers = [];
     this.attachAll?.();
   },
   updated() {
     this.attachAll?.();
+=======
+    var _a;
+    this._handlers = [];
+    (_a = this.attachAll) == null ? void 0 : _a.call(this);
+  },
+  updated() {
+    var _a;
+    (_a = this.attachAll) == null ? void 0 : _a.call(this);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   },
   destroyed() {
     (this._handlers || []).forEach(([target, name, handler]) => {
@@ -26960,6 +27087,10 @@ var GrapheneEventsRoot = {
         if (!name)
           return;
         resolveTargets(element, config).forEach((target) => {
+<<<<<<< HEAD
+=======
+          var _a;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
           const handler = (event) => {
             if (config.js) {
               execViewJS(this, element, config.js, event.type);
@@ -26974,7 +27105,11 @@ var GrapheneEventsRoot = {
             }
           };
           target.addEventListener(name, handler);
+<<<<<<< HEAD
           this._handlers?.push([target, name, handler]);
+=======
+          (_a = this._handlers) == null ? void 0 : _a.push([target, name, handler]);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
         });
       });
     });
@@ -27005,10 +27140,17 @@ var applyInitialSelection = (root) => {
       }
     });
   }
+<<<<<<< HEAD
   const targetId = selectedItem?.getAttribute("target");
   if (targetId) {
     const panel = document.getElementById(targetId);
     panel?.removeAttribute("hidden");
+=======
+  const targetId = selectedItem == null ? void 0 : selectedItem.getAttribute("target");
+  if (targetId) {
+    const panel = document.getElementById(targetId);
+    panel == null ? void 0 : panel.removeAttribute("hidden");
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   }
 };
 var TabsInit = {
@@ -27022,6 +27164,7 @@ var TabsInit = {
 
 // src/lib/_dynamic_loader_mapping.ts
 var componentImports = {
+<<<<<<< HEAD
   "cds-accordion": () => import("./chunks/accordion-5IUFHSOQ.js"),
   "cds-accordion-item": () => import("./chunks/accordion-5IUFHSOQ.js"),
   "cds-accordion-skeleton": () => import("./chunks/accordion-5IUFHSOQ.js"),
@@ -27239,10 +27382,230 @@ var componentImports = {
   "cds-tree-node": () => import("./chunks/tree-view-HE66FRUG.js"),
   "cds-tree-view": () => import("./chunks/tree-view-HE66FRUG.js"),
   "cds-unordered-list": () => import("./chunks/list-C4TKBCZN.js")
+=======
+  "cds-accordion": () => import("./chunks/accordion-2R2GJCV3.js"),
+  "cds-accordion-item": () => import("./chunks/accordion-2R2GJCV3.js"),
+  "cds-accordion-skeleton": () => import("./chunks/accordion-2R2GJCV3.js"),
+  "cds-actionable-notification": () => import("./chunks/notification-2F7XCZGW.js"),
+  "cds-actionable-notification-button": () => import("./chunks/notification-2F7XCZGW.js"),
+  "cds-ai-label": () => import("./chunks/ai-label-MSQQAO5J.js"),
+  "cds-ai-label-action-button": () => import("./chunks/ai-label-MSQQAO5J.js"),
+  "cds-ai-skeleton-icon": () => import("./chunks/ai-skeleton-OXJZMDKY.js"),
+  "cds-ai-skeleton-placeholder": () => import("./chunks/ai-skeleton-OXJZMDKY.js"),
+  "cds-ai-skeleton-text": () => import("./chunks/ai-skeleton-OXJZMDKY.js"),
+  "cds-badge-indicator": () => import("./chunks/badge-indicator-FRGJT4GI.js"),
+  "cds-breadcrumb": () => import("./chunks/breadcrumb-ZRKEJNPA.js"),
+  "cds-breadcrumb-item": () => import("./chunks/breadcrumb-ZRKEJNPA.js"),
+  "cds-breadcrumb-link": () => import("./chunks/breadcrumb-ZRKEJNPA.js"),
+  "cds-breadcrumb-overflow-menu": () => import("./chunks/breadcrumb-ZRKEJNPA.js"),
+  "cds-breadcrumb-skeleton": () => import("./chunks/breadcrumb-ZRKEJNPA.js"),
+  "cds-button": () => import("./chunks/button-WIA57XQ2.js"),
+  "cds-button-set": () => import("./chunks/button-WIA57XQ2.js"),
+  "cds-button-set-base": () => import("./chunks/button-WIA57XQ2.js"),
+  "cds-button-skeleton": () => import("./chunks/button-WIA57XQ2.js"),
+  "cds-callout-notification": () => import("./chunks/notification-2F7XCZGW.js"),
+  "cds-chat-button": () => import("./chunks/chat-button-2G6YFUUS.js"),
+  "cds-chat-button-skeleton": () => import("./chunks/chat-button-2G6YFUUS.js"),
+  "cds-checkbox": () => import("./chunks/checkbox-XMZATRAC.js"),
+  "cds-checkbox-group": () => import("./chunks/checkbox-XMZATRAC.js"),
+  "cds-checkbox-skeleton": () => import("./chunks/checkbox-XMZATRAC.js"),
+  "cds-clickable-tile": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-code-snippet": () => import("./chunks/code-snippet-FEUR4BCG.js"),
+  "cds-code-snippet-skeleton": () => import("./chunks/code-snippet-FEUR4BCG.js"),
+  "cds-column": () => import("./chunks/grid-6F73WRNG.js"),
+  "cds-column-hang": () => import("./chunks/grid-6F73WRNG.js"),
+  "cds-combo-box": () => import("./chunks/combo-box-FIRTDL42.js"),
+  "cds-combo-box-item": () => import("./chunks/combo-box-FIRTDL42.js"),
+  "cds-combo-button": () => import("./chunks/combo-button-FST2OO6L.js"),
+  "cds-contained-list": () => import("./chunks/contained-list-YVSHYODL.js"),
+  "cds-contained-list-description": () => import("./chunks/contained-list-YVSHYODL.js"),
+  "cds-contained-list-item": () => import("./chunks/contained-list-YVSHYODL.js"),
+  "cds-content-switcher": () => import("./chunks/content-switcher-ER3U6PER.js"),
+  "cds-content-switcher-item": () => import("./chunks/content-switcher-ER3U6PER.js"),
+  "cds-copy": () => import("./chunks/copy-ZOTJNHXY.js"),
+  "cds-copy-button": () => import("./chunks/copy-button-OCNPAJB4.js"),
+  "cds-date-picker": () => import("./chunks/date-picker-P4JS6AZR.js"),
+  "cds-date-picker-input": () => import("./chunks/date-picker-P4JS6AZR.js"),
+  "cds-date-picker-input-skeleton": () => import("./chunks/date-picker-P4JS6AZR.js"),
+  "cds-definition-tooltip": () => import("./chunks/tooltip-EGI7YSGN.js"),
+  "cds-dismissible-tag": () => import("./chunks/tag-APKQYZAW.js"),
+  "cds-dropdown": () => import("./chunks/dropdown-YJLPY3C2.js"),
+  "cds-dropdown-item": () => import("./chunks/dropdown-YJLPY3C2.js"),
+  "cds-dropdown-skeleton": () => import("./chunks/dropdown-YJLPY3C2.js"),
+  "cds-expandable-tile": () => import("./chunks/tile-2HRIK5G3.js"),
+  "feature-flags": () => import("./chunks/feature-flags-Q4NEPPKH.js"),
+  "cds-file-uploader": () => import("./chunks/file-uploader-VNKTDUIT.js"),
+  "cds-file-uploader-button": () => import("./chunks/file-uploader-VNKTDUIT.js"),
+  "cds-file-uploader-drop-container": () => import("./chunks/file-uploader-VNKTDUIT.js"),
+  "cds-file-uploader-item": () => import("./chunks/file-uploader-VNKTDUIT.js"),
+  "cds-file-uploader-skeleton": () => import("./chunks/file-uploader-VNKTDUIT.js"),
+  "cds-fluid-number-input": () => import("./chunks/fluid-number-input-IWRTOUZP.js"),
+  "cds-fluid-number-input-skeleton": () => import("./chunks/fluid-number-input-IWRTOUZP.js"),
+  "cds-fluid-search": () => import("./chunks/fluid-search-NPF4GUHH.js"),
+  "cds-fluid-search-skeleton": () => import("./chunks/fluid-search-NPF4GUHH.js"),
+  "cds-fluid-select": () => import("./chunks/fluid-select-P4L6GCTO.js"),
+  "cds-fluid-select-skeleton": () => import("./chunks/fluid-select-P4L6GCTO.js"),
+  "cds-fluid-text-input": () => import("./chunks/fluid-text-input-LW6FWXRV.js"),
+  "cds-fluid-text-input-skeleton": () => import("./chunks/fluid-text-input-LW6FWXRV.js"),
+  "cds-fluid-textarea": () => import("./chunks/fluid-textarea-UXUITDBU.js"),
+  "cds-fluid-textarea-skeleton": () => import("./chunks/fluid-textarea-UXUITDBU.js"),
+  "cds-fluid-time-picker": () => import("./chunks/fluid-time-picker-GDXLSOMH.js"),
+  "cds-fluid-time-picker-select": () => import("./chunks/fluid-time-picker-GDXLSOMH.js"),
+  "cds-fluid-time-picker-skeleton": () => import("./chunks/fluid-time-picker-GDXLSOMH.js"),
+  "cds-form": () => import("./chunks/form-WNMMCCDI.js"),
+  "cds-form-group": () => import("./chunks/form-group-5YN4VXTJ.js"),
+  "cds-form-item": () => import("./chunks/form-WNMMCCDI.js"),
+  "cds-grid": () => import("./chunks/grid-6F73WRNG.js"),
+  "cds-header": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-global-action": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-menu": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-menu-button": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-menu-item": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-name": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-nav": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-nav-item": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-panel": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-header-side-nav-items": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-heading": () => import("./chunks/heading-HVM5IX6X.js"),
+  "cds-icon": () => import("./chunks/icon-6U4GZJ3F.js"),
+  "cds-icon-button": () => import("./chunks/icon-button-KFVSHU4K.js"),
+  "cds-icon-indicator": () => import("./chunks/icon-indicator-QYPE4FEV.js"),
+  "cds-inline-loading": () => import("./chunks/inline-loading-LAPCIXTU.js"),
+  "cds-inline-notification": () => import("./chunks/notification-2F7XCZGW.js"),
+  "cds-layer": () => import("./chunks/layer-SBDSKLKE.js"),
+  "cds-link": () => import("./chunks/link-FSIPKGMT.js"),
+  "cds-list-item": () => import("./chunks/list-THT45XMZ.js"),
+  "cds-loading": () => import("./chunks/loading-AK3FSK5Y.js"),
+  "cds-menu": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-menu-button": () => import("./chunks/menu-button-PXH7T572.js"),
+  "cds-menu-item": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-menu-item-divider": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-menu-item-group": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-menu-item-radio-group": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-menu-item-selectable": () => import("./chunks/menu-KSEZIFH4.js"),
+  "cds-modal": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-body": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-body-content": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-close-button": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-footer": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-footer-button": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-header": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-heading": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-modal-label": () => import("./chunks/modal-BZJKC4AL.js"),
+  "cds-multi-select": () => import("./chunks/multi-select-QWXZZBSX.js"),
+  "cds-multi-select-item": () => import("./chunks/multi-select-QWXZZBSX.js"),
+  "cds-number-input": () => import("./chunks/number-input-W7YGOKJQ.js"),
+  "cds-number-input-skeleton": () => import("./chunks/number-input-W7YGOKJQ.js"),
+  "cds-operational-tag": () => import("./chunks/tag-APKQYZAW.js"),
+  "cds-ordered-list": () => import("./chunks/list-THT45XMZ.js"),
+  "cds-overflow-menu": () => import("./chunks/overflow-menu-4ICZIOY2.js"),
+  "cds-overflow-menu-body": () => import("./chunks/overflow-menu-4ICZIOY2.js"),
+  "cds-overflow-menu-item": () => import("./chunks/overflow-menu-4ICZIOY2.js"),
+  "cds-page-header": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-page-header-breadcrumb": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-page-header-content": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-page-header-content-text": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-page-header-hero-image": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-page-header-tabs": () => import("./chunks/page-header-FMPT57Y6.js"),
+  "cds-pagination": () => import("./chunks/pagination-DQHWKNQ6.js"),
+  "cds-pagination-nav": () => import("./chunks/pagination-nav-RZUMDEIZ.js"),
+  "cds-password-input": () => import("./chunks/password-input-2UWQATC4.js"),
+  "cds-password-input-skeleton": () => import("./chunks/password-input-2UWQATC4.js"),
+  "cds-popover": () => import("./chunks/popover-BXEYGX53.js"),
+  "cds-popover-content": () => import("./chunks/popover-BXEYGX53.js"),
+  "cds-progress-bar": () => import("./chunks/progress-bar-YSV2DDZ3.js"),
+  "cds-progress-indicator": () => import("./chunks/progress-indicator-G5G4HKR4.js"),
+  "cds-progress-indicator-skeleton": () => import("./chunks/progress-indicator-G5G4HKR4.js"),
+  "cds-progress-step": () => import("./chunks/progress-indicator-G5G4HKR4.js"),
+  "cds-progress-step-skeleton": () => import("./chunks/progress-indicator-G5G4HKR4.js"),
+  "cds-radio-button": () => import("./chunks/radio-button-R3FPM7DA.js"),
+  "cds-radio-button-group": () => import("./chunks/radio-button-R3FPM7DA.js"),
+  "cds-radio-button-skeleton": () => import("./chunks/radio-button-R3FPM7DA.js"),
+  "cds-radio-tile": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-search": () => import("./chunks/search-LMVIKAH7.js"),
+  "cds-select": () => import("./chunks/select-2KPXSQMD.js"),
+  "cds-select-item": () => import("./chunks/select-2KPXSQMD.js"),
+  "cds-select-item-group": () => import("./chunks/select-2KPXSQMD.js"),
+  "cds-select-skeleton": () => import("./chunks/select-2KPXSQMD.js"),
+  "cds-selectable-tag": () => import("./chunks/tag-APKQYZAW.js"),
+  "cds-selectable-tile": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-shape-indicator": () => import("./chunks/shape-indicator-W5S2UF7V.js"),
+  "cds-side-nav": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-nav-divider": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-nav-items": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-nav-link": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-nav-menu": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-nav-menu-item": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-side-panel": () => import("./chunks/side-panel-WEQMIBH5.js"),
+  "cds-skeleton-icon": () => import("./chunks/skeleton-icon-BAJFTOAO.js"),
+  "cds-skeleton-placeholder": () => import("./chunks/skeleton-placeholder-HVDWR6DS.js"),
+  "cds-skeleton-text": () => import("./chunks/skeleton-text-23HXVW3A.js"),
+  "cds-skip-to-content": () => import("./chunks/skip-to-content-JSXYJI2F.js"),
+  "cds-slider": () => import("./chunks/slider-G7ZBR5GO.js"),
+  "cds-slider-input": () => import("./chunks/slider-G7ZBR5GO.js"),
+  "cds-slider-skeleton": () => import("./chunks/slider-G7ZBR5GO.js"),
+  "cds-slug": () => import("./chunks/slug-GO3X3ES3.js"),
+  "cds-slug-action-button": () => import("./chunks/slug-GO3X3ES3.js"),
+  "cds-stack": () => import("./chunks/stack-2YKDPWSA.js"),
+  "cds-structured-list": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-body": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-cell": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-head": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-header-cell": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-header-cell-skeleton": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-header-row": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-structured-list-row": () => import("./chunks/structured-list-APBQ42NU.js"),
+  "cds-switcher": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-switcher-divider": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-switcher-item": () => import("./chunks/ui-shell-FTV4RIXD.js"),
+  "cds-tab": () => import("./chunks/tabs-JPMADR6A.js"),
+  "cds-tab-skeleton": () => import("./chunks/tabs-JPMADR6A.js"),
+  "cds-table-batch-actions": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-body": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-cell": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-cell-content": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-expanded-row": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-head": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-header-cell": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-header-description": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-header-row": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-header-title": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-row": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-skeleton": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-toolbar": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-toolbar-content": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-table-toolbar-search": () => import("./chunks/data-table-MH6OQK2E.js"),
+  "cds-tabs": () => import("./chunks/tabs-JPMADR6A.js"),
+  "cds-tabs-skeleton": () => import("./chunks/tabs-JPMADR6A.js"),
+  "cds-tag": () => import("./chunks/tag-APKQYZAW.js"),
+  "cds-tag-skeleton": () => import("./chunks/tag-APKQYZAW.js"),
+  "cds-tearsheet": () => import("./chunks/tearsheet-PSP4ULFK.js"),
+  "cds-text-input": () => import("./chunks/text-input-HOWHTNY7.js"),
+  "cds-text-input-skeleton": () => import("./chunks/text-input-HOWHTNY7.js"),
+  "cds-textarea": () => import("./chunks/textarea-IBPUY4LD.js"),
+  "cds-textarea-skeleton": () => import("./chunks/textarea-IBPUY4LD.js"),
+  "cds-tile": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-tile-above-the-fold-content": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-tile-below-the-fold-content": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-tile-group": () => import("./chunks/tile-2HRIK5G3.js"),
+  "cds-time-picker": () => import("./chunks/time-picker-AOQHKT3I.js"),
+  "cds-time-picker-select": () => import("./chunks/time-picker-AOQHKT3I.js"),
+  "cds-toast-notification": () => import("./chunks/notification-2F7XCZGW.js"),
+  "cds-toggle": () => import("./chunks/toggle-LDE4223B.js"),
+  "cds-toggle-skeleton": () => import("./chunks/toggle-LDE4223B.js"),
+  "cds-toggletip": () => import("./chunks/toggle-tip-3KKDUK2W.js"),
+  "cds-tooltip": () => import("./chunks/tooltip-EGI7YSGN.js"),
+  "cds-tooltip-content": () => import("./chunks/tooltip-EGI7YSGN.js"),
+  "cds-tree-node": () => import("./chunks/tree-view-ZNQKUJFN.js"),
+  "cds-tree-view": () => import("./chunks/tree-view-ZNQKUJFN.js"),
+  "cds-unordered-list": () => import("./chunks/list-THT45XMZ.js")
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 };
 
 // src/lib/_dynamic_loader_mapping_products.ts
 var productComponentImports = {
+<<<<<<< HEAD
   "c4p-about-modal": () => import("./chunks/about-modal-WVNBFKJ7.js"),
   "c4p-big-number": () => import("./chunks/big-number-UIN6MLFU.js"),
   "c4p-big-number-skeleton": () => import("./chunks/big-number-UIN6MLFU.js"),
@@ -27280,6 +27643,45 @@ var productComponentImports = {
   "c4p-tearsheet": () => import("./chunks/tearsheet-XXWQFDZP.js"),
   "c4p-truncated-text": () => import("./chunks/truncated-text-KI4FQS3Y.js"),
   "c4p-user-avatar": () => import("./chunks/user-avatar-DMQKKZU5.js")
+=======
+  "c4p-about-modal": () => import("./chunks/about-modal-WWH2S75W.js"),
+  "c4p-big-number": () => import("./chunks/big-number-BXKUTE5Y.js"),
+  "c4p-big-number-skeleton": () => import("./chunks/big-number-BXKUTE5Y.js"),
+  "c4p-checklist": () => import("./chunks/checklist-KPCRCKVU.js"),
+  "c4p-checklist-chart": () => import("./chunks/checklist-KPCRCKVU.js"),
+  "c4p-checklist-group": () => import("./chunks/checklist-KPCRCKVU.js"),
+  "c4p-checklist-icon": () => import("./chunks/checklist-KPCRCKVU.js"),
+  "c4p-checklist-item": () => import("./chunks/checklist-KPCRCKVU.js"),
+  "c4p-coachmark": () => import("./chunks/coachmark-SOPF44BO.js"),
+  "c4p-coachmark-beacon": () => import("./chunks/coachmark-beacon-HOG5BMHM.js"),
+  "c4p-coachmark-body": () => import("./chunks/coachmark-SOPF44BO.js"),
+  "c4p-coachmark-header": () => import("./chunks/coachmark-SOPF44BO.js"),
+  "c4p-coachmark-tagline": () => import("./chunks/coachmark-tagline-4363UVOB.js"),
+  "c4p-full-page-error": () => import("./chunks/full-page-error-DZ5GUW67.js"),
+  "c4p-guide-banner": () => import("./chunks/guide-banner-OO2OPQP6.js"),
+  "c4p-guide-banner-element": () => import("./chunks/guide-banner-OO2OPQP6.js"),
+  "c4p-interstitial-screen": () => import("./chunks/interstitial-screen-O2GMKY5G.js"),
+  "c4p-interstitial-screen-body": () => import("./chunks/interstitial-screen-O2GMKY5G.js"),
+  "c4p-interstitial-screen-body-item": () => import("./chunks/interstitial-screen-O2GMKY5G.js"),
+  "c4p-interstitial-screen-footer": () => import("./chunks/interstitial-screen-O2GMKY5G.js"),
+  "c4p-interstitial-screen-header": () => import("./chunks/interstitial-screen-O2GMKY5G.js"),
+  "c4p-notification": () => import("./chunks/notification-panel-HTIXKPHE.js"),
+  "c4p-notification-footer": () => import("./chunks/notification-panel-HTIXKPHE.js"),
+  "c4p-notification-panel": () => import("./chunks/notification-panel-HTIXKPHE.js"),
+  "c4p-options-tile": () => import("./chunks/options-tile-CJVNA6CY.js"),
+  "c4p-page-header": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-breadcrumb": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-content": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-content-text": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-hero-image": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-scroller": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-tabs": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-page-header-title-breadcrumb": () => import("./chunks/page-header-6S7W4PAF.js"),
+  "c4p-side-panel": () => import("./chunks/side-panel-UXHGQKRA.js"),
+  "c4p-tearsheet": () => import("./chunks/tearsheet-LNAKKF4V.js"),
+  "c4p-truncated-text": () => import("./chunks/truncated-text-JZLHJMQ5.js"),
+  "c4p-user-avatar": () => import("./chunks/user-avatar-UCJRUJJV.js")
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 };
 
 // src/lib/form_associated.ts
@@ -27385,7 +27787,14 @@ var formSpecs = {
     parseEventValue: (event, el) => {
       const detail = event.detail || {};
       if (Array.isArray(detail.selectedItems)) {
+<<<<<<< HEAD
         const values = detail.selectedItems.map((item) => item?.value ?? item);
+=======
+        const values = detail.selectedItems.map((item) => {
+          var _a;
+          return (_a = item == null ? void 0 : item.value) != null ? _a : item;
+        });
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
         return JSON.stringify(values);
       }
       return JSON.stringify(parseMultiSelectValues(el));
@@ -27421,6 +27830,7 @@ var formSpecs = {
   }
 };
 var importers = {
+<<<<<<< HEAD
   "cds-checkbox": () => import("./chunks/checkbox-L5AT7HRX.js"),
   "cds-toggle": () => import("./chunks/toggle-Y3ETJUG6.js"),
   "cds-radio-button-group": () => import("./chunks/radio-button-group-S5W2RXZZ.js"),
@@ -27442,19 +27852,53 @@ var importers = {
   "cds-time-picker": () => import("./chunks/time-picker-TXDRA6FU.js"),
   "cds-slider": () => import("./chunks/slider-YXVO3VJ7.js"),
   "cds-file-uploader": () => import("./chunks/file-uploader-ZK67XYZB.js")
+=======
+  "cds-checkbox": () => import("./chunks/checkbox-DTZHC277.js"),
+  "cds-toggle": () => import("./chunks/toggle-JSBYOPYW.js"),
+  "cds-radio-button-group": () => import("./chunks/radio-button-group-GCZAF4JV.js"),
+  "cds-number-input": () => import("./chunks/number-input-TEE2JY6D.js"),
+  "cds-fluid-number-input": () => import("./chunks/fluid-number-input-PKBAM6JH.js"),
+  "cds-text-input": () => import("./chunks/text-input-EEEL3FG6.js"),
+  "cds-fluid-text-input": () => import("./chunks/fluid-text-input-L7TYJKV3.js"),
+  "cds-password-input": () => import("./chunks/password-input-2LI7XUW2.js"),
+  "cds-textarea": () => import("./chunks/textarea-AB3TYOMW.js"),
+  "cds-fluid-textarea": () => import("./chunks/fluid-textarea-6LZRL652.js"),
+  "cds-search": () => import("./chunks/search-7MMQN535.js"),
+  "cds-fluid-search": () => import("./chunks/fluid-search-W2HSR4H6.js"),
+  "cds-select": () => import("./chunks/select-IWALEUHS.js"),
+  "cds-fluid-select": () => import("./chunks/fluid-select-H7J4SSNI.js"),
+  "cds-dropdown": () => import("./chunks/dropdown-5YE57H5D.js"),
+  "cds-combo-box": () => import("./chunks/combo-box-WSOTJFE4.js"),
+  "cds-multi-select": () => import("./chunks/multi-select-HJQJ2PB7.js"),
+  "cds-date-picker": () => import("./chunks/date-picker-B4HIGEEK.js"),
+  "cds-time-picker": () => import("./chunks/time-picker-IX4JSJFB.js"),
+  "cds-slider": () => import("./chunks/slider-THJH7BXB.js"),
+  "cds-file-uploader": () => import("./chunks/file-uploader-64SAZ2WM.js")
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 };
 var resolved = /* @__PURE__ */ new Set();
 var parseFileNames2 = (files) => {
   return Array.from(files || []).map((file) => {
     if (file && typeof file === "object" && "name" in file)
       return file.name;
+<<<<<<< HEAD
     return String(file ?? "");
+=======
+    return String(file != null ? file : "");
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   });
 };
 var parseMultiSelectValues = (el) => {
   const items = Array.from(el.querySelectorAll("cds-multi-select-item[selected]"));
   if (items.length > 0) {
+<<<<<<< HEAD
     return items.map((item) => item?.value ?? item?.getAttribute?.("value") ?? "").filter(Boolean);
+=======
+    return items.map((item) => {
+      var _a, _b, _c;
+      return (_c = (_b = item == null ? void 0 : item.value) != null ? _b : (_a = item == null ? void 0 : item.getAttribute) == null ? void 0 : _a.call(item, "value")) != null ? _c : "";
+    }).filter(Boolean);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   }
   const rawValue = el.value;
   if (typeof rawValue === "string" && rawValue.length > 0) {
@@ -27603,11 +28047,19 @@ var createFormAssociatedClass = (Base, spec) => {
       this._changeHandler = null;
     }
     _syncFormValue() {
+<<<<<<< HEAD
+=======
+      var _a;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
       if (!this._internals || typeof this._internals.setFormValue !== "function")
         return;
       let value;
       if (this._eventValueSet) {
+<<<<<<< HEAD
         value = this._eventValue ?? "";
+=======
+        value = (_a = this._eventValue) != null ? _a : "";
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
         this._eventValueSet = false;
       } else {
         value = computeFormValue(this, spec);
@@ -27638,10 +28090,16 @@ var createFormAssociatedClass = (Base, spec) => {
     }
   }
   FormAssociatedElement.formAssociated = true;
+<<<<<<< HEAD
   FormAssociatedElement.shadowRootOptions = {
     ...Base.shadowRootOptions,
     delegatesFocus: true
   };
+=======
+  FormAssociatedElement.shadowRootOptions = __spreadProps(__spreadValues({}, Base.shadowRootOptions), {
+    delegatesFocus: true
+  });
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
   if (!Object.getOwnPropertyDescriptor(Base.prototype, "name")) {
     Object.defineProperty(FormAssociatedElement.prototype, "name", {
       configurable: true,
@@ -27686,10 +28144,14 @@ var ensureFormAssociatedTag = async (tagName) => {
 };
 
 // src/lib/dynamic_loader.ts
+<<<<<<< HEAD
 var componentImports2 = {
   ...componentImports,
   ...productComponentImports
 };
+=======
+var componentImports2 = __spreadValues(__spreadValues({}, componentImports), productComponentImports);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
 var baseComponentNames = Object.keys(componentImports2);
 var formComponentNames = baseComponentNames.map((name) => `${name}-form`);
 var componentNames = [...baseComponentNames, ...formComponentNames];
@@ -27757,7 +28219,11 @@ function normalizeNotificationTimestamp(el) {
   const apply = () => {
     const value = readNotificationTimestamp(el);
     try {
+<<<<<<< HEAD
       el.timestamp = value ?? void 0;
+=======
+      el.timestamp = value != null ? value : void 0;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     } catch (_error) {
     }
   };
@@ -27977,7 +28443,11 @@ var WebComponentManager = class {
       attributes: true,
       attributeFilter: ["timestamp"]
     };
+<<<<<<< HEAD
     const root = document.body ?? document.documentElement;
+=======
+    const root = (_a = document.body) != null ? _a : document.documentElement;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     if (!root) {
       return;
     }
@@ -28007,7 +28477,12 @@ var EventManager = class {
   }
   connect() {
     const doConnect = () => {
+<<<<<<< HEAD
       const root = this.options.root ?? document.body ?? document.documentElement;
+=======
+      var _a, _b;
+      const root = (_b = (_a = this.options.root) != null ? _a : document.body) != null ? _b : document.documentElement;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
       if (!root)
         return;
       this.attachTree(root);
@@ -28020,7 +28495,12 @@ var EventManager = class {
     }
   }
   disconnect() {
+<<<<<<< HEAD
     this.observer?.disconnect();
+=======
+    var _a;
+    (_a = this.observer) == null ? void 0 : _a.disconnect();
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     this.observer = null;
     this.registry.forEach((entry, el) => this.detachElement(el, entry));
     this.registry.clear();
@@ -28063,11 +28543,19 @@ var EventManager = class {
     });
   }
   attachTree(root) {
+<<<<<<< HEAD
+=======
+    var _a;
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     if (root instanceof HTMLElement && root.dataset.gfEvents) {
       this.attachElement(root);
     }
     if ("querySelectorAll" in root) {
+<<<<<<< HEAD
       root.querySelectorAll?.("[data-gf-events]").forEach((el) => {
+=======
+      (_a = root.querySelectorAll) == null ? void 0 : _a.call(root, "[data-gf-events]").forEach((el) => {
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
         this.attachElement(el);
       });
     }
@@ -28109,7 +28597,11 @@ var EventManager = class {
     this.registry.set(el, { raw, targetSelector, handlers });
   }
   detachElement(el, entry) {
+<<<<<<< HEAD
     const current = entry ?? this.registry.get(el);
+=======
+    const current = entry != null ? entry : this.registry.get(el);
+>>>>>>> 8ec8e62f80de45f4d42992fbfd1d4576ecc905a2
     if (!current)
       return;
     current.handlers.forEach(([target, name, handler]) => {
