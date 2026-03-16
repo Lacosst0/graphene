@@ -60,7 +60,7 @@ export const MapLibreHook: MapLibreLiveHook = {
 
     let styles: string | maplibregl.StyleSpecification = data.styles!;
     try {
-      styles = JSON.parse(data.styles);
+      styles = JSON.parse(styles);
     } catch {
       console.debug("Failed to parse styles as JSON, assuming it's a URL", styles)
     };
