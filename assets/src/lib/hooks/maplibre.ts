@@ -48,8 +48,6 @@ interface MapLibreLiveHook {
   pushEventTo?(element: HTMLElement, event: string, payload: any): void;
 }
 
-const DEFAULT_STYLE = "https://styles.trailsta.sh/openmaptiles-osm.json";
-
 // TOOD: Options to set options for controls
 // TODO: Event map click and other
 // TODO: Change markers style
@@ -60,12 +58,12 @@ export const MapLibreHook: MapLibreLiveHook = {
   mounted() {
     const data = this.el!.dataset;
 
-    let styles: string | maplibregl.StyleSpecification | any;
+    let styles: string | maplibregl.StyleSpecification = data.styles!;
     try {
-      styles = JSON.parse(data.styles!);
+      styles = JSON.parse(data.styles);
     } catch {
-      styles = DEFAULT_STYLE;
-    }
+      console.debug("Failed to parse styles as JSON, assuming it's a URL", styles)
+    };
 
     this.map = new maplibregl.Map({
       container: data.mapId!,
