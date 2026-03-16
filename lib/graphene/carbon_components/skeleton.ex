@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.Skeleton do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -29,6 +30,7 @@ defmodule Graphene.CarbonComponents.Skeleton do
 
   """
   attr :optional_classes, :any, doc: "Specify optional classes to be added to your SkeletonText"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -53,6 +55,7 @@ defmodule Graphene.CarbonComponents.Skeleton do
     doc: "width (in px or %) of single line of text or max-width of paragraph lines",
     default: "100%"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

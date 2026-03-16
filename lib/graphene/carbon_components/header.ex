@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.Header do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :name do
@@ -26,8 +27,13 @@ defmodule Graphene.CarbonComponents.Header do
   slot :inner_block
 
   def header(%{name: [_ | _]} = assigns) do
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.header {@rest}>
+    <CoreComponents.header {@component_attrs} {@rest}>
       <%= for name <- @name do %>
         <CoreComponents.header_name
           href={name[:href]}
@@ -50,8 +56,13 @@ defmodule Graphene.CarbonComponents.Header do
   end
 
   def header(%{global: [_ | _]} = assigns) do
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.header {@rest}>
+    <CoreComponents.header {@component_attrs} {@rest}>
       <%= for name <- @name do %>
         <CoreComponents.header_name
           href={name[:href]}
@@ -159,6 +170,7 @@ defmodule Graphene.CarbonComponents.Header do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :icon do
@@ -193,37 +205,41 @@ defmodule Graphene.CarbonComponents.Header do
       |> assign_new(:target, fn -> nil end)
       |> assign_new(:tooltip_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_html_attrs(assigns, [
+        {"active", :active},
+        {"autofocus", :autofocus},
+        {"batch-action", :batch_action},
+        {"button-class-name", :button_class_name},
+        {"button-label-active", :button_label_active},
+        {"button-label-inactive", :button_label_inactive},
+        {"danger-description", :danger_description},
+        {"disabled", :disabled},
+        {"download", :download},
+        {"has-main-content", :has_main_content},
+        {"href", :href},
+        {"hreflang", :hreflang},
+        {"isExpressive", :is_expressive},
+        {"isSelected", :is_selected},
+        {"kind", :kind},
+        {"link-role", :link_role},
+        {"openTooltip", :open_tooltip},
+        {"panel-id", :panel_id},
+        {"ping", :ping},
+        {"rel", :rel},
+        {"size", :size},
+        {"tab-index", :tab_index},
+        {"target", :target},
+        {"tooltip-alignment", :tooltip_alignment},
+        {"tooltip-position", :tooltip_position},
+        {"tooltip-text", :tooltip_text},
+        {"type", :type}
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <cds-header-global-action
-      active={assigns[:active]}
-      autofocus={assigns[:autofocus]}
-      batch-action={assigns[:batch_action]}
-      button-class-name={assigns[:button_class_name]}
-      button-label-active={assigns[:button_label_active]}
-      button-label-inactive={assigns[:button_label_inactive]}
-      danger-description={assigns[:danger_description]}
-      disabled={assigns[:disabled]}
-      download={assigns[:download]}
-      has-main-content={assigns[:has_main_content]}
-      href={assigns[:href]}
-      hreflang={assigns[:hreflang]}
-      isExpressive={assigns[:is_expressive]}
-      isSelected={assigns[:is_selected]}
-      kind={assigns[:kind]}
-      link-role={assigns[:link_role]}
-      openTooltip={assigns[:open_tooltip]}
-      panel-id={assigns[:panel_id]}
-      ping={assigns[:ping]}
-      rel={assigns[:rel]}
-      size={assigns[:size]}
-      tab-index={assigns[:tab_index]}
-      target={assigns[:target]}
-      tooltip-alignment={assigns[:tooltip_alignment]}
-      tooltip-position={assigns[:tooltip_position]}
-      tooltip-text={assigns[:tooltip_text]}
-      type={assigns[:type]}
-      {@rest}
-    >
+    <cds-header-global-action {@component_attrs} {@rest}>
       <%= for icon <- @icon do %>
         <% size_value =
           case icon[:size] do
@@ -267,6 +283,7 @@ defmodule Graphene.CarbonComponents.Header do
   """
   attr :href, :string, doc: "Link `href`."
   attr :prefix, :string, doc: "The product name prefix."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -282,6 +299,7 @@ defmodule Graphene.CarbonComponents.Header do
 
   """
   attr :expanded, :any, doc: "Specify whether the panel is expanded"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -300,6 +318,7 @@ defmodule Graphene.CarbonComponents.Header do
     doc:
       "Optionally specify if container will have a bottom divider to differentiate\nbetween original sidenav items and header menu items. False by default."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

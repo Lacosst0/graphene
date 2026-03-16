@@ -20,6 +20,7 @@ defmodule Graphene.CarbonComponents.SkipToContent do
     doc: "The assistive text for the link,",
     default: "Skip to main content"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

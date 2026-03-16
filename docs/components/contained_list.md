@@ -1,7 +1,5 @@
 # `contained_list`
 
-## basic
-
 ### default
 
 ```heex
@@ -14,15 +12,14 @@
 ```
 
 ```html
-<cds-contained-list id="basic-single-default">
+<cds-contained-list id="contained-list-single-default">
   
   <div slot="label">
     Contained list
   </div>
   
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       First item
     
@@ -30,8 +27,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Second item
     
@@ -39,8 +35,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Third item
     
@@ -66,15 +61,14 @@
 ```
 
 ```html
-<cds-contained-list id="basic-single-interactive">
+<cds-contained-list id="contained-list-single-interactive">
   
   <div slot="label">
     Clickable list
   </div>
   
   
-    
-<cds-contained-list-item clickable>
+    <cds-contained-list-item clickable>
   
       Clickable item
     
@@ -82,8 +76,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item clickable>
+    <cds-contained-list-item clickable>
   
       Another action
     
@@ -91,8 +84,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item disabled>
+    <cds-contained-list-item disabled>
   
       Disabled
     
@@ -127,15 +119,14 @@
 ```
 
 ```html
-<cds-contained-list size="sm" id="basic-sizes-sm">
+<cds-contained-list size="sm" id="contained-list-sizes-sm">
   
   <div slot="label">
     Size sm
   </div>
   
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Alpha
     
@@ -143,8 +134,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Beta
     
@@ -156,16 +146,14 @@
   
   
 </cds-contained-list>
-
-<cds-contained-list size="md" id="basic-sizes-md">
+<cds-contained-list size="md" id="contained-list-sizes-md">
   
   <div slot="label">
     Size md
   </div>
   
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Alpha
     
@@ -173,8 +161,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Beta
     
@@ -186,16 +173,14 @@
   
   
 </cds-contained-list>
-
-<cds-contained-list size="lg" id="basic-sizes-lg">
+<cds-contained-list size="lg" id="contained-list-sizes-lg">
   
   <div slot="label">
     Size lg
   </div>
   
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Alpha
     
@@ -203,8 +188,7 @@
   
 </cds-contained-list-item>
   
-    
-<cds-contained-list-item>
+    <cds-contained-list-item>
   
       Beta
     

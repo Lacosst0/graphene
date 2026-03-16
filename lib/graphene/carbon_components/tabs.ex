@@ -47,6 +47,7 @@ defmodule Graphene.CarbonComponents.Tabs do
   attr :type, :string, doc: "Tabs type.", values: ["", "container", "contained"], default: ""
   attr :value, :string, doc: "The value of the selected item."
   attr :disabled, :boolean, doc: "Whether the tabs are disabled."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :tab do
@@ -68,20 +69,25 @@ defmodule Graphene.CarbonComponents.Tabs do
       |> assign_new(:value, fn -> nil end)
       |> assign_new(:disabled, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :icon,
+        :low_contrast,
+        :selected_index,
+        :selected_item_assistive_text,
+        :selecting_items_assistive_text,
+        :selection_mode,
+        :size,
+        :trigger_content,
+        :type,
+        :value,
+        :disabled
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.tabs
-      icon={@icon}
-      low_contrast={@low_contrast}
-      selected_index={@selected_index}
-      selected_item_assistive_text={@selected_item_assistive_text}
-      selecting_items_assistive_text={@selecting_items_assistive_text}
-      selection_mode={@selection_mode}
-      size={@size}
-      trigger_content={@trigger_content}
-      type={@type}
-      value={@value}
-      {@rest}
-    >
+    <CoreComponents.tabs {@component_attrs} {@rest}>
       <%= for tab <- @tab do %>
         <CoreComponents.tab
           tab_title={tab[:title]}
@@ -108,6 +114,7 @@ defmodule Graphene.CarbonComponents.Tabs do
 
   """
   attr :contained, :boolean, doc: "Provide the type of Tab"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -1,7 +1,5 @@
 # `button`
 
-## basic
-
 ### primary
 
 ```heex
@@ -11,7 +9,7 @@
 ```
 
 ```html
-<cds-button kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-single-primary">
+<cds-button kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-single-primary">
   
   Primary
 
@@ -37,28 +35,25 @@
 ```
 
 ```html
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-kinds-secondary">
+<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-kinds-secondary">
   
   Secondary
 
   
 </cds-button>
-
-<cds-button kind="tertiary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-kinds-tertiary">
+<cds-button kind="tertiary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-kinds-tertiary">
   
   Tertiary
 
   
 </cds-button>
-
-<cds-button kind="ghost" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-kinds-ghost">
+<cds-button kind="ghost" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-kinds-ghost">
   
   Ghost
 
   
 </cds-button>
-
-<cds-button kind="danger" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-kinds-danger">
+<cds-button kind="danger" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-kinds-danger">
   
   Danger
 
@@ -81,21 +76,19 @@
 ```
 
 ```html
-<cds-button kind="primary" link-role="button" size="sm" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-sizes-sm">
+<cds-button kind="primary" link-role="button" size="sm" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-sizes-sm">
   
   Size sm
 
   
 </cds-button>
-
-<cds-button kind="primary" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-sizes-md">
+<cds-button kind="primary" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-sizes-md">
   
   Size md
 
   
 </cds-button>
-
-<cds-button kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-sizes-lg">
+<cds-button kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-sizes-lg">
   
   Size lg
 
@@ -112,7 +105,7 @@
 ```
 
 ```html
-<cds-button disabled kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-single-disabled">
+<cds-button disabled kind="primary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="button-single-disabled">
   
   Disabled
 

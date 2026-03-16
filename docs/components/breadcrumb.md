@@ -14,12 +14,10 @@
 <cds-breadcrumb size="md" id="breadcrumb-single-default">
   
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -28,12 +26,10 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Catalog
         
@@ -42,8 +38,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Current page
@@ -69,12 +64,10 @@
 <cds-breadcrumb no-trailing-slash size="md" id="breadcrumb-single-no-trailing-slash">
   
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -83,12 +76,10 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Library
         
@@ -97,8 +88,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Components
@@ -124,12 +114,10 @@
 <cds-breadcrumb size="sm" id="breadcrumb-single-small">
   
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Home
         
@@ -138,12 +126,10 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
-        
-<cds-breadcrumb-link href="#" size="MEDIUM">
+        <cds-breadcrumb-link href="#" size="MEDIUM">
   
           Docs
         
@@ -152,8 +138,7 @@
     
 </cds-breadcrumb-item>
   
-    
-<cds-breadcrumb-item>
+    <cds-breadcrumb-item>
   
       
         Breadcrumb

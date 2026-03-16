@@ -22,13 +22,15 @@ const resolveGraphene = async () => {
 
 const start = async () => {
   const Graphene = await resolveGraphene()
-  const { WebComponentManager, mergeWebComponentsAttrs } = Graphene
+  const { EventManager, WebComponentManager, mergeWebComponentsAttrs } = Graphene
 
   const componentManager = new WebComponentManager({
     hideUntilReady: true,
     readyTimeoutMs: 3000
   })
   componentManager.connect()
+  const eventManager = new EventManager()
+  eventManager.connect()
 
   const liveSocket = new LiveSocket("/live", Socket, {
     params: { _csrf_token: csrfToken },
@@ -45,6 +47,7 @@ const start = async () => {
   // >> liveSocket.disableLatencySim()
   window.liveSocket = liveSocket
   ;(window as any).componentManager = componentManager
+  ;(window as any).eventManager = eventManager
 }
 
 start().catch((_error) => {

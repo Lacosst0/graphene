@@ -1,7 +1,5 @@
 # `tree_view`
 
-## basic
-
 ### default
 
 ```heex
@@ -21,43 +19,34 @@
 ```
 
 ```html
-<cds-tree-view label="Primary navigation" size="sm" id="basic-single-default">
+<cds-tree-view label="Primary navigation" size="sm" id="tree-view-single-default">
   
+  <cds-tree-node id="products" is-expanded label="Products">
   
-<cds-tree-node id="products" is-expanded label="Products">
-  
-  
-<cds-tree-node id="catalog" label="Catalog">
+  <cds-tree-node id="catalog" label="Catalog">
   
 </cds-tree-node>
-  
-<cds-tree-node id="pricing" label="Pricing">
+  <cds-tree-node id="pricing" label="Pricing">
   
 </cds-tree-node>
-  
-<cds-tree-node id="releases" label="Releases">
+  <cds-tree-node id="releases" label="Releases">
   
 </cds-tree-node>
 
 </cds-tree-node>
-
 <cds-tree-node id="teams" is-expanded label="Teams">
   
-  
-<cds-tree-node id="design" label="Design">
-  
-</cds-tree-node>
-  
-<cds-tree-node id="engineering" label="Engineering" selected>
+  <cds-tree-node id="design" label="Design">
   
 </cds-tree-node>
+  <cds-tree-node id="engineering" label="Engineering" selected>
   
-<cds-tree-node disabled id="marketing" label="Marketing">
+</cds-tree-node>
+  <cds-tree-node disabled id="marketing" label="Marketing">
   
 </cds-tree-node>
 
 </cds-tree-node>
-
 <cds-tree-node active id="settings" label="Settings">
   
 </cds-tree-node>
@@ -83,39 +72,31 @@
 ```
 
 ```html
-<cds-tree-view label="Workspace navigation" size="sm" id="basic-single-nested">
+<cds-tree-view label="Workspace navigation" size="sm" id="tree-view-single-nested">
   
+  <cds-tree-node id="projects" is-expanded label="Projects">
   
-<cds-tree-node id="projects" is-expanded label="Projects">
-  
-  
-<cds-tree-node id="alpha" label="Alpha">
+  <cds-tree-node id="alpha" label="Alpha">
   
 </cds-tree-node>
-  
-<cds-tree-node id="beta" label="Beta">
+  <cds-tree-node id="beta" label="Beta">
   
 </cds-tree-node>
-  
-<cds-tree-node id="gamma" label="Gamma">
+  <cds-tree-node id="gamma" label="Gamma">
   
 </cds-tree-node>
 
 </cds-tree-node>
-
 <cds-tree-node id="analytics" is-expanded label="Analytics">
   
-  
-<cds-tree-node id="dashboards" label="Dashboards">
+  <cds-tree-node id="dashboards" label="Dashboards">
   
 </cds-tree-node>
-  
-<cds-tree-node id="reports" label="Reports">
+  <cds-tree-node id="reports" label="Reports">
   
 </cds-tree-node>
 
 </cds-tree-node>
-
 <cds-tree-node id="settings" label="Settings">
   
 </cds-tree-node>
@@ -136,22 +117,18 @@
 ```
 
 ```html
-<cds-tree-view label="Small tree" size="sm" id="basic-single-sizes">
+<cds-tree-view label="Small tree" size="sm" id="tree-view-single-sizes">
   
+  <cds-tree-node id="favorites" is-expanded label="Favorites">
   
-<cds-tree-node id="favorites" is-expanded label="Favorites">
-  
-  
-<cds-tree-node id="overview" label="Overview">
+  <cds-tree-node id="overview" label="Overview">
   
 </cds-tree-node>
-  
-<cds-tree-node id="recent" label="Recently viewed">
+  <cds-tree-node id="recent" label="Recently viewed">
   
 </cds-tree-node>
 
 </cds-tree-node>
-
 <cds-tree-node id="archive" label="Archive">
   
 </cds-tree-node>

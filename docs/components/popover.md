@@ -20,16 +20,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Auto align popover
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Auto-aligned popover content.</p>
@@ -61,16 +59,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Offset 16
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Offset axis example.</p>
@@ -102,16 +98,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Caret popover
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Auto align with caret.</p>
@@ -146,16 +140,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Open popover
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Popover content goes here.</p>
@@ -187,16 +179,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Top popover
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Top aligned content.</p>
@@ -228,16 +218,14 @@
   
   
     
-  
-<cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+  <cds-button kind="secondary" link-role="button" size="lg" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   Right popover
   
 </cds-button>
 
   
   
-    
-<cds-popover-content backgroundToken="layer" dropShadow slot="content">
+    <cds-popover-content backgroundToken="layer" dropShadow slot="content">
   
       
   <p>Right aligned content.</p>

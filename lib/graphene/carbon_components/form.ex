@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.Form do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :for, :any, default: nil, doc: "form data passed to Phoenix.Component.form/1"
   attr :as, :any, default: nil, doc: "form name passed to Phoenix.Component.form/1"
   attr :action, :string, default: nil, doc: "form action"
@@ -68,6 +69,7 @@ defmodule Graphene.CarbonComponents.Form do
     doc: "Specify whether the message should be displayed in the Form Group"
 
   attr :message_text, :any, doc: "Provide the text for the message in the Form Group"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -82,6 +84,7 @@ defmodule Graphene.CarbonComponents.Form do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

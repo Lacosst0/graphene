@@ -1,7 +1,5 @@
 # `multi_select`
 
-## basic
-
 ### default
 
 ```heex
@@ -15,30 +13,26 @@
 
 ```html
 <input type="hidden" id="multi-select-default-input" name="multi-select-default" value="">
-
-<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" locale="en" name="multi-select-default" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="" id="basic-single-default" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-default-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" locale="en" name="multi-select-default" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="" id="multi-select-single-default" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-default-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="title-text">
     Choose multiple
   </div>
   
-    
-<cds-multi-select-item size="md" value="one">
+    <cds-multi-select-item size="md" value="one">
   
       Option 1
     
 </cds-multi-select-item>
   
-    
-<cds-multi-select-item size="md" value="two">
+    <cds-multi-select-item size="md" value="two">
   
       Option 2
     
 </cds-multi-select-item>
   
-    
-<cds-multi-select-item size="md" value="three">
+    <cds-multi-select-item size="md" value="three">
   
       Option 3
     
@@ -64,23 +58,20 @@
 
 ```html
 <input type="hidden" id="multi-select-inline-input" name="multi-select-inline" value="">
-
-<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" locale="en" name="multi-select-inline" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="inline" id="basic-single-inline" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-inline-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" locale="en" name="multi-select-inline" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="inline" id="multi-select-single-inline" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-inline-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="title-text">
     Inline
   </div>
   
-    
-<cds-multi-select-item size="md" value="alpha">
+    <cds-multi-select-item size="md" value="alpha">
   
       Alpha
     
 </cds-multi-select-item>
   
-    
-<cds-multi-select-item size="md" value="beta">
+    <cds-multi-select-item size="md" value="beta">
   
       Beta
     
@@ -106,23 +97,20 @@
 
 ```html
 <input type="hidden" id="multi-select-disabled-input" name="multi-select-disabled" value="">
-
-<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" disabled locale="en" name="multi-select-disabled" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="" id="basic-single-disabled" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-disabled-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-multi-select clear-selection-description="Total items selected: " clear-selection-text="To clear selection, press Delete or Backspace." direction="bottom" disabled locale="en" name="multi-select-disabled" required-validity-message="Please fill out this field." selection-feedback="top-after-reopen" size="md" type="" id="multi-select-single-disabled" style="min-width: 20rem;" data-form-detail="checked" data-form-event="cds-multi-select-selected" data-form-input="multi-select-disabled-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="title-text">
     Disabled
   </div>
   
-    
-<cds-multi-select-item size="md" value="one">
+    <cds-multi-select-item size="md" value="one">
   
       Option 1
     
 </cds-multi-select-item>
   
-    
-<cds-multi-select-item size="md" value="two">
+    <cds-multi-select-item size="md" value="two">
   
       Option 2
     

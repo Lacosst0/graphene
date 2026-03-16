@@ -27,6 +27,7 @@ defmodule Graphene.CarbonComponents.SideNavMenu do
 
   attr :large, :boolean, doc: "Specify if this is a large variation of the side nav menu"
   attr :title, :string, doc: "The title text."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :title_icon, doc: "The icon."
   slot :inner_block
@@ -46,6 +47,7 @@ defmodule Graphene.CarbonComponents.SideNavMenu do
   attr :href, :string, doc: "Link `href`."
   attr :target, :string, doc: "Link `target`."
   attr :title, :string, doc: "The title."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

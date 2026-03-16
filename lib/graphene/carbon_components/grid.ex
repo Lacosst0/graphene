@@ -47,6 +47,7 @@ defmodule Graphene.CarbonComponents.Grid do
       "13"
     ]
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :column do
@@ -91,15 +92,19 @@ defmodule Graphene.CarbonComponents.Grid do
         end
       end
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :align,
+        :condensed,
+        :full_width,
+        :narrow,
+        :row_gap
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.grid
-      align={@align}
-      condensed={@condensed}
-      full_width={@full_width}
-      narrow={@narrow}
-      row_gap={@row_gap}
-      {@rest}
-    >
+    <CoreComponents.grid {@component_attrs} {@rest}>
       <%= for column <- @column do %>
         <CoreComponents.column
           sm={column[:sm]}

@@ -33,6 +33,7 @@ defmodule Graphene.CarbonComponents.ContentSwitcher do
 
   attr :size, :string, doc: "Content switcher size.", values: [nil, "sm", "md", "lg", "xl"]
   attr :value, :string, doc: "The value of the selected item."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -53,16 +54,20 @@ defmodule Graphene.CarbonComponents.ContentSwitcher do
       |> assign_new(:size, fn -> nil end)
       |> assign_new(:value, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :icon,
+        :low_contrast,
+        :selected_index,
+        :selection_mode,
+        :size,
+        :value
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.content_switcher
-      icon={@icon}
-      low_contrast={@low_contrast}
-      selected_index={@selected_index}
-      selection_mode={@selection_mode}
-      size={@size}
-      value={@value}
-      {@rest}
-    >
+    <CoreComponents.content_switcher {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.content_switcher_item
           value={item[:value]}
@@ -105,6 +110,7 @@ defmodule Graphene.CarbonComponents.ContentSwitcher do
     doc:
       "The `value` attribute that is set to the parent `<cds-content-switcher>`\nwhen this content switcher item is selected."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :tooltip_content, doc: "Tooltip content for the item."
   slot :inner_block

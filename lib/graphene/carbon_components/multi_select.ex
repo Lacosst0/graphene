@@ -102,12 +102,13 @@ defmodule Graphene.CarbonComponents.MultiSelect do
   attr :warn_text, :string,
     doc: "Provide the text that is displayed when the control is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
   slot :title_text, doc: "Title text content."
@@ -134,7 +135,6 @@ defmodule Graphene.CarbonComponents.MultiSelect do
       |> assign_new(:invalid_text, fn -> nil end)
       |> assign_new(:label, fn -> nil end)
       |> assign_new(:name, fn -> nil end)
-      |> assign_new(:field, fn -> nil end)
       |> assign_new(:open, fn -> false end)
       |> assign_new(:read_only, fn -> false end)
       |> assign_new(:required, fn -> false end)
@@ -146,40 +146,45 @@ defmodule Graphene.CarbonComponents.MultiSelect do
       |> assign_new(:warn, fn -> false end)
       |> assign_new(:warn_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :autoalign,
+        :clear_selection_description,
+        :clear_selection_label,
+        :clear_selection_text,
+        :direction,
+        :disabled,
+        :filterable,
+        :helper_text,
+        :hide_label,
+        :invalid,
+        :invalid_text,
+        :label,
+        :locale,
+        :name,
+        :open,
+        :read_only,
+        :required,
+        :required_validity_message,
+        :select_all,
+        :selection_feedback,
+        :size,
+        :toggle_label_closed,
+        :toggle_label_open,
+        :type,
+        :validity_message,
+        :value,
+        :warn,
+        :warn_text,
+        :field,
+        :form,
+        :form_event
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <FormComponents.multi_select
-      autoalign={@autoalign}
-      clear_selection_label={@clear_selection_label}
-      clear_selection_text={@clear_selection_text}
-      direction={@direction}
-      disabled={@disabled}
-      filterable={@filterable}
-      helper_text={@helper_text}
-      hide_label={@hide_label}
-      invalid={@invalid}
-      invalid_text={@invalid_text}
-      label={@label}
-      locale={@locale}
-      name={@name}
-      open={@open}
-      read_only={@read_only}
-      required={@required}
-      required_validity_message={@required_validity_message}
-      select_all={@select_all}
-      selection_feedback={@selection_feedback}
-      size={@size}
-      toggle_label_closed={@toggle_label_closed}
-      toggle_label_open={@toggle_label_open}
-      type={@type}
-      validity_message={@validity_message}
-      value={@value}
-      warn={@warn}
-      warn_text={@warn_text}
-      field={@field}
-      form={@form}
-      form_event={@form_event}
-      {@rest}
-    >
+    <FormComponents.multi_select {@component_attrs} {@rest}>
       <.dynamic_tag
         :for={title <- @title_text}
         tag_name={Map.get(title, :tag, "div")}
@@ -225,6 +230,7 @@ defmodule Graphene.CarbonComponents.MultiSelect do
       "The `value` attribute that is set to the parent `<cds-dropdown>` when this dropdown item is selected."
 
   attr :selected, :boolean, doc: "Whether the item is selected."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

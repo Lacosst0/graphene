@@ -55,48 +55,77 @@ defmodule DemoWeb.CostsLive do
       <:content_text subtitle="Track spend, forecast demand, and allocate budgets across teams." />
     </.page_header>
 
-    <.grid>
+    <.grid full_width row_gap="07">
       <:column span="16">
-        <.grid full_width class="demo-section">
+        <.grid>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card">
-              <h3>Budget health</h3>
-              <p class="demo-muted">Current month spend</p>
-              <h2>{format_money(@spend)}</h2>
-              <.progress_bar value={@spend / @budget * 100} />
-              <p class="demo-muted">Budget {format_money(@budget)}</p>
+            <.tile>
+              <.stack gap="3">
+                <.heading>Budget health</.heading>
+                <p>Current month spend</p>
+                <h3>{format_money(@spend)}</h3>
+                <.progress_bar value={@spend / @budget * 100} />
+                <p>Budget {format_money(@budget)}</p>
+              </.stack>
             </.tile>
           </:column>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card demo-card--elevated">
-              <h3>Adjust budget</h3>
-              <.form for={@budget_form} phx-change="update_budget">
-                <.number_input
-                  field={@budget_form[:budget]}
-                  label="Monthly budget"
-                  min="0"
-                />
-              </.form>
-              <p class="demo-muted">Changes apply immediately to forecasts and alerts.</p>
+            <.tile>
+              <.stack gap="3">
+                <.heading>Adjust budget</.heading>
+                <.form for={@budget_form} phx-change="update_budget">
+                  <.form_group
+                    legend_text="Monthly budget"
+                    message
+                    message_text="Changes apply immediately to forecasts and alerts."
+                  >
+                    <.number_input
+                      field={@budget_form[:budget]}
+                      label="Monthly budget"
+                      min="0"
+                    />
+                  </.form_group>
+                </.form>
+              </.stack>
             </.tile>
           </:column>
         </.grid>
       </:column>
 
       <:column span="16">
-        <div class="demo-section demo-card demo-card--elevated">
-          <h3>Cost centers</h3>
-          <.table_live id="cost-centers" rows={@cost_centers} size="sm">
-            <:col :let={center} label="Team">{center.name}</:col>
-            <:col :let={center} label="Month">{center.month}</:col>
-            <:col :let={center} label="Spend">{format_money(center.spend)}</:col>
-            <:col :let={center} label="Delta">
-              <.tag type={if(center.change >= 0, do: "purple", else: "cool-gray")}>
-                {delta_label(center.change)}
-              </.tag>
-            </:col>
-          </.table_live>
-        </div>
+        <.data_table id="cost-centers" rows={@cost_centers} row_id={& &1.id} size="sm">
+          <:title>Cost centers</:title>
+          <:description>Monthly allocation trends by team.</:description>
+          <:toolbar>
+            <.table_toolbar>
+              <.table_toolbar_content>
+                <.table_toolbar_search placeholder="Search cost centers" size="sm" />
+                <.overflow_menu toolbar_action>
+                  <:icon>
+                    <Graphene.Icons.icon fit="width" name="overflow-menu--horizontal" />
+                  </:icon>
+                  <:tooltip_content>Filters</:tooltip_content>
+                  <:item>Month</:item>
+                  <:item>Team</:item>
+                </.overflow_menu>
+              </.table_toolbar_content>
+            </.table_toolbar>
+          </:toolbar>
+          <:col :let={center} label="Team">{center.name}</:col>
+          <:col :let={center} label="Month">{center.month}</:col>
+          <:col :let={center} label="Spend">{format_money(center.spend)}</:col>
+          <:col :let={center} label="Delta">
+            <.tag type={
+              cond do
+                center.change > 0 -> "green"
+                center.change < 0 -> "red"
+                true -> "cool-gray"
+              end
+            }>
+              {delta_label(center.change)}
+            </.tag>
+          </:col>
+        </.data_table>
       </:column>
     </.grid>
     """

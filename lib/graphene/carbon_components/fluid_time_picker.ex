@@ -40,6 +40,7 @@ defmodule Graphene.CarbonComponents.FluidTimePicker do
   attr :type, :string, doc: "Input type", default: "text"
   attr :value, :string, doc: "Value of the input"
   attr :warning, :boolean, doc: "Specify whether the control is in warning state"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :invalid_text, doc: "The invalid text."
   slot :label_text, doc: "The label text."
@@ -93,6 +94,7 @@ defmodule Graphene.CarbonComponents.FluidTimePicker do
   attr :value, :string, doc: "The value of the text area."
   attr :warn, :boolean, doc: "Specify if the currently value is warn."
   attr :warn_text, :string, doc: "Message which is displayed if the value is warn."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :helper_text, doc: "The helper text."
   slot :label_text, doc: "The label text."
@@ -115,6 +117,7 @@ defmodule Graphene.CarbonComponents.FluidTimePicker do
 
   """
   attr :is_only_two, :boolean, doc: "Specify if there are only two TimePicker elements."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

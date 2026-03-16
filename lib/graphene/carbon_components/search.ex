@@ -42,12 +42,13 @@ defmodule Graphene.CarbonComponents.Search do
   attr :type, :string, doc: "The `<input>` name."
   attr :value, :string, doc: "The value."
   attr :color_scheme, :string, doc: "Color scheme for the search."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
   slot :inner_block

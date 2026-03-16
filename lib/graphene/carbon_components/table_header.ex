@@ -41,6 +41,7 @@ defmodule Graphene.CarbonComponents.TableHeader do
       "The table sort direction.\nIf present, this table header cell will have a sorting UI. Choose between `ascending` or `descending`.",
     values: [nil, nil, "xs", "sm", "md", "lg", "xl"]
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -55,6 +56,7 @@ defmodule Graphene.CarbonComponents.TableHeader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -105,6 +107,7 @@ defmodule Graphene.CarbonComponents.TableHeader do
       "The `name` attribute for the `<input>` for selection.\nIf present, this table row will be a selectable one."
 
   attr :selection_value, :string, doc: "The `value` attribute for the `<input>` for selection."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -119,6 +122,7 @@ defmodule Graphene.CarbonComponents.TableHeader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

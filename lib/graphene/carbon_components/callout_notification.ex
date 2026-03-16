@@ -48,8 +48,9 @@ defmodule Graphene.CarbonComponents.CalloutNotification do
   attr :status_icon_description, :string,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any, doc: "Specify an optional duration the notification should be closed in"
+  attr :timeout, :string, doc: "Specify an optional duration the notification should be closed in"
   attr :title_id, :string, doc: "Specify the id for the title element."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :action, doc: "The action button."
   slot :subtitle, doc: "The subtitle."

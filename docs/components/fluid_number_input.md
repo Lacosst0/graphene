@@ -1,7 +1,5 @@
 # `fluid_number_input`
 
-## basic
-
 ### default
 
 ```heex
@@ -12,8 +10,7 @@
 
 ```html
 <input type="hidden" id="fluid-number-default-input" name="fluid-number-default" value="10">
-
-<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-default" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="10" id="basic-single-default" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-default-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-default" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="10" id="fluid-number-input-single-default" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-default-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   
@@ -35,8 +32,7 @@
 
 ```html
 <input type="hidden" id="fluid-number-helper-input" name="fluid-number-helper" value="2">
-
-<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-helper" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="2" id="basic-single-helper-text" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-helper-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-helper" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="2" id="fluid-number-input-single-helper-text" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-helper-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   <div slot="helper-text">
@@ -60,8 +56,7 @@
 
 ```html
 <input type="hidden" id="fluid-number-invalid-input" name="fluid-number-invalid" value="0">
-
-<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-invalid" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="0" id="basic-single-invalid" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-invalid-input" data-form-mode="value" phx-hook="Graphene.Internal.FormComponents.GrapheneFormBridge">
+<cds-fluid-number-input decrement-button-assistive-text="decrease number input" hidePasswordLabel="Hide password" increment-button-assistive-text="increase number input" max="Infty" min="-Infty" name="fluid-number-invalid" required-validity-message="Please fill out this field." showPasswordLabel="Show password" size="md" step="1" tooltipAlignment="center" tooltipDirection="bottom" type="text" value="0" id="fluid-number-input-single-invalid" data-form-detail="checked" data-form-event="cds-number-input" data-form-input="fluid-number-invalid-input" data-form-mode="value" phx-hook="GrapheneFormBridge">
   
   
   

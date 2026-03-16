@@ -15,25 +15,20 @@
 
 ```html
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="lg" label="Actions" x="200" y="140" id="menu-single-default">
   
-<cds-menu open size="lg" label="Actions" x="200" y="140" id="menu-single-default">
-  
-  
-<cds-menu-item kind="default" label="First action">
+  <cds-menu-item danger-description="danger" kind="default" label="First action">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Second action">
+<cds-menu-item danger-description="danger" kind="default" label="Second action">
   
   
 </cds-menu-item>
-
 <cds-menu-item-divider>
   
 </cds-menu-item-divider>
-
-<cds-menu-item kind="danger" label="Danger action">
+<cds-menu-item danger-description="danger" kind="danger" label="Danger action">
   
   
 </cds-menu-item>
@@ -56,16 +51,13 @@
 
 ```html
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="md" label="More" x="520" y="140" id="menu-single-secondary">
   
-<cds-menu open size="md" label="More" x="520" y="140" id="menu-single-secondary">
-  
-  
-<cds-menu-item kind="default" label="Edit">
+  <cds-menu-item danger-description="danger" kind="default" label="Edit">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Duplicate">
+<cds-menu-item danger-description="danger" kind="default" label="Duplicate">
   
   
 </cds-menu-item>
@@ -109,16 +101,13 @@
 
 ```html
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="sm" label="Menu" x="200" y="360" id="menu-sizes-sm">
   
-<cds-menu open size="sm" label="Menu" x="200" y="360" id="menu-sizes-sm">
-  
-  
-<cds-menu-item kind="default" label="Item A">
+  <cds-menu-item danger-description="danger" kind="default" label="Item A">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Item B">
+<cds-menu-item danger-description="danger" kind="default" label="Item B">
   
   
 </cds-menu-item>
@@ -127,16 +116,13 @@
 
 </div>
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="md" label="Menu" x="420" y="360" id="menu-sizes-md">
   
-<cds-menu open size="md" label="Menu" x="420" y="360" id="menu-sizes-md">
-  
-  
-<cds-menu-item kind="default" label="Item A">
+  <cds-menu-item danger-description="danger" kind="default" label="Item A">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Item B">
+<cds-menu-item danger-description="danger" kind="default" label="Item B">
   
   
 </cds-menu-item>
@@ -145,16 +131,13 @@
 
 </div>
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="lg" label="Menu" x="640" y="360" id="menu-sizes-lg">
   
-<cds-menu open size="lg" label="Menu" x="640" y="360" id="menu-sizes-lg">
-  
-  
-<cds-menu-item kind="default" label="Item A">
+  <cds-menu-item danger-description="danger" kind="default" label="Item A">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Item B">
+<cds-menu-item danger-description="danger" kind="default" label="Item B">
   
   
 </cds-menu-item>
@@ -163,16 +146,13 @@
 
 </div>
 <div class="psb" style="position: relative; min-height: 240px;">
+  <cds-menu open size="xl" label="Menu" x="860" y="360" id="menu-sizes-xl">
   
-<cds-menu open size="xl" label="Menu" x="860" y="360" id="menu-sizes-xl">
-  
-  
-<cds-menu-item kind="default" label="Item A">
+  <cds-menu-item danger-description="danger" kind="default" label="Item A">
   
   
 </cds-menu-item>
-
-<cds-menu-item kind="default" label="Item B">
+<cds-menu-item danger-description="danger" kind="default" label="Item B">
   
   
 </cds-menu-item>

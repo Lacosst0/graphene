@@ -17,6 +17,7 @@ defmodule Graphene.CarbonComponents.Icon do
   attr :class, :string, doc: "Custom CSS classes"
   attr :icon, :any, doc: "The imported icon"
   attr :size, :string, doc: "The size of the icon (16, 20, 24, 32)", default: "16"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :name, :string, doc: "Carbon icon name"
   attr :rest, :global
   slot :inner_block
@@ -147,6 +148,7 @@ defmodule Graphene.CarbonComponents.Icon do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :tooltip_content, doc: "Tooltip content."
 
@@ -180,39 +182,43 @@ defmodule Graphene.CarbonComponents.Icon do
       |> assign_new(:target, fn -> nil end)
       |> assign_new(:tooltip_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :align,
+        :autoalign,
+        :autofocus,
+        :batch_action,
+        :button_class_name,
+        :close_on_activation,
+        :danger_description,
+        :default_open,
+        :disabled,
+        :download,
+        :enter_delay_ms,
+        :has_main_content,
+        :href,
+        :hreflang,
+        :is_expressive,
+        :is_selected,
+        :kind,
+        :leave_delay_ms,
+        :link_role,
+        :open_tooltip,
+        :ping,
+        :rel,
+        :size,
+        :tab_index,
+        :target,
+        :tooltip_alignment,
+        :tooltip_position,
+        :tooltip_text,
+        :type
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.icon_button
-      align={assigns[:align]}
-      autoalign={assigns[:autoalign]}
-      autofocus={assigns[:autofocus]}
-      batch_action={assigns[:batch_action]}
-      button_class_name={assigns[:button_class_name]}
-      close_on_activation={assigns[:close_on_activation]}
-      danger_description={assigns[:danger_description]}
-      default_open={assigns[:default_open]}
-      disabled={assigns[:disabled]}
-      download={assigns[:download]}
-      enter_delay_ms={assigns[:enter_delay_ms]}
-      has_main_content={assigns[:has_main_content]}
-      href={assigns[:href]}
-      hreflang={assigns[:hreflang]}
-      is_expressive={assigns[:is_expressive]}
-      is_selected={assigns[:is_selected]}
-      kind={assigns[:kind]}
-      leave_delay_ms={assigns[:leave_delay_ms]}
-      link_role={assigns[:link_role]}
-      open_tooltip={assigns[:open_tooltip]}
-      ping={assigns[:ping]}
-      rel={assigns[:rel]}
-      size={assigns[:size]}
-      tab_index={assigns[:tab_index]}
-      target={assigns[:target]}
-      tooltip_alignment={assigns[:tooltip_alignment]}
-      tooltip_position={assigns[:tooltip_position]}
-      tooltip_text={assigns[:tooltip_text]}
-      type={assigns[:type]}
-      {@rest}
-    >
+    <CoreComponents.icon_button {@component_attrs} {@rest}>
       <%= for icon <- @icon do %>
         <% size_value =
           case icon[:size] do
@@ -277,6 +283,7 @@ defmodule Graphene.CarbonComponents.Icon do
 
   attr :label, :string, doc: "Label next to the icon."
   attr :size, :string, doc: "Icon indicator should be size 16 or 20", default: "16"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

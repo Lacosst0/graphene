@@ -19,6 +19,7 @@ defmodule Graphene.CarbonComponents.TableCell do
       "Specify whether the overflow menu (if it exists) should be shown always, or only on hover"
 
   attr :size, :any, doc: "The table size."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -33,6 +34,7 @@ defmodule Graphene.CarbonComponents.TableCell do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

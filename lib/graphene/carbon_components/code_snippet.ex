@@ -66,6 +66,7 @@ defmodule Graphene.CarbonComponents.CodeSnippet do
     default: "single"
 
   attr :wrap_text, :boolean, doc: "`true` if the button should be disabled."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -77,6 +78,26 @@ defmodule Graphene.CarbonComponents.CodeSnippet do
       |> assign_new(:hide_copy_button, fn -> false end)
       |> assign_new(:wrap_text, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :copy_text,
+        :disabled,
+        :feedback,
+        :feedback_timeout,
+        :hide_copy_button,
+        :max_collapsed_number_of_rows,
+        :max_expanded_number_of_rows,
+        :min_collapsed_number_of_rows,
+        :min_expanded_number_of_rows,
+        :show_less_text,
+        :show_more_text,
+        :tooltip_content,
+        :type,
+        :wrap_text
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
     <% copy_text =
       @copy_text ||
@@ -85,23 +106,7 @@ defmodule Graphene.CarbonComponents.CodeSnippet do
         |> Phoenix.HTML.Safe.to_iodata()
         |> IO.iodata_to_binary()
         |> String.trim() %>
-    <CoreComponents.code_snippet
-      copy_text={copy_text}
-      disabled={@disabled}
-      feedback={@feedback}
-      feedback_timeout={@feedback_timeout}
-      hide_copy_button={@hide_copy_button}
-      max_collapsed_number_of_rows={@max_collapsed_number_of_rows}
-      max_expanded_number_of_rows={@max_expanded_number_of_rows}
-      min_collapsed_number_of_rows={@min_collapsed_number_of_rows}
-      min_expanded_number_of_rows={@min_expanded_number_of_rows}
-      show_less_text={@show_less_text}
-      show_more_text={@show_more_text}
-      tooltip_content={@tooltip_content}
-      type={@type}
-      wrap_text={@wrap_text}
-      {@rest}
-    >
+    <CoreComponents.code_snippet {@component_attrs} copy_text={copy_text} {@rest}>
       {render_slot(@inner_block)}
     </CoreComponents.code_snippet>
     """
@@ -118,6 +123,7 @@ defmodule Graphene.CarbonComponents.CodeSnippet do
 
   """
   attr :type, :string, doc: "Code snippet type.", values: [nil, "single", "inline", "multi"]
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

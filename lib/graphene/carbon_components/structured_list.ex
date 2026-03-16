@@ -21,6 +21,7 @@ defmodule Graphene.CarbonComponents.StructuredList do
     doc:
       "The `name` attribute for the `<input>` for selection.\nIf present, this structured list will be a selectable one."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rows, :list, default: nil
   attr :row_id, :any, default: nil
   attr :selected_ids, :list, default: nil
@@ -43,13 +44,17 @@ defmodule Graphene.CarbonComponents.StructuredList do
       assigns
       |> assign(:selected_set, MapSet.new(Enum.map(assigns.selected_ids || [], &to_string/1)))
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :condensed,
+        :flush,
+        :selection_name
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.structured_list
-      condensed={@condensed}
-      flush={@flush}
-      selection_name={@selection_name}
-      {@rest}
-    >
+    <CoreComponents.structured_list {@component_attrs} {@rest}>
       <CoreComponents.structured_list_head>
         <CoreComponents.structured_list_header_row selection_name={@selection_name}>
           <CoreComponents.structured_list_header_cell :for={col <- @col}>
@@ -94,6 +99,7 @@ defmodule Graphene.CarbonComponents.StructuredList do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -108,6 +114,7 @@ defmodule Graphene.CarbonComponents.StructuredList do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -122,6 +129,7 @@ defmodule Graphene.CarbonComponents.StructuredList do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -147,6 +155,7 @@ defmodule Graphene.CarbonComponents.StructuredList do
       "The `name` attribute for the `<input>` for selection.\nIf present, this structured list row will be a selectable one."
 
   attr :selection_value, :string, doc: "The `value` attribute for the `<input>` for selection."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

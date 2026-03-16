@@ -1,5 +1,7 @@
 /* dynamic_loader.ts */
-import { componentImports } from "./_dynamic_loader_mapping";
+import { componentImports as carbonComponentImports } from "./_dynamic_loader_mapping";
+import { productComponentImports } from "./_dynamic_loader_mapping_products";
+import { ensureFormAssociatedTag } from "./form_associated";
 
 type ComponentImporter = () => Promise<unknown>;
 
@@ -10,48 +12,108 @@ export interface WebComponentManagerOptions {
   root?: ParentNode | null;
 }
 
-const componentNames = Object.keys(componentImports);
+const componentImports = {
+  ...carbonComponentImports,
+  ...productComponentImports
+};
+const baseComponentNames = Object.keys(componentImports);
+const formComponentNames = baseComponentNames.map((name) => `${name}-form`);
+const componentNames = [...baseComponentNames, ...formComponentNames];
 const componentSelector = componentNames.join(",");
 const componentSet = new Set(componentNames);
 const loadedComponents: Record<string, Promise<unknown>> = {};
 const numberInputTags = new Set(["cds-number-input", "cds-fluid-number-input"]);
+const notificationTags = new Set(["c4p-notification"]);
 const patchedNumberInputs = new Set<string>();
 const definePatchFlag = "__graphenePatchedDefine";
 const originalDefine = customElements.define.bind(customElements);
+
+function normalizeTagName(tagName: string): { tag: string; base: string; isForm: boolean } {
+  const lower = tagName.toLowerCase();
+  if (lower.endsWith("-form")) {
+    return { tag: lower, base: lower.slice(0, -5), isForm: true };
+  }
+  return { tag: lower, base: lower, isForm: false };
+}
 
 function isComponentTag(tagName: string): boolean {
   return componentSet.has(tagName.toLowerCase());
 }
 
 function importerForTag(tagName: string): ComponentImporter | undefined {
-  return componentImports[tagName.toLowerCase()];
+  const { base } = normalizeTagName(tagName);
+  return componentImports[base];
 }
 
 function loadComponentByTag(tagName: string): Promise<unknown> | undefined {
-  const componentName = tagName.toLowerCase();
+  const { tag, base, isForm } = normalizeTagName(tagName);
 
-  if (!loadedComponents[componentName]) {
-    const importer = importerForTag(componentName);
+  if (!loadedComponents[base]) {
+    const importer = importerForTag(base);
     if (!importer) {
-      console.warn(`No importer found for component: ${componentName}`);
+      console.warn(`No importer found for component: ${base}`);
       return undefined;
     }
 
-    loadedComponents[componentName] = importer()
+    loadedComponents[base] = importer()
       .then((module) => module)
       .catch((err) => {
-        console.error(`Error loading ${componentName}:`, err);
-        delete loadedComponents[componentName];
+        console.error(`Error loading ${base}:`, err);
+        delete loadedComponents[base];
         throw err;
       });
   }
 
-  return loadedComponents[componentName];
+  const loadPromise = loadedComponents[base];
+
+  if (isForm) {
+    loadPromise.then(() => ensureFormAssociatedTag(tag));
+  }
+
+  return loadPromise;
+}
+
+function readNotificationTimestamp(el: Element): Date | null {
+  if (!el.hasAttribute("timestamp")) {
+    return null;
+  }
+  const raw = el.getAttribute("timestamp");
+  if (!raw || raw === "null" || raw === "undefined") {
+    return null;
+  }
+  const parsed = Date.parse(raw);
+  if (Number.isNaN(parsed)) {
+    return null;
+  }
+  return new Date(parsed);
+}
+
+function normalizeNotificationTimestamp(el: Element): void {
+  const tagName = el.tagName.toLowerCase();
+  if (!notificationTags.has(tagName)) {
+    return;
+  }
+
+  const apply = () => {
+    const value = readNotificationTimestamp(el);
+    try {
+      (el as any).timestamp = value ?? undefined;
+    } catch (_error) {
+      // Ignore if the component rejects the property assignment.
+    }
+  };
+
+  if (customElements.get(tagName)) {
+    apply();
+  } else {
+    customElements.whenDefined(tagName).then(apply);
+  }
 }
 
 function normalizeNumberInputStep(el: Element): void {
   const tagName = el.tagName.toLowerCase();
-  if (!numberInputTags.has(tagName)) {
+  const { base } = normalizeTagName(tagName);
+  if (!numberInputTags.has(base)) {
     return;
   }
 
@@ -71,36 +133,6 @@ function normalizeNumberInputStep(el: Element): void {
     applyStep();
   } else {
     customElements.whenDefined(tagName).then(applyStep);
-  }
-}
-
-function applyGrapheneOpen(el: Element): void {
-  const value = el.getAttribute("data-graphene-open");
-  if (value === null) {
-    return;
-  }
-
-  const normalized = value === "false" ? false : value === "true" ? true : null;
-  if (normalized === null) {
-    return;
-  }
-
-  const tagName = el.tagName.toLowerCase();
-  const apply = () => {
-    try {
-      (el as any).open = normalized;
-      if (!normalized) {
-        el.removeAttribute("open");
-      }
-    } catch (_error) {
-      // Ignore if the component rejects the property assignment.
-    }
-  };
-
-  if (customElements.get(tagName)) {
-    apply();
-  } else {
-    customElements.whenDefined(tagName).then(apply);
   }
 }
 
@@ -200,9 +232,10 @@ function scanAndLoad(root: ParentNode | null): void {
   }
 
   if (root instanceof Element && isComponentTag(root.tagName)) {
+    normalizeNotificationTimestamp(root);
     normalizeNumberInputStep(root);
-    applyGrapheneOpen(root);
-    ensureNumberInputPatched(root.tagName.toLowerCase());
+    const { base } = normalizeTagName(root.tagName);
+    ensureNumberInputPatched(base);
     loadComponentByTag(root.tagName);
   }
 
@@ -213,9 +246,10 @@ function scanAndLoad(root: ParentNode | null): void {
   root
     .querySelectorAll(componentSelector)
     .forEach((el) => {
+      normalizeNotificationTimestamp(el);
       normalizeNumberInputStep(el);
-      applyGrapheneOpen(el);
-      ensureNumberInputPatched(el.tagName.toLowerCase());
+      const { base } = normalizeTagName(el.tagName);
+      ensureNumberInputPatched(base);
       loadComponentByTag(el.tagName);
     });
 }
@@ -314,19 +348,30 @@ export class WebComponentManager {
   private observeDOM(): void {
     const observerCallback: MutationCallback = (mutationsList) => {
       for (const mutation of mutationsList) {
-        if (mutation.type !== "childList") {
-          continue;
-        }
-
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof Element || node instanceof DocumentFragment) {
-            scanAndLoad(node);
+        if (mutation.type === "childList") {
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof Element || node instanceof DocumentFragment) {
+              scanAndLoad(node);
+            }
+          });
+        } else if (mutation.type === "attributes") {
+          const target = mutation.target;
+          if (
+            target instanceof Element &&
+            mutation.attributeName === "timestamp"
+          ) {
+            normalizeNotificationTimestamp(target);
           }
-        });
+        }
       }
     };
 
-    const observerOptions: MutationObserverInit = { childList: true, subtree: true };
+    const observerOptions: MutationObserverInit = {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["timestamp"]
+    };
     const root = document.body ?? document.documentElement;
     if (!root) {
       return;

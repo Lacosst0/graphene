@@ -27,8 +27,7 @@
   </div>
   
   
-    
-<cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+    <cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   
       View details
     
@@ -65,8 +64,7 @@
   </div>
   
   
-    
-<cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+    <cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   
       Review
     
@@ -121,8 +119,7 @@
   </div>
   
   
-    
-<cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+    <cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   
       Open
     
@@ -134,7 +131,6 @@
   
   
 </cds-ai-label>
-
 <cds-ai-label ai-text="AI" alignment="bottom-start" alignment-axis-offset="0" button-label="Show information" kind="" revert-label="Revert to AI input" size="md" slot="ai-label" id="ai-label-sizes-md">
   
   <div slot="body-text">
@@ -146,8 +142,7 @@
   </div>
   
   
-    
-<cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+    <cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   
       Open
     
@@ -159,7 +154,6 @@
   
   
 </cds-ai-label>
-
 <cds-ai-label ai-text="AI" alignment="bottom-start" alignment-axis-offset="0" button-label="Show information" kind="" revert-label="Revert to AI input" size="lg" slot="ai-label" id="ai-label-sizes-lg">
   
   <div slot="body-text">
@@ -171,8 +165,7 @@
   </div>
   
   
-    
-<cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
+    <cds-ai-label-action-button kind="primary" link-role="button" size="lg" slot="actions" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button">
   
       Open
     

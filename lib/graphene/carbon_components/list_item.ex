@@ -14,6 +14,7 @@ defmodule Graphene.CarbonComponents.ListItem do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :nested, doc: "The nested child list."
   slot :inner_block

@@ -33,6 +33,7 @@ defmodule Graphene.CarbonComponents.Tree do
   attr :label, :string, doc: "Rendered label for the TreeNode"
   attr :on_click, :any, doc: "when adding an href to control the click functionality"
   attr :selected, :boolean, doc: "sets if tree node is selected"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -57,6 +58,7 @@ defmodule Graphene.CarbonComponents.Tree do
 
   attr :controlled, :boolean, doc: "Whether the tree view is controlled."
   attr :links, :boolean, doc: "Whether the tree view renders links."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :node do
@@ -80,13 +82,19 @@ defmodule Graphene.CarbonComponents.Tree do
       |> assign_new(:controlled, fn -> nil end)
       |> assign_new(:links, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :hide_label,
+        :label,
+        :size,
+        :controlled,
+        :links
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.tree_view
-      hide_label={@hide_label}
-      label={@label}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.tree_view {@component_attrs} {@rest}>
       <%= for node <- @node do %>
         <CoreComponents.tree_node
           label={node[:label]}

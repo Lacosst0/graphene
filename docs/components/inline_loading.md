@@ -1,7 +1,5 @@
 # `inline_loading`
 
-## basic
-
 ### active
 
 ```heex
@@ -11,7 +9,7 @@
 ```
 
 ```html
-<cds-inline-loading icon-description="Loading" status="active" success-delay="1500" id="basic-single-active">
+<cds-inline-loading icon-description="Loading" status="active" success-delay="1500" id="inline-loading-single-active">
   
   Loading...
 
@@ -27,7 +25,7 @@
 ```
 
 ```html
-<cds-inline-loading icon-description="Loading" status="finished" success-delay="1500" id="basic-single-finished">
+<cds-inline-loading icon-description="Loading" status="finished" success-delay="1500" id="inline-loading-single-finished">
   
   Complete
 
@@ -43,7 +41,7 @@
 ```
 
 ```html
-<cds-inline-loading icon-description="Loading" status="error" success-delay="1500" id="basic-single-error">
+<cds-inline-loading icon-description="Loading" status="error" success-delay="1500" id="inline-loading-single-error">
   
   Failed
 

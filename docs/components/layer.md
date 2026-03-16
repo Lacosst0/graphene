@@ -1,7 +1,5 @@
 # `layer`
 
-## basic
-
 ### base
 
 ```heex
@@ -11,7 +9,7 @@
 ```
 
 ```html
-<cds-layer level="0" id="basic-single-base">
+<cds-layer level="0" id="layer-single-base">
   
   <div style="padding: 1rem; border: 1px solid #e0e0e0;">Base layer</div>
 
@@ -35,12 +33,11 @@
 ```
 
 ```html
-<cds-layer level="0" id="basic-single-nested">
+<cds-layer level="0" id="layer-single-nested">
   
   <div style="padding: 1rem; border: 1px solid #e0e0e0;">
   Base layer
-  
-<cds-layer level="1">
+  <cds-layer level="1">
   
     <div style="margin-top: 0.5rem; padding: 1rem; border: 1px dashed #8d8d8d;">
       Nested layer
@@ -75,17 +72,15 @@
 ```
 
 ```html
-<cds-layer level="0" id="basic-single-deep">
+<cds-layer level="0" id="layer-single-deep">
   
   <div style="padding: 1rem; border: 1px solid #e0e0e0;">
   Level 0
-  
-<cds-layer level="1">
+  <cds-layer level="1">
   
     <div style="margin-top: 0.5rem; padding: 1rem; border: 1px dashed #8d8d8d;">
       Level 1
-      
-<cds-layer level="2">
+      <cds-layer level="2">
   
         <div style="margin-top: 0.5rem; padding: 1rem; border: 1px dotted #525252;">
           Level 2

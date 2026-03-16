@@ -52,12 +52,13 @@ defmodule Graphene.CarbonComponents.Checkbox do
   attr :warn_text, :boolean,
     doc: "Provide the text that is displayed when the Checkbox is in a warn state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
   slot :inner_block
@@ -97,6 +98,7 @@ defmodule Graphene.CarbonComponents.Checkbox do
   attr :warn_text, :string,
     doc: "Provide the text that is displayed when the form group is in warning state"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -121,20 +123,24 @@ defmodule Graphene.CarbonComponents.Checkbox do
       |> assign_new(:warn, fn -> false end)
       |> assign_new(:warn_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :disabled,
+        :helper_text,
+        :invalid,
+        :invalid_text,
+        :legend_id,
+        :legend_text,
+        :orientation,
+        :readonly,
+        :warn,
+        :warn_text
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.checkbox_group
-      disabled={@disabled}
-      helper_text={@helper_text}
-      invalid={@invalid}
-      invalid_text={@invalid_text}
-      legend_id={@legend_id}
-      legend_text={@legend_text}
-      orientation={@orientation}
-      readonly={@readonly}
-      warn={@warn}
-      warn_text={@warn_text}
-      {@rest}
-    >
+    <CoreComponents.checkbox_group {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.checkbox
           label_text={item[:label]}
@@ -157,6 +163,7 @@ defmodule Graphene.CarbonComponents.Checkbox do
   Checkbox skeleton.
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

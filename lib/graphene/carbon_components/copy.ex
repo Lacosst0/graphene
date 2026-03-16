@@ -112,6 +112,7 @@ defmodule Graphene.CarbonComponents.Copy do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -157,6 +158,7 @@ defmodule Graphene.CarbonComponents.Copy do
     doc: "The number in milliseconds to determine how long the tooltip should remain.",
     default: "2000"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

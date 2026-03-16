@@ -117,29 +117,57 @@ Combine inputs with .form_group and .button actions, and surface validation with
 
             <div style="display: grid; gap: 0.75rem;">
               <h3>Selects</h3>
-              <Graphene.CarbonComponents.select field={@form[:select]}>
+              <Graphene.CarbonComponents.select
+                field={@form[:select]}
+                id={@form[:select].id}
+                name={@form[:select].name}
+                value={@form[:select].value}
+              >
                 <:label_text>Select option</:label_text>
                 <:item value="option-1">Option 1</:item>
                 <:item value="option-2">Option 2</:item>
                 <:item value="option-3">Option 3</:item>
               </Graphene.CarbonComponents.select>
-              <Graphene.CarbonComponents.fluid_select field={@form[:fluid_select]}>
+              <Graphene.CarbonComponents.fluid_select
+                field={@form[:fluid_select]}
+                id={@form[:fluid_select].id}
+                name={@form[:fluid_select].name}
+                value={@form[:fluid_select].value}
+              >
                 <:label_text>Fluid select</:label_text>
                 <:item value="option-1">Option 1</:item>
                 <:item value="option-2">Option 2</:item>
                 <:item value="option-3">Option 3</:item>
               </Graphene.CarbonComponents.fluid_select>
-              <Graphene.CarbonComponents.dropdown field={@form[:dropdown]} label="Dropdown">
+              <Graphene.CarbonComponents.dropdown
+                field={@form[:dropdown]}
+                id={@form[:dropdown].id}
+                name={@form[:dropdown].name}
+                value={@form[:dropdown].value}
+                label="Dropdown"
+              >
                 <:item value="option-1">Option 1</:item>
                 <:item value="option-2">Option 2</:item>
                 <:item value="option-3">Option 3</:item>
               </Graphene.CarbonComponents.dropdown>
-              <Graphene.CarbonComponents.combo_box field={@form[:combo]} label="Combo box">
+              <Graphene.CarbonComponents.combo_box
+                field={@form[:combo]}
+                id={@form[:combo].id}
+                name={@form[:combo].name}
+                value={@form[:combo].value}
+                label="Combo box"
+              >
                 <:item value="option-1">Option 1</:item>
                 <:item value="option-2">Option 2</:item>
                 <:item value="option-3">Option 3</:item>
               </Graphene.CarbonComponents.combo_box>
-              <Graphene.CarbonComponents.multi_select field={@form[:multi]} label="Multi select">
+              <Graphene.CarbonComponents.multi_select
+                field={@form[:multi]}
+                id={@form[:multi].id}
+                name={@form[:multi].name}
+                value={@form[:multi].value}
+                label="Multi select"
+              >
                 <:item value="option-1">Option 1</:item>
                 <:item value="option-2">Option 2</:item>
                 <:item value="option-3">Option 3</:item>

@@ -70,6 +70,7 @@ defmodule Graphene.CarbonComponents.Slug do
     doc: "Specify the text that will be provided to the aria-label of the `Slug` button",
     default: "Show information"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -151,6 +152,7 @@ defmodule Graphene.CarbonComponents.Slug do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

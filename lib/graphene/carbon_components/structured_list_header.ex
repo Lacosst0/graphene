@@ -18,6 +18,7 @@ defmodule Graphene.CarbonComponents.StructuredListHeader do
     doc:
       "The `name` attribute for the `<input>` for selection.\nIf present, this structured list header row will show its selectable version of the UI."
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -27,6 +27,7 @@ defmodule Graphene.CarbonComponents.ExpandableTile do
       "Specify if the `ExpandableTile` component should be rendered with rounded corners.\nOnly valid when `ai-label` prop is present"
 
   attr :with_interactive, :boolean, doc: "`true` to expand this expandable tile."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :above_the_fold_content, doc: "Above-the-fold content."
   slot :inner_block

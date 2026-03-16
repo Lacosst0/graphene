@@ -29,6 +29,7 @@ defmodule Graphene.CarbonComponents.ChatButton do
     default: "primary"
 
   attr :size, :string, doc: "Chat button size.", values: ["sm", "md", "lg"], default: "lg"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -49,6 +50,7 @@ defmodule Graphene.CarbonComponents.ChatButton do
     values: ["sm", "md", "lg"],
     default: "lg"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

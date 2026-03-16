@@ -31,6 +31,7 @@ defmodule Graphene.CarbonComponents.Radio do
   attr :name, :string
   attr :selected, :boolean, doc: "`true` to show the selected state."
   attr :value, :string
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

@@ -35,6 +35,7 @@ defmodule Graphene.CarbonComponents.Stack do
   attr :use_custom_gap_value, :boolean,
     doc: "Turn on when passing in custom value to 'gap' attribute (ie. gap=\"2rem\")"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

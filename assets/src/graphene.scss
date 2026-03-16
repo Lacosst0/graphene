@@ -7,6 +7,8 @@
 @use '@carbon/styles/scss/themes';
 @use '@carbon/styles/scss/components';
 @use '@carbon/styles/scss/layout';
+@use '@carbon/ibm-products-styles/scss/index-without-carbon';
+@use './story-assets/interstitial-screen';
 @use '@carbon/grid' as grid;
 @use '@carbon/layout/scss/spacing' as carbon_spacing;
 

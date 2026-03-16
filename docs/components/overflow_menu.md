@@ -1,7 +1,5 @@
 # `overflow_menu`
 
-## basic
-
 ### default
 
 ```heex
@@ -17,7 +15,7 @@
 ```
 
 ```html
-<cds-overflow-menu align="top" close-on-activation enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-single-default">
+<cds-overflow-menu align="top" close-on-activation enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="overflow-menu-single-default">
   
   <span slot="icon">
     
@@ -32,26 +30,22 @@
   <span slot="tooltip-content">
     Options
   </span>
-  
-<cds-overflow-menu-body direction="bottom" size="md">
+  <cds-overflow-menu-body direction="bottom" size="md">
   
     
-      
-<cds-overflow-menu-item size="md">
+      <cds-overflow-menu-item size="md">
   
         Action 1
       
 </cds-overflow-menu-item>
     
-      
-<cds-overflow-menu-item size="md">
+      <cds-overflow-menu-item size="md">
   
         Action 2
       
 </cds-overflow-menu-item>
     
-      
-<cds-overflow-menu-item danger size="md">
+      <cds-overflow-menu-item danger size="md">
   
         Delete
       
@@ -79,7 +73,7 @@
 ```
 
 ```html
-<cds-overflow-menu align="top" autoalign close-on-activation enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-single-autoalign">
+<cds-overflow-menu align="top" autoalign close-on-activation enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="overflow-menu-single-autoalign">
   
   <span slot="icon">
     
@@ -94,19 +88,16 @@
   <span slot="tooltip-content">
     Auto align
   </span>
-  
-<cds-overflow-menu-body direction="bottom" size="md">
+  <cds-overflow-menu-body direction="bottom" size="md">
   
     
-      
-<cds-overflow-menu-item size="md">
+      <cds-overflow-menu-item size="md">
   
         Edit
       
 </cds-overflow-menu-item>
     
-      
-<cds-overflow-menu-item size="md">
+      <cds-overflow-menu-item size="md">
   
         Duplicate
       
@@ -133,7 +124,7 @@
 ```
 
 ```html
-<cds-overflow-menu align="top" close-on-activation disabled enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="300" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="basic-single-disabled">
+<cds-overflow-menu align="top" close-on-activation disabled enter-delay-ms="100" index="1" kind="primary" leave-delay-ms="100" link-role="button" size="md" tab-index="0" tooltip-alignment="" tooltip-position="top" type="button" id="overflow-menu-single-disabled">
   
   <span slot="icon">
     
@@ -148,12 +139,10 @@
   <span slot="tooltip-content">
     Disabled
   </span>
-  
-<cds-overflow-menu-body direction="bottom" size="md">
+  <cds-overflow-menu-body direction="bottom" size="md">
   
     
-      
-<cds-overflow-menu-item size="md">
+      <cds-overflow-menu-item size="md">
   
         Action 1
       

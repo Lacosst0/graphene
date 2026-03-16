@@ -41,6 +41,7 @@ defmodule Graphene.CarbonComponents.Popover do
   attr :high_contrast, :boolean, doc: "Render the component using the high-contrast variant"
   attr :open, :boolean, doc: "Specify whether the component is currently open or closed"
   attr :tab_tip, :boolean, doc: "Render the component using the tab tip variant"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :trigger
   slot :content
@@ -58,21 +59,25 @@ defmodule Graphene.CarbonComponents.Popover do
       |> assign_new(:open, fn -> false end)
       |> assign_new(:tab_tip, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :align,
+        :alignment_axis_offset,
+        :autoalign,
+        :autoalign_boundary,
+        :background_token,
+        :border,
+        :caret,
+        :drop_shadow,
+        :high_contrast,
+        :open,
+        :tab_tip
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.popover
-      align={@align}
-      alignment_axis_offset={@alignment_axis_offset}
-      autoalign={@autoalign}
-      autoalign_boundary={@autoalign_boundary}
-      background_token={@background_token}
-      border={@border}
-      caret={@caret}
-      drop_shadow={@drop_shadow}
-      high_contrast={@high_contrast}
-      open={@open}
-      tab_tip={@tab_tip}
-      {@rest}
-    >
+    <CoreComponents.popover {@component_attrs} {@rest}>
       <%= for trigger <- @trigger do %>
         {render_slot(trigger)}
       <% end %>
@@ -120,6 +125,7 @@ defmodule Graphene.CarbonComponents.Popover do
     default: "content"
 
   attr :tab_tip, :boolean, doc: "Render the component using the tab tip variant"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

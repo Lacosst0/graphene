@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title suffix=" · Nimbus Cloud">
-      <%= assigns[:page_title] || "Nimbus Cloud Console" %>
+      {assigns[:page_title] || "Nimbus Cloud Console"}
     </.live_title>
     <link rel="preload" as="style" href={~p"/graphene/assets/graphene.css"} />
     <%= if path = Graphene.Font.path("Regular", "Latin1") do %>
@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="graphene-app">
-      <%= @inner_content %>
+      {@inner_content}
     </div>
   </body>
 </html>

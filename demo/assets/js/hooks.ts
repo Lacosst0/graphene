@@ -26,7 +26,7 @@ const parseEvents = (raw: string | undefined): string[] => {
 };
 
 const resolveTargets = (el: HTMLElement): EventTarget[] => {
-  const selector = el.dataset.targetSelector;
+  const selector = el.dataset.gfTargetSelector;
   if (!selector) return [el];
   return Array.from(el.querySelectorAll(selector));
 };
@@ -56,9 +56,10 @@ const buildPayload = (event: Event, targetEl: CustomEventTarget | null) => {
   };
 };
 
+
 const StorybookCustomEvents: StorybookCustomEventsHook = {
   mounted() {
-    const events = parseEvents(this.el.dataset.events);
+    const events = parseEvents(this.el.dataset.gfEvents);
     const targets = resolveTargets(this.el);
 
     this._handlers = [];

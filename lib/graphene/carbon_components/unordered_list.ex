@@ -16,6 +16,7 @@ defmodule Graphene.CarbonComponents.UnorderedList do
   """
   attr :is_expressive, :boolean, doc: "`true` if expressive theme enabled."
   attr :nested, :boolean, doc: "Specify whether the list is nested, or not"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -30,12 +31,13 @@ defmodule Graphene.CarbonComponents.UnorderedList do
       |> assign_new(:is_expressive, fn -> false end)
       |> assign_new(:nested, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [:is_expressive, :nested])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.unordered_list
-      is_expressive={@is_expressive}
-      nested={@nested}
-      {@rest}
-    >
+    <CoreComponents.unordered_list {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.list_item {item[:attrs] || %{}}>
           {render_slot(item)}

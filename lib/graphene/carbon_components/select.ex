@@ -44,12 +44,13 @@ defmodule Graphene.CarbonComponents.Select do
   attr :value, :string, doc: "The value of the text area."
   attr :warn, :boolean, doc: "Specify if the currently value is warn."
   attr :warn_text, :string, doc: "Message which is displayed if the value is warn."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :field, Phoenix.HTML.FormField, doc: "a form field struct, for example: @form[:email]"
-  attr :form, :string, default: nil, doc: "the form attribute for the hidden input"
+  attr :form, :string, default: nil, doc: "the form attribute for the form-associated element"
 
   attr :form_event, :string,
     default: nil,
-    doc: "override the custom event used to sync form values"
+    doc: "override the custom event used to sync form values (passed as `form-event`)"
 
   attr :rest, :global
   slot :helper_text, doc: "The helper text."
@@ -81,7 +82,6 @@ defmodule Graphene.CarbonComponents.Select do
       |> assign_new(:is_fluid, fn -> false end)
       |> assign_new(:multiple, fn -> nil end)
       |> assign_new(:name, fn -> nil end)
-      |> assign_new(:field, fn -> nil end)
       |> assign_new(:pattern, fn -> nil end)
       |> assign_new(:placeholder, fn -> nil end)
       |> assign_new(:readonly, fn -> false end)
@@ -91,33 +91,37 @@ defmodule Graphene.CarbonComponents.Select do
       |> assign_new(:warn, fn -> false end)
       |> assign_new(:warn_text, fn -> nil end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :autofocus,
+        :disabled,
+        :hide_label,
+        :id,
+        :inline,
+        :invalid,
+        :invalid_text,
+        :is_fluid,
+        :multiple,
+        :name,
+        :pattern,
+        :placeholder,
+        :readonly,
+        :required,
+        :required_validity_message,
+        :selected_index,
+        :size,
+        :value,
+        :warn,
+        :warn_text,
+        :field,
+        :form,
+        :form_event
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <FormComponents.select
-      autofocus={@autofocus}
-      disabled={@disabled}
-      hide_label={@hide_label}
-      id={@id}
-      inline={@inline}
-      invalid={@invalid}
-      invalid_text={@invalid_text}
-      is_fluid={@is_fluid}
-      multiple={@multiple}
-      name={@name}
-      pattern={@pattern}
-      placeholder={@placeholder}
-      readonly={@readonly}
-      required={@required}
-      required_validity_message={@required_validity_message}
-      selected_index={@selected_index}
-      size={@size}
-      value={@value}
-      warn={@warn}
-      warn_text={@warn_text}
-      field={@field}
-      form={@form}
-      form_event={@form_event}
-      {@rest}
-    >
+    <FormComponents.select {@component_attrs} {@rest}>
       <.dynamic_tag
         :for={label <- @label_text}
         tag_name={Map.get(label, :tag, "div")}
@@ -164,6 +168,7 @@ defmodule Graphene.CarbonComponents.Select do
 
   """
   attr :hide_label, :boolean, doc: "Specify whether the label should be hidden."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

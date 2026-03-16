@@ -7,6 +7,36 @@ defmodule <%= @module %> do
 
   def version(), do: ~S|<%= @version %>|
 
+  defp normalize_events(nil), do: []
+
+  defp normalize_events(events) when is_map(events) do
+    Map.to_list(events)
+  end
+
+  defp normalize_events(events) when is_list(events) do
+    if Enum.all?(events, &match?({_, _}, &1)) do
+      events
+    else
+      Enum.map(events, &{&1, []})
+    end
+  end
+
+  defp normalize_events(event), do: [{event, []}]
+
+  defp apply_events(assigns) do
+    assigns = assign_new(assigns, :events, fn -> nil end)
+    events = normalize_events(assigns[:events])
+
+    if events == [] do
+      assigns
+    else
+      rest = Map.get(assigns, :rest, %{})
+      id = Map.get(assigns, :id) || Map.get(rest, :id)
+      event_attrs = Graphene.JS.events(events: events, id: id)
+      assign(assigns, :rest, Map.merge(rest, event_attrs))
+    end
+  end
+
   <%= for component <- @components do %>
   <%= Graphene.CodeGen.Component.display component %>
   <% end %>

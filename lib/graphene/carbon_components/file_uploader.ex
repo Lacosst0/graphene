@@ -45,6 +45,7 @@ defmodule Graphene.CarbonComponents.FileUploader do
     doc: "The shadow DOM slot to put this drop container in.",
     default: "drop-container"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -75,6 +76,7 @@ defmodule Graphene.CarbonComponents.FileUploader do
     doc: "The shadow DOM slot to put this drop container in.",
     default: "drop-container"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -114,6 +116,7 @@ defmodule Graphene.CarbonComponents.FileUploader do
     values: ["uploading", "complete", "edit"],
     default: "uploading"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :validity, doc: "message The validity message."
   slot :validity_message, doc: "supplement The supplemental validity message."
@@ -130,6 +133,7 @@ defmodule Graphene.CarbonComponents.FileUploader do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

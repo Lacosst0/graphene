@@ -31,6 +31,7 @@ defmodule Graphene.CarbonComponents.SideNav do
     doc: "Specify if the side-nav will be persistent above the lg breakpoint"
 
   attr :usage_mode, :string, doc: "Usage mode for the side nav."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -45,6 +46,7 @@ defmodule Graphene.CarbonComponents.SideNav do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -59,6 +61,7 @@ defmodule Graphene.CarbonComponents.SideNav do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -78,6 +81,7 @@ defmodule Graphene.CarbonComponents.SideNav do
   attr :large, :boolean, doc: "Specify if this is a large variation of the side nav link"
   attr :rel, :string, doc: "The link type."
   attr :target, :string, doc: "The link target."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :link, doc: "The link."
   slot :title, doc: "The title."

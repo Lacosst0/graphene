@@ -40,40 +40,52 @@ defmodule DemoWeb.SecurityLive do
   def render(assigns) do
     ~H"""
     <.page_header>
-      <:breadcrumb>
+      <.page_header_breadcrumb>
         <.breadcrumb size="sm">
           <:item href={~p"/demo"} text="Cloud Admin" />
         </.breadcrumb>
-      </:breadcrumb>
-      <:content title="Security & Compliance">
-        <.tag type="cool-gray">Policy Pack v3.2</.tag>
-      </:content>
-      <:content_text subtitle="Continuous policy enforcement, identity hardening, and audit trails." />
+      </.page_header_breadcrumb>
+      <.page_header_content title="Security & Compliance">
+        <:contextual_actions>
+          <.tag type="cool-gray">Policy Pack v3.2</.tag>
+        </:contextual_actions>
+        <:page_actions>
+          <.button kind="primary" size="sm" phx-click="rotate_keys">
+            Rotate API keys
+          </.button>
+        </:page_actions>
+        <.page_header_content_text subtitle="Continuous policy enforcement, identity hardening, and audit trails." />
+      </.page_header_content>
     </.page_header>
 
-    <.grid>
+    <.grid full_width row_gap="07">
       <:column span="16">
-        <.grid full_width class="demo-section">
+        <.grid>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card">
-              <h3>Policy coverage</h3>
-              <.structured_list rows={@policies} condensed>
-                <:col :let={policy} label="Policy">{policy.name}</:col>
-                <:col :let={policy} label="Coverage">{policy.coverage}%</:col>
-                <:col :let={policy} label="Status">
-                  <.tag type={status_kind(policy.status)}>
-                    {policy.status}
-                  </.tag>
-                </:col>
-              </.structured_list>
+            <.tile>
+              <.stack gap="3">
+                <.heading>Policy coverage</.heading>
+                <.structured_list rows={@policies} condensed>
+                  <:col :let={policy} label="Policy">{policy.name}</:col>
+                  <:col :let={policy} label="Coverage">{policy.coverage}%</:col>
+                  <:col :let={policy} label="Status">
+                    <.tag type={status_kind(policy.status)}>
+                      {policy.status}
+                    </.tag>
+                  </:col>
+                </.structured_list>
+              </.stack>
             </.tile>
           </:column>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card demo-card--elevated">
-              <h3>Identity controls</h3>
-              <div>
-                <div class="demo-kicker">Required for production</div>
-                <.stack gap="3">
+            <.tile>
+              <.stack gap="4">
+                <.heading>Identity controls</.heading>
+                <.form_group
+                  legend_text="Required for production"
+                  message
+                  message_text="Applies to all production tenants."
+                >
                   <.checkbox
                     id="security-mfa"
                     name="security-mfa"
@@ -91,9 +103,7 @@ defmodule DemoWeb.SecurityLive do
                     name="security-keys"
                     label_text="Hardware security keys"
                   />
-                </.stack>
-              </div>
-              <div class="demo-section">
+                </.form_group>
                 <.radio_button_group
                   legend_text="Default access policy"
                   name="default-access-policy"
@@ -102,33 +112,33 @@ defmodule DemoWeb.SecurityLive do
                   <:item label="Balanced" value="balanced" />
                   <:item label="Open" value="open" />
                 </.radio_button_group>
-              </div>
-              <div class="demo-section">
-                <.button kind="primary" phx-click="rotate_keys">
-                  Rotate API keys
-                </.button>
-                <p class="demo-muted">Last rotated {@last_rotated}</p>
-              </div>
+                <.stack gap="2">
+                  <p>Last rotated {@last_rotated}</p>
+                </.stack>
+              </.stack>
             </.tile>
           </:column>
         </.grid>
       </:column>
 
       <:column span="16">
-        <div class="demo-section demo-card">
-          <.accordion>
-            <:item title="Network perimeter" open>
-              Edge ingress is protected by WAF ruleset 6.2 with managed threat detection.
-              New rule proposals are staged in "Audit" mode for 24 hours.
-            </:item>
-            <:item title="Data protection">
-              All persistent volumes use envelope encryption with quarterly key rotation.
-            </:item>
-            <:item title="Incident response">
-              On-call rotation schedules are synchronized with PagerDuty and Opsgenie.
-            </:item>
-          </.accordion>
-        </div>
+        <.tile>
+          <.stack gap="3">
+            <.heading>Policy details</.heading>
+            <.accordion>
+              <:item title="Network perimeter" open>
+                Edge ingress is protected by WAF ruleset 6.2 with managed threat detection.
+                New rule proposals are staged in "Audit" mode for 24 hours.
+              </:item>
+              <:item title="Data protection">
+                All persistent volumes use envelope encryption with quarterly key rotation.
+              </:item>
+              <:item title="Incident response">
+                On-call rotation schedules are synchronized with PagerDuty and Opsgenie.
+              </:item>
+            </.accordion>
+          </.stack>
+        </.tile>
       </:column>
     </.grid>
     """

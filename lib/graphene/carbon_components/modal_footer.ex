@@ -15,6 +15,7 @@ defmodule Graphene.CarbonComponents.ModalFooter do
 
   """
   attr :has_three_buttons, :boolean, doc: "`true` if this modal footer has more than two buttons."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -95,6 +96,7 @@ defmodule Graphene.CarbonComponents.ModalFooter do
     values: ["button", "reset", "submit"],
     default: "button"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

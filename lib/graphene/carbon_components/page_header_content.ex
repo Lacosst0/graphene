@@ -20,6 +20,7 @@ defmodule Graphene.CarbonComponents.PageHeaderContent do
     doc:
       "Set to `true` if the breadcrumb bar is sitting within a grid\n(ie. when used in tandem with page-header-hero-image)"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :contextual_actions, doc: "Contextual actions for the page header."
   slot :page_actions, doc: "Page actions for the page header."
@@ -37,6 +38,7 @@ defmodule Graphene.CarbonComponents.PageHeaderContent do
 
   """
   attr :subtitle, :string, doc: "Subtitle text of the page-header-content"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

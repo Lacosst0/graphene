@@ -33,6 +33,7 @@ defmodule Graphene.CarbonComponents.Inline do
     default: "1500"
 
   attr :controlled, :boolean, doc: "Whether the loading state is controlled."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -65,7 +66,8 @@ defmodule Graphene.CarbonComponents.Inline do
   attr :status_icon_description, :string,
     doc: "Provide a description for \"status\" icon that can be read by screen readers"
 
-  attr :timeout, :any, doc: "Specify an optional duration the notification should be closed in"
+  attr :timeout, :string, doc: "Specify an optional duration the notification should be closed in"
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :subtitle, doc: "The subtitle."
   slot :title, doc: "The title."

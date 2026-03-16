@@ -32,6 +32,7 @@ defmodule Graphene.CarbonComponents.ProgressStep do
     values: ["complete", "current", "incomplete", "invalid"],
     default: "incomplete"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :secondary_label_text, doc: "The secondary progress label."
   slot :inner_block
@@ -47,6 +48,7 @@ defmodule Graphene.CarbonComponents.ProgressStep do
 
   """
   attr :vertical, :boolean, doc: "`true` to render the vertical variant."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

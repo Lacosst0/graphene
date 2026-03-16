@@ -22,6 +22,7 @@ defmodule Graphene.CarbonComponents.HeaderMenu do
 
   attr :menu_label, :string, doc: "The `aria-label` attribute for the menu UI."
   attr :trigger_content, :string, doc: "The content of the trigger button."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -59,6 +60,7 @@ defmodule Graphene.CarbonComponents.HeaderMenu do
   attr :is_not_child_of_header, :boolean,
     doc: "If `true` will style the side nav to sit below the header"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -87,6 +89,7 @@ defmodule Graphene.CarbonComponents.HeaderMenu do
 
   attr :target, :string, doc: "The link target."
   attr :title, :string, doc: "The title."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

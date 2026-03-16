@@ -29,6 +29,7 @@ defmodule Graphene.CarbonComponents.MenuItem do
   attr :shortcut, :any, doc: "Shortcut for the menu item."
   attr :submenu_open, :boolean, doc: "Whether the menu submen for an item is open or not."
   attr :selected, :boolean, doc: "Whether the menu item is selected."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :submenu, doc: "Submenu content."
   slot :inner_block
@@ -44,6 +45,7 @@ defmodule Graphene.CarbonComponents.MenuItem do
 
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -59,6 +61,7 @@ defmodule Graphene.CarbonComponents.MenuItem do
 
   """
   attr :label, :any, doc: "Label for the menu item."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -77,6 +80,7 @@ defmodule Graphene.CarbonComponents.MenuItem do
   attr :items, :any, doc: "List of items in the radio group."
   attr :label, :any, doc: "Label for the menu item radio group."
   attr :selected_item, :any, doc: "Selected item in the radio group."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -95,6 +99,7 @@ defmodule Graphene.CarbonComponents.MenuItem do
   attr :render_icon, :any, doc: "Sets the menu item's icon."
   attr :selected, :boolean, doc: "Whether the menu item is selected or not."
   attr :shortcut, :any
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

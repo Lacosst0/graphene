@@ -29,6 +29,7 @@ defmodule Graphene.CarbonComponents.Accordion do
     values: ["sm", "md", "lg"],
     default: "md"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
 
   slot :item do
@@ -46,14 +47,18 @@ defmodule Graphene.CarbonComponents.Accordion do
       |> assign_new(:disabled, fn -> false end)
       |> assign_new(:is_flush, fn -> false end)
 
+    component_attrs =
+      Graphene.CodeGen.ComponentAttrs.build_component_attrs(assigns, [
+        :alignment,
+        :disabled,
+        :is_flush,
+        :size
+      ])
+
+    assigns = assign(assigns, :component_attrs, component_attrs)
+
     ~H"""
-    <CoreComponents.accordion
-      alignment={@alignment}
-      disabled={@disabled}
-      is_flush={@is_flush}
-      size={@size}
-      {@rest}
-    >
+    <CoreComponents.accordion {@component_attrs} {@rest}>
       <%= for item <- @item do %>
         <CoreComponents.accordion_item
           title={item[:title]}
@@ -87,6 +92,7 @@ defmodule Graphene.CarbonComponents.Accordion do
   attr :open, :boolean, doc: "`true` if the accordion item should be open."
   attr :title, :string, doc: "The title text."
   attr :controlled, :boolean, doc: "Whether the item is controlled by the parent."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -107,6 +113,7 @@ defmodule Graphene.CarbonComponents.Accordion do
   attr :count, :string, doc: "Set number of items to render."
   attr :is_flush, :boolean, doc: "Specify whether Accordion text should be flush."
   attr :open, :boolean, doc: "`true` if the first accordion item should be open."
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 

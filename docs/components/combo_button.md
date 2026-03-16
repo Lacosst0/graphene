@@ -13,14 +13,12 @@
 ```html
 <cds-combo-button label="Primary action" menu-alignment="top" size="lg" tooltip-alignment="top" tooltip-content="Additional actions" id="combo-button-single-default">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Second action">
+  <cds-menu-item danger-description="danger" label="Second action">
   
     
   
@@ -28,8 +26,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Third action">
+  <cds-menu-item danger-description="danger" label="Third action">
   
     
   
@@ -37,13 +34,11 @@
 </cds-menu-item>
 
   
-    
-<cds-menu-item-divider>
+    <cds-menu-item-divider>
   
 </cds-menu-item-divider>
   
-  
-<cds-menu-item kind="danger" label="Danger action">
+  <cds-menu-item danger-description="danger" kind="danger" label="Danger action">
   
     
   
@@ -69,14 +64,12 @@
 ```html
 <cds-combo-button label="Small combo" menu-alignment="top" size="sm" tooltip-alignment="top" tooltip-content="Additional actions" id="combo-button-single-small">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Secondary">
+  <cds-menu-item danger-description="danger" label="Secondary">
   
     
   
@@ -84,8 +77,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Tertiary">
+  <cds-menu-item danger-description="danger" label="Tertiary">
   
     
   
@@ -111,14 +103,12 @@
 ```html
 <cds-combo-button disabled label="Disabled" menu-alignment="top" size="lg" tooltip-alignment="top" tooltip-content="Additional actions" id="combo-button-single-disabled">
   
-  
-<cds-menu>
+  <cds-menu>
   
     
 
   
-  
-<cds-menu-item label="Secondary">
+  <cds-menu-item danger-description="danger" label="Secondary">
   
     
   
@@ -126,8 +116,7 @@
 </cds-menu-item>
 
   
-  
-<cds-menu-item label="Tertiary">
+  <cds-menu-item danger-description="danger" label="Tertiary">
   
     
   

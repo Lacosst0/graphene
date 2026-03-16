@@ -2,15 +2,36 @@ defmodule Storybook.CarbonComponents.InteractivityHelpers do
   use Phoenix.Component
 
   def custom_event_attrs(events, opts \\ []) do
-    attrs = %{
-      "phx-hook" => "StorybookCustomEvents",
-      "data-events" => Jason.encode!(List.wrap(events)),
-      "data-target-selector" => Keyword.get(opts, :target_selector)
-    }
+    target = Keyword.get(opts, :target_selector)
+    id = Keyword.get(opts, :id)
 
-    attrs
-    |> Enum.reject(fn {_key, value} -> is_nil(value) or value == "" end)
-    |> Map.new()
+    normalized_events =
+      events
+      |> List.wrap()
+      |> Enum.map(&normalize_storybook_event/1)
+
+    Graphene.JS.events(on: normalized_events, target: target, id: id)
+  end
+
+  defp normalize_storybook_event({event, event_opts}) do
+    {event, ensure_storybook_defaults(event, event_opts)}
+  end
+
+  defp normalize_storybook_event(event) do
+    {event, ensure_storybook_defaults(event, %{})}
+  end
+
+  defp ensure_storybook_defaults(event, event_opts) do
+    event_opts =
+      cond do
+        is_map(event_opts) -> event_opts
+        is_list(event_opts) -> Map.new(event_opts)
+        true -> %{}
+      end
+
+    event_opts
+    |> Map.put_new(:push, event)
+    |> Map.put_new(:payload, :all)
   end
 
   def assign_event(socket, event, payload) do
@@ -61,7 +82,9 @@ defmodule Storybook.CarbonComponents.InteractivityHelpers do
 
   def event_panel(assigns) do
     assigns =
-      assign(assigns, :inspect_opts,
+      assign(
+        assigns,
+        :inspect_opts,
         if(assigns.pretty, do: [pretty: true, limit: :infinity], else: [])
       )
 

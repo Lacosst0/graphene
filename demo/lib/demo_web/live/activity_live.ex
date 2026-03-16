@@ -45,44 +45,63 @@ defmodule DemoWeb.ActivityLive do
   def render(assigns) do
     ~H"""
     <.page_header>
-      <:breadcrumb>
+      <.page_header_breadcrumb>
         <.breadcrumb size="sm">
           <:item href={~p"/demo"} text="Cloud Admin" />
         </.breadcrumb>
-      </:breadcrumb>
-      <:content title="Live Activity">
-        <.tag type="blue">PubSub</.tag>
-      </:content>
-      <:content_text subtitle="Streaming operational events in real-time across the control plane." />
-    </.page_header>
-
-    <.grid>
-      <:column span="16">
-        <div class="demo-section demo-card">
-          <.button kind="primary" phx-click="emit_event">
+      </.page_header_breadcrumb>
+      <.page_header_content title="Live Activity">
+        <:contextual_actions>
+          <.tag type="blue">PubSub</.tag>
+        </:contextual_actions>
+        <:page_actions>
+          <.button kind="primary" size="sm" phx-click="emit_event">
             Send synthetic event
           </.button>
-        </div>
-      </:column>
+        </:page_actions>
+        <.page_header_content_text subtitle="Streaming operational events in real-time across the control plane." />
+      </.page_header_content>
+    </.page_header>
 
+    <.grid full_width row_gap="07">
       <:column span="16">
-        <div class="demo-section demo-card demo-card--elevated">
-          <.table_live id="activity-feed" rows={@events} size="sm">
-            <:col :let={event} label="Time">{event.time}</:col>
-            <:col :let={event} label="Service">{event.service}</:col>
-            <:col :let={event} label="Event">{event.event}</:col>
-            <:col :let={event} label="Severity">
-              <.tag type={severity_kind(event.severity)}>
-                {event.severity}
-              </.tag>
-            </:col>
-            <:col :let={event} label="Status">
-              <.tag type={status_kind(event.status)}>
-                {event.status}
-              </.tag>
-            </:col>
-          </.table_live>
-        </div>
+        <.data_table id="activity-feed" rows={@events} row_id={& &1.id} size="sm">
+          <:title>Activity feed</:title>
+          <:description>Recent events across the control plane.</:description>
+          <:toolbar>
+            <.table_toolbar>
+              <.table_toolbar_content>
+                <.table_toolbar_search placeholder="Search events" size="sm" />
+                <.content_switcher value="24h" size="sm" low_contrast>
+                  <:item value="24h">24h</:item>
+                  <:item value="7d">7d</:item>
+                  <:item value="30d">30d</:item>
+                </.content_switcher>
+                <.overflow_menu toolbar_action>
+                  <:icon>
+                    <Graphene.Icons.icon fit="width" name="overflow-menu--horizontal" />
+                  </:icon>
+                  <:tooltip_content>Filters</:tooltip_content>
+                  <:item>Severity</:item>
+                  <:item>Status</:item>
+                </.overflow_menu>
+              </.table_toolbar_content>
+            </.table_toolbar>
+          </:toolbar>
+          <:col :let={event} label="Time">{event.time}</:col>
+          <:col :let={event} label="Service">{event.service}</:col>
+          <:col :let={event} label="Event">{event.event}</:col>
+          <:col :let={event} label="Severity">
+            <.tag type={severity_kind(event.severity)}>
+              {event.severity}
+            </.tag>
+          </:col>
+          <:col :let={event} label="Status">
+            <.tag type={status_kind(event.status)}>
+              {event.status}
+            </.tag>
+          </:col>
+        </.data_table>
       </:column>
     </.grid>
     """

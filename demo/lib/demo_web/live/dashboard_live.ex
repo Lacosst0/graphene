@@ -4,7 +4,6 @@ defmodule DemoWeb.DashboardLive do
   alias Demo.CloudData
   alias Demo.CloudEvents
 
-  alias Graphene.Icons
   import DemoWeb.CloudHelpers
 
   @impl true
@@ -70,203 +69,211 @@ defmodule DemoWeb.DashboardLive do
   def render(assigns) do
     ~H"""
     <.page_header>
-      <:breadcrumb>
+      <.page_header_breadcrumb>
         <.breadcrumb size="sm">
           <:item href={~p"/demo"} text="Cloud Admin" />
         </.breadcrumb>
-      </:breadcrumb>
-      <:content title="Overview">
-        <.tag type="green">Production</.tag>
-      </:content>
-      <:content_text subtitle="Real-time health, spend, and security posture across Nimbus Cloud." />
+      </.page_header_breadcrumb>
+      <.page_header_content title="Overview">
+        <:contextual_actions>
+          <.tag type="green">Production</.tag>
+        </:contextual_actions>
+        <:page_actions>
+          <.button kind="primary" size="sm" phx-click="create_snapshot">
+            Create snapshot
+          </.button>
+        </:page_actions>
+        <.page_header_content_text subtitle="Real-time health, spend, and security posture across Nimbus Cloud." />
+      </.page_header_content>
     </.page_header>
 
-    <.grid>
+    <.grid full_width row_gap="07">
       <:column span="16">
-        <div class="demo-section demo-card">
-          <.form for={@range_form} phx-change="switch_range">
-            <.radio_button_group
-              field={@range_form[:range]}
-              legend_text="Metrics window"
-              name="metrics-window"
-            >
-              <:item label="Last 24h" value="24h" />
-              <:item label="7 days" value="7d" />
-              <:item label="30 days" value="30d" />
-            </.radio_button_group>
-          </.form>
-        </div>
-      </:column>
-
-      <:column span="16">
-        <.grid full_width class="demo-section">
+        <.grid>
           <:column sm="4" md="2" lg="4">
-            <.tile class="demo-card demo-metric">
-              <div class="demo-kicker">Active clusters</div>
-              <h3>{@metrics.clusters}</h3>
-              <p class="demo-muted">+2 provisioned this quarter</p>
+            <.tile>
+              <.form for={@range_form} phx-change="switch_range">
+                <.radio_button_group
+                  field={@range_form[:range]}
+                  legend_text="Metrics window"
+                  name="metrics-window"
+                >
+                  <:item label="Last 24h" value="24h" />
+                  <:item label="7 days" value="7d" />
+                  <:item label="30 days" value="30d" />
+                </.radio_button_group>
+              </.form>
             </.tile>
           </:column>
           <:column sm="4" md="2" lg="4">
-            <.tile class="demo-card demo-metric">
-              <div class="demo-kicker">Monthly spend</div>
-              <h3>{format_money(@metrics.monthly_spend)}</h3>
-              <.progress_bar value={@metrics.monthly_spend / @metrics.budget * 100} />
-              <p class="demo-muted">Budget {format_money(@metrics.budget)}</p>
+            <.tile>
+              <.stack gap="2">
+                <.heading>Active clusters</.heading>
+                <h3>{@metrics.clusters}</h3>
+                <p>+2 provisioned this quarter</p>
+              </.stack>
             </.tile>
           </:column>
           <:column sm="4" md="2" lg="4">
-            <.tile class="demo-card demo-metric">
-              <div class="demo-kicker">Security posture</div>
-              <h3>{@metrics.risk_score}%</h3>
-              <p class="demo-muted">Aligned with CIS controls</p>
-              <.button kind="ghost" size="sm" phx-click="acknowledge_risk">
-                {if @risk_acknowledged, do: "Acknowledged", else: "Acknowledge"}
-              </.button>
+            <.tile>
+              <.stack gap="2">
+                <.heading>Monthly spend</.heading>
+                <h3>{format_money(@metrics.monthly_spend)}</h3>
+                <.progress_bar value={@metrics.monthly_spend / @metrics.budget * 100} />
+                <p>Budget {format_money(@metrics.budget)}</p>
+              </.stack>
             </.tile>
           </:column>
           <:column sm="4" md="2" lg="4">
-            <.tile class="demo-card demo-metric">
-              <div class="demo-kicker">SLA uptime</div>
-              <h3>{format_percent(@metrics.uptime)}</h3>
-              <p class="demo-muted">All regions within target</p>
-              <.button kind="ghost" size="sm" phx-click="create_snapshot">
-                Create snapshot
-              </.button>
+            <.tile>
+              <.stack gap="2">
+                <.heading>Security posture</.heading>
+                <h3>{@metrics.risk_score}%</h3>
+                <p>Aligned with CIS controls</p>
+                <.button kind="ghost" size="sm" phx-click="acknowledge_risk">
+                  {if @risk_acknowledged, do: "Acknowledged", else: "Acknowledge"}
+                </.button>
+              </.stack>
             </.tile>
+          </:column>
+          <:column sm="4" md="2" lg="4">
+            <.tile>
+              <.stack gap="2">
+                <.heading>SLA uptime</.heading>
+                <h3>{format_percent(@metrics.uptime)}</h3>
+                <p>All regions within target</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column sm="4" md="2" lg="4">
+            <.tile>
+              <.stack gap="2">
+                <.heading>Regions online</.heading>
+                <h3>12</h3>
+                <p>3 failover ready</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column sm="4" md="2" lg="4">
+            <.tile>
+              <.stack gap="2">
+                <.heading>Edge PoPs</.heading>
+                <h3>214</h3>
+                <p>+12 this quarter</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column sm="4" md="2" lg="4">
+            <.tile>
+              <.stack gap="2">
+                <.heading>Latency p95</.heading>
+                <h3>28 ms</h3>
+                <p>SLO target 50 ms</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column sm="4" md="4" lg="8">
+            <.tile>
+              <.stack gap="2">
+                <.stack orientation="horizontal" gap="2">
+                  <.heading>Storage IOPS</.heading>
+                  <.tag type="green">Stable</.tag>
+                </.stack>
+                <h3>84k</h3>
+                <.progress_bar value={72} />
+                <p>72% of provisioned capacity</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column sm="4" md="4" lg="8">
+            <.tile>
+              <.stack gap="2">
+                <.stack orientation="horizontal" gap="2">
+                  <.heading>Outbound traffic</.heading>
+                  <.tag type="blue">Trending up</.tag>
+                </.stack>
+                <h3>3.2 Tbps</h3>
+                <.progress_bar value={64} />
+                <p>Peaked 20 minutes ago</p>
+              </.stack>
+            </.tile>
+          </:column>
+          <:column span="16">
+            <.contained_list>
+              <:label>Runbook queue</:label>
+              <:action>
+                <.tag type="blue">3 active</.tag>
+              </:action>
+              <.contained_list_item>
+                Failover rehearsal · us-east-1
+                <:action>ETA 12m</:action>
+              </.contained_list_item>
+              <.contained_list_item>
+                Edge cache warmup · LON
+                <:action>ETA 18m</:action>
+              </.contained_list_item>
+              <.contained_list_item>
+                Snapshot verify · Aurora
+                <:action>ETA 22m</:action>
+              </.contained_list_item>
+            </.contained_list>
           </:column>
         </.grid>
       </:column>
 
       <:column span="16">
-        <div class="demo-section demo-card">
-          <div class="demo-kicker">Layout</div>
-          <h3>Implicit grid rows</h3>
-          <p class="demo-muted">Columns wrap when the total span exceeds 16.</p>
-          <.grid class="demo-grid-example">
-            <:column span="4">
-              <div class="demo-grid-widget">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="cloud" size={16} />
-                  <span class="demo-grid-widget__title">Regions online</span>
-                </div>
-                <div class="demo-grid-widget__value">12</div>
-                <div class="demo-grid-widget__meta">3 failover ready</div>
-              </div>
-            </:column>
-            <:column span="4">
-              <div class="demo-grid-widget">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="cloud-services" size={16} />
-                  <span class="demo-grid-widget__title">Edge PoPs</span>
-                </div>
-                <div class="demo-grid-widget__value">214</div>
-                <div class="demo-grid-widget__meta">+12 this quarter</div>
-              </div>
-            </:column>
-            <:column span="4">
-              <div class="demo-grid-widget">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="dashboard" size={16} />
-                  <span class="demo-grid-widget__title">Latency p95</span>
-                </div>
-                <div class="demo-grid-widget__value">28 ms</div>
-                <div class="demo-grid-widget__meta">SLO target 50 ms</div>
-              </div>
-            </:column>
-            <:column span="4">
-              <div class="demo-grid-widget">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="security" size={16} />
-                  <span class="demo-grid-widget__title">Security posture</span>
-                </div>
-                <div class="demo-grid-widget__value">96%</div>
-                <div class="demo-grid-widget__meta">CIS aligned</div>
-              </div>
-            </:column>
-            <:column span="8">
-              <div class="demo-grid-widget demo-grid-widget--wide">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="cloud-services" size={16} />
-                  <span class="demo-grid-widget__title">Storage IOPS</span>
-                  <span class="demo-grid-widget__tag">
-                    <.tag type="green">Stable</.tag>
-                  </span>
-                </div>
-                <div class="demo-grid-widget__value">84k</div>
-                <.progress_bar value={72} />
-                <div class="demo-grid-widget__meta">72% of provisioned capacity</div>
-              </div>
-            </:column>
-            <:column span="8">
-              <div class="demo-grid-widget demo-grid-widget--wide">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="dashboard" size={16} />
-                  <span class="demo-grid-widget__title">Outbound traffic</span>
-                  <span class="demo-grid-widget__tag">
-                    <.tag type="blue">Trending up</.tag>
-                  </span>
-                </div>
-                <div class="demo-grid-widget__value">3.2 Tbps</div>
-                <.progress_bar value={64} />
-                <div class="demo-grid-widget__meta">Peaked 20 minutes ago</div>
-              </div>
-            </:column>
-            <:column span="16">
-              <div class="demo-grid-widget demo-grid-widget--wide">
-                <div class="demo-grid-widget__header">
-                  <Icons.icon name="notification" size={16} />
-                  <span class="demo-grid-widget__title">Runbook queue</span>
-                  <span class="demo-grid-widget__tag">
-                    <.tag type="blue">3 active</.tag>
-                  </span>
-                </div>
-                <div class="demo-grid-widget__list">
-                  <div class="demo-grid-widget__list-row">
-                    <span>Failover rehearsal · us-east-1</span>
-                    <span class="demo-grid-widget__meta">ETA 12m</span>
-                  </div>
-                  <div class="demo-grid-widget__list-row">
-                    <span>Edge cache warmup · LON</span>
-                    <span class="demo-grid-widget__meta">ETA 18m</span>
-                  </div>
-                  <div class="demo-grid-widget__list-row">
-                    <span>Snapshot verify · Aurora</span>
-                    <span class="demo-grid-widget__meta">ETA 22m</span>
-                  </div>
-                </div>
-              </div>
-            </:column>
-          </.grid>
-        </div>
-      </:column>
-
-      <:column span="16">
-        <.grid full_width class="demo-section">
+        <.grid>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card demo-card--elevated">
-              <h3>Service health</h3>
-              <.table_live id="service-health" rows={@services} size="sm">
-                <:col :let={service} label="Service">{service.name}</:col>
-                <:col :let={service} label="Status">
-                  <.tag type={status_kind(service.status)}>
-                    {service.status}
-                  </.tag>
-                </:col>
-                <:col :let={service} label="Latency">{service.latency_ms} ms</:col>
-                <:col :let={service} label="SLA">{format_percent(service.sla)}</:col>
-              </.table_live>
-            </.tile>
+            <.data_table id="service-health" rows={@services} row_id={& &1.name} size="sm">
+              <:title>Service health</:title>
+              <:description>Current status and latency across core services.</:description>
+              <:toolbar>
+                <.table_toolbar>
+                  <.table_toolbar_content>
+                    <.table_toolbar_search placeholder="Search services" size="sm" />
+                    <.overflow_menu toolbar_action>
+                      <:icon>
+                        <Graphene.Icons.icon fit="width" name="overflow-menu--horizontal" />
+                      </:icon>
+                      <:tooltip_content>Options</:tooltip_content>
+                      <:item>Status filters</:item>
+                      <:item>Export</:item>
+                    </.overflow_menu>
+                  </.table_toolbar_content>
+                </.table_toolbar>
+              </:toolbar>
+              <:col :let={service} label="Service">{service.name}</:col>
+              <:col :let={service} label="Status">
+                <.tag type={status_kind(service.status)}>
+                  {service.status}
+                </.tag>
+              </:col>
+              <:col :let={service} label="Latency">{service.latency_ms} ms</:col>
+              <:col :let={service} label="SLA">{format_percent(service.sla)}</:col>
+            </.data_table>
           </:column>
           <:column sm="4" md="4" lg="8">
-            <.tile class="demo-card demo-card--elevated">
-              <h3>Recent audit activity</h3>
-              <.table_live id="recent-audits" rows={@audits} size="sm">
-                <:col :let={audit} label="Time">{audit.time}</:col>
-                <:col :let={audit} label="Actor">{audit.actor}</:col>
-                <:col :let={audit} label="Action">{audit.action}</:col>
-              </.table_live>
-            </.tile>
+            <.data_table id="recent-audits" rows={@audits} row_id={& &1.id} size="sm">
+              <:title>Recent audit activity</:title>
+              <:description>Latest compliance and change events.</:description>
+              <:toolbar>
+                <.table_toolbar>
+                  <.table_toolbar_content>
+                    <.table_toolbar_search placeholder="Search audits" size="sm" />
+                    <.overflow_menu toolbar_action>
+                      <:icon>
+                        <Graphene.Icons.icon fit="width" name="overflow-menu--horizontal" />
+                      </:icon>
+                      <:tooltip_content>Options</:tooltip_content>
+                      <:item>Download CSV</:item>
+                    </.overflow_menu>
+                  </.table_toolbar_content>
+                </.table_toolbar>
+              </:toolbar>
+              <:col :let={audit} label="Time">{audit.time}</:col>
+              <:col :let={audit} label="Actor">{audit.actor}</:col>
+              <:col :let={audit} label="Action">{audit.action}</:col>
+            </.data_table>
           </:column>
         </.grid>
       </:column>

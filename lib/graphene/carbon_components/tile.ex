@@ -20,6 +20,7 @@ defmodule Graphene.CarbonComponents.Tile do
     doc:
       "Specify if the `Tile` component should be rendered with rounded corners.\nOnly valid when `ai-label` prop is present"
 
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :decorator, doc: "Decorator content."
   slot :inner_block
@@ -34,6 +35,7 @@ defmodule Graphene.CarbonComponents.Tile do
   Tile above-the-fold content.
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -47,6 +49,7 @@ defmodule Graphene.CarbonComponents.Tile do
   Tile below-the-fold content.
 
   """
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :inner_block
 
@@ -74,6 +77,7 @@ defmodule Graphene.CarbonComponents.Tile do
 
   attr :radio_tiles, :any
   attr :selectable_tiles, :any
+  attr :events, :any, default: nil, doc: "custom events passed to Graphene.JS.events/1"
   attr :rest, :global
   slot :legend, doc: "Legend content."
   slot :inner_block
