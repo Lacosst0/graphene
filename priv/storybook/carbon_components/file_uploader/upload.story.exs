@@ -130,6 +130,7 @@ Pair .file_uploader with .button actions for submit and clear, and use
     <script :type={Phoenix.LiveView.ColocatedHook} name=".CarbonFileUploaderBridge" runtime>
       {
         mounted() {
+        
           this.el.dataset.bridgeReady = "true";
           this._handleFileChange = async (event) => {
             const files = event?.detail?.addedFiles;
