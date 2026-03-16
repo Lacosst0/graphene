@@ -58,7 +58,7 @@ defmodule Graphene.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build"],
+      setup: ["deps.get", "assets.build"],
       # building assets requires npm available in shell
       "assets.setup": [
         # download files to node_modules
