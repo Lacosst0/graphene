@@ -137,31 +137,10 @@ defmodule DemoWeb.DevicesLive do
       <:content_text subtitle="Health and status of devices on the sites." />
     </.page_header>
 
-    <%!-- <.table
-      id="sites-table"
-      rows={
-        [1, 2, 3, 4, 5]
-      }
-      locale="en"
-      expandable={true}
-    >
-      <:title>DataTable</:title>
-      <:description>With expansion</:description>
-
-      <:col :let={row} :for={col <- ["ID", "STUFF"]} label={col}>
-        1
-      </:col>
-
-      <:expanded_row :let={row}>
-        <h6>Expandable row content</h6>
-        <div>MEOW</div>
-      </:expanded_row>
-    </.table> --%>
-
     <div style="padding-top: 16px;">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <.tile style="display: flex; flex-direction: column; gap: 16px; height: 400px;">
-          <div style="display: flex; gap: 8px;">
+          <div style="display: flex; gap: 8px; align-items: center">
             <.selectable_tag
               phx-click="toggle_filter"
               phx-value-field="violations"
@@ -177,8 +156,42 @@ defmodule DemoWeb.DevicesLive do
               text={"Offline sensors: #{count_offline(@devices)}"}
             />
           </div>
+          <div style="overflow-y: auto; scrollbar-gutter: stable;">
+            <.table
+              id="sites-table"
+              rows={@filtered_sites}
+              locale="en"
+              expandable={true}
+            >
+              <:toolbar>
+                <.table_toolbar>
+                  <.table_toolbar_content>
+                    <.table_toolbar_search placeholder="Filter table" persistent />
+                  </.table_toolbar_content>
+                </.table_toolbar>
+              </:toolbar>
+              <:col :let={row} :for={col <- [:address, :uin]} label={col}>
+                {elem(row, 0)[col]}
+              </:col>
 
-          <div style="overflow-y: scroll; "></div>
+              <:expanded_row :let={row}>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div :for={device <- elem(row, 1)}>
+                    <.button
+                      id={"device-#{device.device_id}"}
+                      phx-click="graphene:map-focus-marker"
+                      phx-value-id={device.device_id}
+                      phx-target="#devices-map"
+                      variant="ghost"
+                      style="display: contents;"
+                    >
+                      <strong>Device ID:</strong> {device.device_id}
+                    </.button>
+                  </div>
+                </div>
+              </:expanded_row>
+            </.table>
+          </div>
         </.tile>
 
         <.tile>
