@@ -70,7 +70,7 @@ defmodule Graphene.CarbonComponents.MapComponent do
     ~H"""
     <div class="map-containter" style="width: 100%; height: 100%;">
       <%= if @popup do %>
-        <div id={"map-popup--#{@id}"} class="maplibregl-popup" hidden>
+        <div id={"map-popup--#{@id}"} class="maplibregl-popup" hidden style="display: none;">
           {render_slot(@popup)}
         </div>
       <% end %>

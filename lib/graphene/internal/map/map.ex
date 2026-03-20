@@ -28,8 +28,6 @@ defmodule Graphene.CarbonComponents.Custom.Map do
 
   """
 
-  # check repo for used events
-
   attr :id, :string, required: true
 
   attr :map_styles, :string,
